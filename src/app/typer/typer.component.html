@@ -1,0 +1,28 @@
+<div class="type-test">
+    <div class="word-container-wrapper">
+        <div class="word-container">
+            <div class="word" *ngFor="let word of words">{{word}}</div>
+        </div>
+    </div>
+    <input [(ngModel)]="wordInput" (input)="wordInputChanged($event.target.value)" type="text" spellcheck="false" class="word-input">
+</div>
+<div class="type-test-results">
+    <table>
+        <tr>
+            <th>Correct words</th>
+            <th>{{testResults.correctWordCount}}</th>
+        </tr>
+        <tr>
+            <th>Incorrect words</th>
+            <th>{{testResults.incorrectWordCount}}</th>
+        </tr>
+        <tr>
+            <th>Correct characters</th>
+            <th>{{testResults.correctCharacterCount}}</th>
+        </tr>
+        <tr>
+            <th>Incorrect characters</th>
+            <th>{{testResults.incorrectCharacterCount}}</th>
+        </tr>
+    </table>
+</div>
