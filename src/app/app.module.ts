@@ -7,19 +7,23 @@ import { WordService } from './word.service';
 import { DefaultWordService } from './default-word.service';
 import { TyperComponent } from './typer/typer.component';
 import { TimePipe } from './time.pipe';
+import { PreferencesService } from './preferences.service';
+import { PreferencesComponent } from './preferences/preferences.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TyperComponent,
-    TimePipe
+    TimePipe,
+    PreferencesComponent
   ],
   imports: [
     BrowserModule,
     FormsModule
   ],
   providers: [
-    { provide: WordService, useClass: DefaultWordService }
+    { provide: WordService, useClass: DefaultWordService },
+    PreferencesService
   ],
   bootstrap: [AppComponent]
 })

@@ -20,7 +20,7 @@
 }
 
 .word-container-wrapper {
-    height: 50%;
+    height: 60%;
     width: 100%;
     position: absolute;
     mask: linear-gradient(to right,  
@@ -34,19 +34,17 @@
 .word-container {
     display: flex;
     position: absolute;
-    top: 50%;
-    left: calc(50% - 3em);
-    transform: translate3d(0, -50%, 0);
+    left: calc(50% - 65px);
     transition: left 0.1s ease-in-out;
 }
 
 .word {
     color: white;
     font-size: 3em;
-    padding: 5px;
     text-align: center;
     transition: color 1s, opacity 1s;
     user-select: none;
+    padding: 5px 20px 5px 0;
 
     &.word-correct {
         opacity: .2;
@@ -66,8 +64,8 @@
     outline:none;
     position: absolute;
     bottom: 0;
-    left: calc(50% - .9em);
-    width: calc(50% + .9em);
+    left: calc(50% - 65px);
+    width: calc(50% + 65px);
     caret-color: white;
     transition: color .2s;
 

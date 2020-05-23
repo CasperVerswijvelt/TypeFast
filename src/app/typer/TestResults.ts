@@ -4,7 +4,7 @@ export interface TestResults {
   correctWordCount: number;
   incorrectWordCount: number;
   incorrectWords: IncorrectWord[];
-  duration: number;
+  timeElapsed: number;
   stats?: TestResultsStats;
 }
 

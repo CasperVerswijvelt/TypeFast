@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { WordService } from '../word.service';
 import { TestResults, TestResultsStats } from './TestResults';
 import { timer, Observable, Subscription } from 'rxjs';
+import { PreferencesService } from '../preferences.service';
 
 @Component({
   selector: 'app-typer',
@@ -28,7 +29,8 @@ export class TyperComponent implements OnInit {
 
   constructor(
     private wordService: WordService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private preferencesService: PreferencesService
   ) {}
 
   ngOnInit(): void {
@@ -43,16 +45,19 @@ export class TyperComponent implements OnInit {
 
     this.updateTimer(0);
 
-    this.setupTest();
+    this.wordService.addListener(this.setupTest.bind(this));
   }
 
   setupTest() {
+    this.secondTimer?.unsubscribe();
+    this.secondTimer = undefined;
+    
     this.wordInput = '';
     this.currentIndex = 0;
     this.leftOffset = 0;
     this.words = [];
     this.cdRef.detectChanges();
-    this.words = this.wordService.getWords(false, 100);
+    this.words = this.wordService.getWords(true, 100);
     this.cdRef.detectChanges();
     this.testResults = {
       correctCharacterCount: 0,
@@ -60,7 +65,7 @@ export class TyperComponent implements OnInit {
       correctWordCount: 0,
       incorrectWordCount: 0,
       incorrectWords: [],
-      duration: 0,
+      timeElapsed: 0,
     };
 
     this.inputElement.disabled = false;
@@ -72,8 +77,14 @@ export class TyperComponent implements OnInit {
   }
 
   wordInputChanged(word: string) {
+
+    if (!this.words) {
+      this.inputElement.value = "";
+      return;
+    }
+
     // Start timer if not already started
-    if (!this.secondTimer) {
+    if (!this.testStarted) {
       this.startTest();
     }
 
@@ -101,32 +112,41 @@ export class TyperComponent implements OnInit {
   startTest() {
     this.secondTimer = timer(0, 1000).subscribe(this.onSecond.bind(this));
     this.testStarted = true;
-    this.testResults.duration = this.testTime;
+    this.testResults.timeElapsed = this.testTime;
   }
 
   nextWord() {
     this.currentIndex++;
     this.wordInput = '';
+    this.inputElement.value = "";
 
     this.leftOffset =
       this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncCurrentWordElement();
     this.syncLeft();
+
+
+    if (this.currentIndex > this.words.length - 20) {
+      this.words = this.words.concat(this.wordService.getWords(true, 100))
+    }
   }
 
   registerWord(value: string, expected: string, wordCompleted : boolean = true) {
-    if (value === expected) {
-      this.currentWordElement.classList.add('word-correct');
-      this.testResults.correctWordCount++;
-    } else {
-      this.testResults.incorrectWords.push({
-        expected: expected,
-        value: value,
-      });
-      this.currentWordElement.classList.add('word-incorrect');
-      this.testResults.incorrectWordCount++;
-    }
 
+    if (wordCompleted) {
+      if (value === expected) {
+        this.currentWordElement.classList.add('word-correct');
+        this.testResults.correctWordCount++;
+      } else {
+        this.testResults.incorrectWords.push({
+          expected: expected,
+          value: value,
+        });
+        this.currentWordElement.classList.add('word-incorrect');
+        this.testResults.incorrectWordCount++;
+      }
+    }
+    
     // Only add correct character for end space if word was completed
     let correctCharacters = wordCompleted ? 1 : 0;
     let incorrectCharacters = 0;
@@ -154,7 +174,7 @@ export class TyperComponent implements OnInit {
       this.onTimeRunsOut();
     }
 
-    this.testResults.duration = seconds;
+    this.testResults.timeElapsed = seconds;
     this.calculateStats();
   }
 
@@ -173,9 +193,9 @@ export class TyperComponent implements OnInit {
       this.testResults.correctWordCount /
       (this.testResults.correctWordCount + this.testResults.incorrectWordCount);
     stats.cpm =
-      (this.testResults.correctCharacterCount / this.testResults.duration) * 60;
+      (this.testResults.correctCharacterCount / this.testResults.timeElapsed) * 60;
     stats.wpm =
-      (this.testResults.correctCharacterCount / 5 / this.testResults.duration) *
+      (this.testResults.correctCharacterCount / 5 / this.testResults.timeElapsed) *
       60;
 
     this.testResults.stats = stats;
@@ -188,7 +208,7 @@ export class TyperComponent implements OnInit {
   }
 
   syncLeft() {
-    this.containerElement.style.left = `calc(50% - 3em - ${this.leftOffset}px)`;
+    this.containerElement.style.left = `calc(50% - 65px - ${this.leftOffset}px)`;
   }
 
   onTimeRunsOut() {
