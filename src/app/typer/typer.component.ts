@@ -51,7 +51,7 @@ export class TyperComponent implements OnInit {
   setupTest() {
     this.secondTimer?.unsubscribe();
     this.secondTimer = undefined;
-    
+
     this.wordInput = '';
     this.currentIndex = 0;
     this.leftOffset = 0;
@@ -77,9 +77,8 @@ export class TyperComponent implements OnInit {
   }
 
   wordInputChanged(word: string) {
-
     if (!this.words) {
-      this.inputElement.value = "";
+      this.inputElement.value = '';
       return;
     }
 
@@ -93,10 +92,14 @@ export class TyperComponent implements OnInit {
     this.syncCurrentWordElement();
 
     if (word[word.length - 1] == ' ') {
-      //Space typed, validate word
-      this.registerWord(this.wordInput, this.words[this.currentIndex]);
+      if (word.length === 1) {
+        this.inputElement.value = '';
+      } else {
+        //Space typed, validate word
+        this.registerWord(this.wordInput, this.words[this.currentIndex]);
 
-      this.nextWord();
+        this.nextWord();
+      }
     } else {
       if (
         this.words[this.currentIndex].slice(0, this.wordInput.length) !==
@@ -118,21 +121,19 @@ export class TyperComponent implements OnInit {
   nextWord() {
     this.currentIndex++;
     this.wordInput = '';
-    this.inputElement.value = "";
+    this.inputElement.value = '';
 
     this.leftOffset =
       this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncCurrentWordElement();
     this.syncLeft();
 
-
     if (this.currentIndex > this.words.length - 20) {
-      this.words = this.words.concat(this.wordService.getWords(true, 100))
+      this.words = this.words.concat(this.wordService.getWords(true, 100));
     }
   }
 
-  registerWord(value: string, expected: string, wordCompleted : boolean = true) {
-
+  registerWord(value: string, expected: string, wordCompleted: boolean = true) {
     if (wordCompleted) {
       if (value === expected) {
         this.currentWordElement.classList.add('word-correct');
@@ -146,7 +147,7 @@ export class TyperComponent implements OnInit {
         this.testResults.incorrectWordCount++;
       }
     }
-    
+
     // Only add correct character for end space if word was completed
     let correctCharacters = wordCompleted ? 1 : 0;
     let incorrectCharacters = 0;
@@ -185,18 +186,28 @@ export class TyperComponent implements OnInit {
   calculateStats() {
     let stats = {} as TestResultsStats;
 
-    stats.characterAccuracy =
-      this.testResults.correctCharacterCount /
-      (this.testResults.correctCharacterCount +
-        this.testResults.incorrectCharacterCount);
-    stats.wordAccuracy =
-      this.testResults.correctWordCount /
-      (this.testResults.correctWordCount + this.testResults.incorrectWordCount);
-    stats.cpm =
-      (this.testResults.correctCharacterCount / this.testResults.timeElapsed) * 60;
-    stats.wpm =
-      (this.testResults.correctCharacterCount / 5 / this.testResults.timeElapsed) *
-      60;
+    let totalCharacterCount =
+      this.testResults.correctCharacterCount +
+      this.testResults.incorrectCharacterCount;
+
+    let totalWordCount =
+      this.testResults.correctCharacterCount +
+      this.testResults.incorrectCharacterCount;
+
+    stats.characterAccuracy = totalCharacterCount ?
+      this.testResults.correctCharacterCount / totalCharacterCount : 0;
+    stats.wordAccuracy = totalWordCount ? this.testResults.correctWordCount / totalWordCount : 0;
+    stats.cpm = this.testResults.timeElapsed
+      ? (this.testResults.correctCharacterCount /
+          this.testResults.timeElapsed) *
+        60
+      : 0;
+    stats.wpm = this.testResults.timeElapsed
+      ? (this.testResults.correctCharacterCount /
+          5 /
+          this.testResults.timeElapsed) *
+        60
+      : 0;
 
     this.testResults.stats = stats;
   }
@@ -217,7 +228,11 @@ export class TyperComponent implements OnInit {
     this.inputElement.disabled = true;
 
     // Add right/wrong characters for current word
-    this.registerWord(this.wordInput.trim(), this.words[this.currentIndex].slice(0, this.wordInput.length), false);
+    this.registerWord(
+      this.wordInput.trim(),
+      this.words[this.currentIndex].slice(0, this.wordInput.length),
+      false
+    );
   }
 
   private breakPoints = [

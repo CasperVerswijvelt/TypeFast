@@ -9,7 +9,7 @@
   right: 16px;
   top: 16px;
   display: flex;
-  pointer-events: initial;
+  pointer-events: none;
 }
 
 .preferences-icon {
@@ -24,6 +24,7 @@
   outline: none;
   cursor: pointer;
   position: relative;
+  pointer-events: initial;
 
   svg {
     fill: rgb(105, 105, 105);
@@ -70,8 +71,8 @@
     }
   }
 
-  tr:nth-child(even){
-      background-color: rgba(255, 255, 255, 0.014);
+  tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.014);
   }
 
   .switch {
