@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { WordService } from './word.service';
 import { DefaultWordService } from './default-word.service';
 import { TyperComponent } from './typer/typer.component';
+import { TimePipe } from './time.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    TyperComponent
+    TyperComponent,
+    TimePipe
   ],
   imports: [
     BrowserModule,
