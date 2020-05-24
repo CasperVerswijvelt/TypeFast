@@ -1,4 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { WordService } from '../word.service';
 import { TestResults, TestResultsStats } from './TestResults';
 import { timer, Observable, Subscription } from 'rxjs';
@@ -10,6 +16,8 @@ import { PreferencesService } from '../preferences.service';
   styleUrls: ['./typer.component.scss'],
 })
 export class TyperComponent implements OnInit {
+  @Output() focusFunctionReady = new EventEmitter<() => void>();
+
   words: string[];
   currentIndex: number;
   wordInput: string;
@@ -41,11 +49,12 @@ export class TyperComponent implements OnInit {
       'word-input'
     )[0] as HTMLInputElement;
 
-    //this.inputElement.onpaste = (e) => e.preventDefault();
+    this.inputElement.onpaste = (e) => e.preventDefault();
 
     this.updateTimer(0);
 
     this.wordService.addListener(this.setupTest.bind(this));
+    this.focusFunctionReady.emit(this.focusInput.bind(this));
   }
 
   setupTest() {
@@ -69,11 +78,15 @@ export class TyperComponent implements OnInit {
     };
 
     this.inputElement.disabled = false;
-    this.inputElement.focus();
-    this.inputElement.select();
+    this.focusInput();
 
     this.testStarted = false;
     this.syncLeft();
+  }
+
+  focusInput() {
+    this.inputElement.focus();
+    this.inputElement.select();
   }
 
   wordInputChanged(word: string) {

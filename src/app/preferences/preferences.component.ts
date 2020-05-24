@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PreferencesService } from '../preferences.service';
 import { Preference, Language } from '../Preference';
 import { WordService } from '../word.service';
@@ -9,6 +9,8 @@ import { WordService } from '../word.service';
   styleUrls: ['./preferences.component.scss'],
 })
 export class PreferencesComponent implements OnInit {
+  @Output() toggled = new EventEmitter<boolean>();
+
   showPreferences = false;
   Language = Language;
 
@@ -31,6 +33,7 @@ export class PreferencesComponent implements OnInit {
 
   togglePreferences() {
     this.showPreferences = !this.showPreferences;
+    this.toggled.emit(this.showPreferences);
   }
 
   onDarkModeChanged() {
@@ -46,7 +49,6 @@ export class PreferencesComponent implements OnInit {
   }
 
   getFlagForLangauge(language: Language): string {
-    console.log(language, language as string);
     switch (language) {
       case Language.DUTCH:
         return '🇳🇱';
