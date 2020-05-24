@@ -92,7 +92,7 @@ input:checked+.slider:before {
   app-preferences {
 
     .preferences-list {
-      background-color: #ffffffee;
+      background-color: #cececeee;
       color: rgb(15, 15, 15);
 
     }
@@ -101,10 +101,20 @@ input:checked+.slider:before {
       border-color: rgb(0, 0, 0);
     }
 
+    .preferences-entry {
+
+      &:nth-child(even) {
+        background-color: rgba(128, 128, 128, 0.103);
+      }
+
+      &:hover {
+        background-color: rgba(128, 128, 128, 0.233);
+      }
+    }
+
   }
 
   app-typer {
-
 
     .word {
       color: rgba(26, 26, 26, 0.74);
@@ -125,7 +135,7 @@ input:checked+.slider:before {
     }
 
     .type-test-results {
-      background-color: rgba(75, 75, 75, 0.062);
+      background-color: rgba(77, 77, 77, 0.062);
       color: rgba(32, 32, 32, 0.582);
 
       tr {
