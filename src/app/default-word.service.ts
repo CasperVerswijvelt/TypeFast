@@ -9,38 +9,64 @@ import { Preference } from './Preference';
 export class DefaultWordService implements WordService {
   private words: string[] = ['Word', 'list', 'not', 'initialized', 'yet.'];
   private wordListLoaded = false;
-  private listeners: (() => void) [] = [] 
+  private listeners: (() => void)[] = [];
 
-  constructor(private preferencesService : PreferencesService) {
-    this.loadWordList();
+  constructor(private preferencesService: PreferencesService) {
+    this.reloadWordList();
   }
 
-  loadWordList(url?: string) : Promise<void> {
+  reprocessWordList(): void {
+    this.notifySubscribers();
+  }
 
-    let path;
-    if (url) {
-      path = url;
-    } else {
-      path = `assets/words/${this.preferencesService.getPreference(Preference.LANGUAGE)}.txt`
-    }
+  reloadWordList(): void {
+    
+    this.loadWordListUrl(`assets/words/${this.preferencesService.getPreference(
+      Preference.LANGUAGE
+    )}.txt`);
+  }
 
-    return fetch(path)
-      .then((response) => response.text())
-      .then((text) => {
-        this.words = text.split(/\r?\n?\s/);
-        this.wordListLoaded = true;
-        this.notifySubscribers();
-      });
+  loadWordListLocal(file: File): void {
+
+    if (file.type !== "text/plain") return;
+
+    let reader = new FileReader();
+    reader.onload = (event : ProgressEvent<FileReader>) => {
+      let text = reader.result as string;
+      this.loadWordListText(text);
+    };
+    reader.readAsText(file);
+  }
+
+  async loadWordListUrl(url: string): Promise<void> {
+
+    const response = await fetch(url);
+    const text = await response.text();
+    this.loadWordListText (text);
   }
 
   getWords(shuffle?: boolean, wordCount?: number): string[] {
-
-    let data: string[] = this.words.slice();
+    let data: string[] = [];
     let res: string[] = [];
 
     if (typeof wordCount !== 'undefined') {
       while (res.length < wordCount) {
-        res.push(data.splice(Math.floor(Math.random() * data.length), 1)[0]);
+
+        if (data.length == 0) {
+          data = this.words.slice();
+        }
+        
+        if (shuffle === false) {
+
+          // Take as many words as we need or as we can (whichever is less)
+          res = res.concat(data.splice(0, Math.min(data.length, wordCount - res.length)));
+          
+        } else {
+
+          // Take 1 word randomly from dataset and push it to result words
+          res.push(data.splice(Math.floor(Math.random() * data.length), 1)[0]);
+        }
+
       }
     } else {
       res = data;
@@ -49,8 +75,7 @@ export class DefaultWordService implements WordService {
     return res;
   }
 
-  addListener(listenerFunction: () => void) : void {
-
+  addListener(listenerFunction: () => void): void {
     this.listeners.push(listenerFunction);
 
     if (this.wordListLoaded) {
@@ -58,7 +83,13 @@ export class DefaultWordService implements WordService {
     }
   }
 
-  notifySubscribers () {
-    this.listeners.forEach(listener => listener());
+  notifySubscribers() {
+    this.listeners.forEach((listener) => listener());
+  }
+
+  private loadWordListText(text : string) {
+    this.words = text.split(/\r?\n?\s/);
+    this.wordListLoaded = true;
+    this.notifySubscribers();
   }
 }

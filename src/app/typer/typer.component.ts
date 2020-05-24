@@ -9,6 +9,7 @@ import { WordService } from '../word.service';
 import { TestResults, TestResultsStats } from './TestResults';
 import { timer, Observable, Subscription } from 'rxjs';
 import { PreferencesService } from '../preferences.service';
+import { Preference } from '../Preference';
 
 @Component({
   selector: 'app-typer',
@@ -55,9 +56,11 @@ export class TyperComponent implements OnInit {
 
     this.wordService.addListener(this.setupTest.bind(this));
     this.focusFunctionReady.emit(this.focusInput.bind(this));
+    this.focusInput();
   }
 
   setupTest() {
+    this.updateTimer(0);
     this.secondTimer?.unsubscribe();
     this.secondTimer = undefined;
 
@@ -66,7 +69,7 @@ export class TyperComponent implements OnInit {
     this.leftOffset = 0;
     this.words = [];
     this.cdRef.detectChanges();
-    this.words = this.wordService.getWords(true, 100);
+    this.words = this.getWords();
     this.cdRef.detectChanges();
     this.testResults = {
       correctCharacterCount: 0,
@@ -78,7 +81,6 @@ export class TyperComponent implements OnInit {
     };
 
     this.inputElement.disabled = false;
-    this.focusInput();
 
     this.testStarted = false;
     this.syncLeft();
@@ -142,8 +144,12 @@ export class TyperComponent implements OnInit {
     this.syncLeft();
 
     if (this.currentIndex > this.words.length - 20) {
-      this.words = this.words.concat(this.wordService.getWords(true, 100));
+      this.words = this.words.concat(this.getWords());
     }
+  }
+
+  getWords () : string [] {
+    return this.wordService.getWords(this.preferencesService.getPreference(Preference.SHUFFLE_WORDS) as boolean, 100);
   }
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {
@@ -234,7 +240,7 @@ export class TyperComponent implements OnInit {
   }
 
   syncLeft() {
-    this.containerElement.style.marginLeft = `calc(50% - 65px - ${this.leftOffset}px)`;
+    this.containerElement.style.marginLeft = `calc(50% - 80px - ${this.leftOffset}px)`;
   }
 
   onTimeRunsOut() {
@@ -331,8 +337,6 @@ export class TyperComponent implements OnInit {
 
   onRestartClicked() {
     this.setupTest();
-    this.updateTimer(0);
-    this.secondTimer?.unsubscribe();
-    this.secondTimer = undefined;
+    this.focusInput();
   }
 }

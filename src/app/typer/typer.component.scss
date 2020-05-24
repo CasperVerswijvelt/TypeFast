@@ -32,7 +32,7 @@
 
 .word-container {
   display: flex;
-  margin-left: calc(50% - 65px);
+  margin-left: calc(50% - 80px);
   transition: margin-left 0.1s ease-in-out;
 }
 
@@ -62,13 +62,21 @@
   height: auto;
   border: none;
   outline: none;
-  padding: 0 0 0 calc(50% - 65px);
-  width: calc(50% + 65px);
+  padding: 0 0 0 calc(50% - 80px);
+  width: calc(50% + 80px);
   caret-color: white;
   transition: color .2s;
 
   &.input-incorrect {
     color: rgb(255, 68, 68);
+  }
+
+  &::placeholder {
+    opacity: .3;
+  }
+
+  &:focus::placeholder {
+    color: transparent;
   }
 }
 

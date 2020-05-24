@@ -6,7 +6,7 @@
         <div class="word" *ngFor="let word of words">{{word}}</div>
       </div>
     </div>
-    <input [(ngModel)]="wordInput" (input)="wordInputChanged($event.target.value)" type="text" spellcheck="false"
+    <input [(ngModel)]="wordInput" (input)="wordInputChanged($event.target.value)" type="text" spellcheck="false" placeholder="type here" autofocus autocomplete="off" autocapitalize="off"
       class="word-input" tabindex="3">
   </div>
 

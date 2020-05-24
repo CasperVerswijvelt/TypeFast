@@ -1,6 +1,7 @@
 export enum Preference {
   LANGUAGE = 'word_language',
   DARK_MODE = 'dark_mode',
+  SHUFFLE_WORDS = 'shuffle_words'
 }
 
 export enum Language {
@@ -23,4 +24,5 @@ export enum Language {
 export interface Preferences {
   word_language?: string;
   dark_mode?: boolean;
+  shuffle_words?: boolean;
 }

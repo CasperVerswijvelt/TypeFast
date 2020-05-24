@@ -9,6 +9,7 @@ export class PreferencesService {
   private defaults: Preferences = {
     dark_mode: true,
     word_language: Language.ENGLISH,
+    shuffle_words: true
   };
 
   getPreference(key: Preference): any {

@@ -16,6 +16,7 @@ export class PreferencesComponent implements OnInit {
   Language = Language;
 
   useDarkMode: boolean;
+  shuffleWords: boolean;
   language: Language;
 
   constructor(
@@ -25,6 +26,7 @@ export class PreferencesComponent implements OnInit {
   ) {
     this.useDarkMode = preferencesService.getPreference(Preference.DARK_MODE);
     this.language = preferencesService.getPreference(Preference.LANGUAGE);
+    this.shuffleWords = preferencesService.getPreference(Preference.SHUFFLE_WORDS);
   }
 
   ngOnInit(): void {}
@@ -46,43 +48,63 @@ export class PreferencesComponent implements OnInit {
     this.themeService.setTheme();
   }
 
-  onLanguageChanged() {
-    this.preferencesService.setPreference(Preference.LANGUAGE, this.language);
-    this.wordService.loadWordList();
+  onShuffleWordsChanged() {
+    this.preferencesService.setPreference(
+      Preference.SHUFFLE_WORDS,
+      this.shuffleWords
+    );
+    this.wordService.reprocessWordList();
   }
 
-  getFlagForLangauge(language: Language): string {
+  onLanguageChanged() {
+    this.preferencesService.setPreference(Preference.LANGUAGE, this.language);
+    this.wordService.reloadWordList();
+  }
+
+  onClickLoadCustomList() {
+    var input: HTMLInputElement = document.createElement('input');
+    input.type = 'file';
+
+    input.onchange = input.onchange = (e: Event) => {
+      var file = (<HTMLInputElement>e.target).files[0];
+      this.wordService.loadWordListLocal(file);
+    };
+
+    input.click();
+  }
+
+  getISOForLangauge(language: Language): string {
     switch (language) {
       case Language.DUTCH:
-        return '🇳🇱';
+        return 'nl';
       case Language.ENGLISH:
-        return '🇬🇧';
+        return 'gb';
       case Language.ITALIAN:
-        return '🇮🇹';
+        return 'it';
       case Language.DUTCH:
-        return '🇧🇪';
+        return 'be';
       case Language.HINDI:
-        return '🇮🇳';
+        return 'in';
       case Language.HUNGARIAN:
-        return '🇭🇺';
+        return 'hu';
       case Language.JAPANESE:
-        return '🇯🇵';
+        return 'jp';
       case Language.KOREAN:
-        return '🇰🇷';
+        return 'kr';
       case Language.CHINESE:
-        return '🇨🇳';
+        return 'cn';
       case Language.RUSSIAN:
-        return '🇷🇺';
+        return 'ru';
       case Language.SPANISH:
-        return '🇪🇸';
+        return 'es';
       case Language.PORTUGUESE:
-        return '🇵🇹';
+        return 'pt';
       case Language.FRENCH:
-        return '🇫🇷';
+        return 'fr';
       case Language.GERMAN:
-        return '🇩🇪';
+        return 'de';
       case Language.ARABIC:
-        return '🇸🇦';
+        return 'sa';
       default:
         return '🏳️';
     }

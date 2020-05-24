@@ -88,6 +88,10 @@ input:checked+.slider:before {
 
   background-color: rgb(219, 219, 219);
 
+  .title {
+    color: rgb(24, 24, 24);
+  }
+
   // Preferences component
   app-preferences {
 
