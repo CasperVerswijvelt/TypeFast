@@ -3,20 +3,18 @@ import { WordService } from './word.service';
 import { Preference, Preferences, Language } from './Preference';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-
 export class PreferencesService {
-
-  private defaults : Preferences = {
+  private defaults: Preferences = {
     dark_mode: true,
-    word_language: Language.ENGLISH
-  }
+    word_language: Language.ENGLISH,
+  };
 
   getPreference(key: Preference): any {
     try {
       let preference = JSON.parse(localStorage.getItem('preferences'))[key];
-      if (typeof preference === "undefined") throw null;
+      if (typeof preference === 'undefined') throw null;
       return preference;
     } catch (e) {
       return this.defaults[key];
@@ -25,12 +23,13 @@ export class PreferencesService {
 
   setPreference(key: Preference, value: any) {
     // Retrieve preferences object
-    let pref: Preferences = {};
+    let pref: Preferences;
 
     try {
-
       pref = JSON.parse(localStorage.getItem('preferences'));
+      if (pref == null || typeof pref === 'undefined') throw null;
     } catch (e) {
+      pref = {};
     }
 
     pref[key as string] = value;

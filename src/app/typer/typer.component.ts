@@ -41,7 +41,7 @@ export class TyperComponent implements OnInit {
       'word-input'
     )[0] as HTMLInputElement;
 
-    this.inputElement.onpaste = (e) => e.preventDefault();
+    //this.inputElement.onpaste = (e) => e.preventDefault();
 
     this.updateTimer(0);
 
@@ -191,12 +191,14 @@ export class TyperComponent implements OnInit {
       this.testResults.incorrectCharacterCount;
 
     let totalWordCount =
-      this.testResults.correctCharacterCount +
-      this.testResults.incorrectCharacterCount;
+      this.testResults.correctWordCount + this.testResults.incorrectWordCount;
 
-    stats.characterAccuracy = totalCharacterCount ?
-      this.testResults.correctCharacterCount / totalCharacterCount : 0;
-    stats.wordAccuracy = totalWordCount ? this.testResults.correctWordCount / totalWordCount : 0;
+    stats.characterAccuracy = totalCharacterCount
+      ? this.testResults.correctCharacterCount / totalCharacterCount
+      : 0;
+    stats.wordAccuracy = totalWordCount
+      ? this.testResults.correctWordCount / totalWordCount
+      : 0;
     stats.cpm = this.testResults.timeElapsed
       ? (this.testResults.correctCharacterCount /
           this.testResults.timeElapsed) *
