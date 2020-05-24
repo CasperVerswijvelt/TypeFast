@@ -63,6 +63,7 @@ export class PreferencesComponent implements OnInit {
 
   onClickLoadCustomList() {
     var input: HTMLInputElement = document.createElement('input');
+    input.setAttribute("accept", ".txt");
     input.type = 'file';
 
     input.onchange = input.onchange = (e: Event) => {
