@@ -80,3 +80,84 @@ input:checked+.slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+
+// Themes (default is dark)
+
+#body.theme--light {
+
+  background-color: rgb(219, 219, 219);
+
+  // Preferences component
+  app-preferences {
+
+    .preferences-list {
+      background-color: #ffffffee;
+      color: rgb(15, 15, 15);
+
+    }
+
+    .checkmark:after {
+      border-color: rgb(0, 0, 0);
+    }
+
+  }
+
+  app-typer {
+
+
+    .word {
+      color: rgba(26, 26, 26, 0.74);
+
+      &.word-incorrect {
+        color: #ff0000;
+      }
+    }
+
+    .word-input {
+      background: transparent;
+      color: rgba(26, 26, 26, 0.74);
+      caret-color: rgba(26, 26, 26, 0.74);
+
+      &.input-incorrect {
+        color: rgb(255, 94, 94);
+      }
+    }
+
+    .type-test-results {
+      background-color: rgba(75, 75, 75, 0.062);
+      color: rgba(32, 32, 32, 0.582);
+
+      tr {
+
+        &:nth-child(even) {
+          background-color: rgba(51, 51, 51, 0.07);
+        }
+
+      }
+    }
+
+    .type-test-timer {
+      color: rgb(32, 32, 32);
+
+      .type-test-timer-increase,
+      .type-test-timer-decrease {
+
+        svg {
+
+          fill: rgb(48, 48, 48);
+        }
+      }
+    }
+
+    .type-test-restart {
+
+      svg {
+
+        fill: rgb(48, 48, 48);
+      }
+
+    }
+
+  }
+}

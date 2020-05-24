@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PreferencesService } from '../preferences.service';
 import { Preference, Language } from '../Preference';
 import { WordService } from '../word.service';
+import { ThemeService } from '../theme.service';
 
 @Component({
   selector: 'app-preferences',
@@ -19,7 +20,8 @@ export class PreferencesComponent implements OnInit {
 
   constructor(
     private preferencesService: PreferencesService,
-    private wordService: WordService
+    private wordService: WordService,
+    private themeService: ThemeService
   ) {
     this.useDarkMode = preferencesService.getPreference(Preference.DARK_MODE);
     this.language = preferencesService.getPreference(Preference.LANGUAGE);
@@ -41,6 +43,7 @@ export class PreferencesComponent implements OnInit {
       Preference.DARK_MODE,
       this.useDarkMode
     );
+    this.themeService.setTheme();
   }
 
   onLanguageChanged() {

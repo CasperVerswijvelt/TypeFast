@@ -9,22 +9,16 @@ import { TyperComponent } from './typer/typer.component';
 import { TimePipe } from './time.pipe';
 import { PreferencesService } from './preferences.service';
 import { PreferencesComponent } from './preferences/preferences.component';
+import { ThemeService } from './theme.service';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    TyperComponent,
-    TimePipe,
-    PreferencesComponent
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule
-  ],
+  declarations: [AppComponent, TyperComponent, TimePipe, PreferencesComponent],
+  imports: [BrowserModule, FormsModule],
   providers: [
     { provide: WordService, useClass: DefaultWordService },
-    PreferencesService
+    PreferencesService,
+    ThemeService,
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -69,12 +69,12 @@
   background-color: transparent;
 
   &:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.02);
+    background-color: rgba(128, 128, 128, 0.04);
   }
 
   &:hover {
     cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.048);
+    background-color: rgba(128, 128, 128, 0.08);
   }
 
   &.preferences-toggle-entry {
