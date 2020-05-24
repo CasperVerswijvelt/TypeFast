@@ -221,7 +221,7 @@ export class TyperComponent implements OnInit {
   }
 
   syncLeft() {
-    this.containerElement.style.left = `calc(50% - 65px - ${this.leftOffset}px)`;
+    this.containerElement.style.marginLeft = `calc(50% - 65px - ${this.leftOffset}px)`;
   }
 
   onTimeRunsOut() {
