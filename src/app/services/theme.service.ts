@@ -8,11 +8,7 @@ import { Preference } from '../models/Preference';
 })
 export class ThemeService {
   constructor(private preferencesService: PreferencesService) {
-    this.setTheme(
-      preferencesService.getPreference(Preference.THEME)
-        ? Theme.DARK
-        : Theme.LIGHT
-    );
+    this.setTheme();
     preferencesService.addListener(this.onPreferenceUpdated.bind(this))
   }
 
@@ -23,11 +19,9 @@ export class ThemeService {
   }
 
   setTheme(theme?: Theme) {
-    let _theme: Theme = theme
+    let _theme: Theme = theme 
       ? theme
-      : this.preferencesService.getPreference(Preference.THEME)
-      ? Theme.DARK
-      : Theme.LIGHT;
+      : this.preferencesService.getPreference(Preference.THEME);
     document.body.className = `theme--${_theme as string}`;
   }
 }

@@ -59,8 +59,6 @@ export class PreferencesService {
         let oldObj : Preferences = JSON.parse(event.oldValue);
         let newObj : Preferences = JSON.parse(event.newValue);
 
-        console.table(oldObj, newObj);
-
         Object.keys(this.defaults).forEach(key => {
           if(oldObj[key] !== newObj[key]) {
             this.notifySubscribers(key as Preference, newObj[key]);

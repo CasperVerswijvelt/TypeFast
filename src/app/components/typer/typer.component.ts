@@ -69,7 +69,9 @@ export class TyperComponent implements OnInit {
     this.leftOffset = 0;
     this.words = [];
     this.cdRef.detectChanges();
-    this.words = this.getWords();
+    while (this.words.length < 20) {
+      this.words = this.words.concat(this.getWords());
+    }
     this.cdRef.detectChanges();
     this.testResults = {
       correctCharacterCount: 0,
@@ -143,13 +145,13 @@ export class TyperComponent implements OnInit {
     this.syncCurrentWordElement();
     this.syncLeft();
 
-    if (this.currentIndex > this.words.length - 20) {
+    while (this.currentIndex > this.words.length - 20) {
       this.words = this.words.concat(this.getWords());
     }
   }
 
   getWords () : string [] {
-    return this.wordService.getWords(true, 100); // TODO get shuffle from mode
+    return this.wordService.getWords(); // TODO dynamic with mode
   }
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {

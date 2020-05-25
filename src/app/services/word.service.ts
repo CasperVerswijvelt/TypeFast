@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
+import { TextFormat } from '../models/TextSource';
+import { Language } from '../models/Preference';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export abstract class WordService {
+  abstract getWords(wordCount?: number): string[];
 
-  abstract getWords(shuffle?: boolean, wordCount? : number): string[];
+  abstract getSentence(): string[];
 
-  abstract reprocessWordList() :void;
+  abstract loadLanguage(language: Language): Promise<[boolean,boolean]>
 
-  abstract reloadWordList() :void;
+  abstract loadTextViaUrl(format: TextFormat, url: string): Promise<boolean>;
 
-  abstract loadWordListUrl(url: string) : Promise<void>;
+  abstract loadTextViaFile(format: TextFormat, file: File): Promise<boolean>;
 
-  abstract loadWordListLocal(file: File) :  void;
-
-  abstract addListener(listenerFunction: () => void) : void;
+  abstract addListener(listenerFunction: () => void): void;
 }

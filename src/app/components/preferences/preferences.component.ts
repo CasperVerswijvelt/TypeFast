@@ -4,6 +4,7 @@ import { Preference, Language } from '../../models/Preference';
 import { WordService } from '../../services/word.service';
 import { ThemeService } from '../../services/theme.service';
 import { Theme } from 'src/app/models/Theme';
+import { TextFormat } from 'src/app/models/TextSource';
 
 @Component({
   selector: 'app-preferences',
@@ -24,7 +25,7 @@ export class PreferencesComponent implements OnInit {
     private wordService: WordService,
     private themeService : ThemeService
   ) {
-    this.useDarkMode = preferencesService.getPreference(Preference.THEME);
+    this.useDarkMode = preferencesService.getPreference(Preference.THEME) === Theme.DARK;
     this.language = preferencesService.getPreference(Preference.LANGUAGE);
 
     preferencesService.addListener(this.onPreferenceUpdated.bind(this));
@@ -71,7 +72,7 @@ export class PreferencesComponent implements OnInit {
 
     input.onchange = input.onchange = (e: Event) => {
       var file = (<HTMLInputElement>e.target).files[0];
-      this.wordService.loadWordListLocal(file);
+      this.wordService.loadTextViaFile(TextFormat.WORDS, file);
     };
 
     input.click();
