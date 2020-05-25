@@ -5,11 +5,11 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { WordService } from '../word.service';
-import { TestResults, TestResultsStats } from './TestResults';
+import { WordService } from '../../services/word.service';
+import { TestResults, TestResultsStats } from '../../models/TestResults';
 import { timer, Observable, Subscription } from 'rxjs';
-import { PreferencesService } from '../preferences.service';
-import { Preference } from '../Preference';
+import { PreferencesService } from '../../services/preferences.service';
+import { Preference } from '../../models/Preference';
 
 @Component({
   selector: 'app-typer',
@@ -149,7 +149,7 @@ export class TyperComponent implements OnInit {
   }
 
   getWords () : string [] {
-    return this.wordService.getWords(this.preferencesService.getPreference(Preference.SHUFFLE_WORDS) as boolean, 100);
+    return this.wordService.getWords(true, 100); // TODO get shuffle from mode
   }
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {

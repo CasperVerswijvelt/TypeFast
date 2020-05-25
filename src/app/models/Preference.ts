@@ -1,7 +1,9 @@
+import { Theme } from './Theme';
+
 export enum Preference {
   LANGUAGE = 'word_language',
-  DARK_MODE = 'dark_mode',
-  SHUFFLE_WORDS = 'shuffle_words'
+  THEME = 'theme',
+  FOLLOW_SYSTEM_THEME = 'follow_system_theme'
 }
 
 export enum Language {
@@ -22,7 +24,7 @@ export enum Language {
 }
 
 export interface Preferences {
-  word_language?: string;
-  dark_mode?: boolean;
-  shuffle_words?: boolean;
+  word_language?: Language;
+  theme?: Theme;
+  follow_system_theme?: boolean;
 }

@@ -1,7 +1,7 @@
 import { Injectable, SystemJsNgModuleLoader } from '@angular/core';
 import { WordService } from './word.service';
 import { PreferencesService } from './preferences.service';
-import { Preference } from './Preference';
+import { Preference } from '../models/Preference';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +13,14 @@ export class DefaultWordService implements WordService {
 
   constructor(private preferencesService: PreferencesService) {
     this.reloadWordList();
+
+    preferencesService.addListener(this.onPreferenceUpdated.bind(this));
+  }
+
+  private onPreferenceUpdated(preference : Preference, value : any) {
+    if (preference === Preference.LANGUAGE) {
+      this.reloadWordList();
+    }
   }
 
   reprocessWordList(): void {

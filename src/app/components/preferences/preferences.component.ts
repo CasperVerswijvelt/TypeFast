@@ -1,8 +1,9 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { PreferencesService } from '../preferences.service';
-import { Preference, Language } from '../Preference';
-import { WordService } from '../word.service';
-import { ThemeService } from '../theme.service';
+import { PreferencesService } from '../../services/preferences.service';
+import { Preference, Language } from '../../models/Preference';
+import { WordService } from '../../services/word.service';
+import { ThemeService } from '../../services/theme.service';
+import { Theme } from 'src/app/models/Theme';
 
 @Component({
   selector: 'app-preferences',
@@ -16,20 +17,32 @@ export class PreferencesComponent implements OnInit {
   Language = Language;
 
   useDarkMode: boolean;
-  shuffleWords: boolean;
   language: Language;
 
   constructor(
     private preferencesService: PreferencesService,
     private wordService: WordService,
-    private themeService: ThemeService
+    private themeService : ThemeService
   ) {
-    this.useDarkMode = preferencesService.getPreference(Preference.DARK_MODE);
+    this.useDarkMode = preferencesService.getPreference(Preference.THEME);
     this.language = preferencesService.getPreference(Preference.LANGUAGE);
-    this.shuffleWords = preferencesService.getPreference(Preference.SHUFFLE_WORDS);
+
+    preferencesService.addListener(this.onPreferenceUpdated.bind(this));
   }
 
   ngOnInit(): void {}
+
+  private onPreferenceUpdated(
+    updatedPreference: Preference,
+    preferenceValue: any
+  ) {
+    if (updatedPreference === Preference.THEME) {
+      this.useDarkMode = preferenceValue == Theme.DARK;
+    }
+    if (updatedPreference === Preference.LANGUAGE) {
+      this.language = preferenceValue;
+    }
+  }
 
   onPreferencesIconClicked() {
     this.togglePreferences();
@@ -42,28 +55,18 @@ export class PreferencesComponent implements OnInit {
 
   onDarkModeChanged() {
     this.preferencesService.setPreference(
-      Preference.DARK_MODE,
-      this.useDarkMode
+      Preference.THEME,
+      this.useDarkMode ? Theme.DARK : Theme.LIGHT
     );
-    this.themeService.setTheme();
-  }
-
-  onShuffleWordsChanged() {
-    this.preferencesService.setPreference(
-      Preference.SHUFFLE_WORDS,
-      this.shuffleWords
-    );
-    this.wordService.reprocessWordList();
   }
 
   onLanguageChanged() {
     this.preferencesService.setPreference(Preference.LANGUAGE, this.language);
-    this.wordService.reloadWordList();
   }
 
   onClickLoadCustomList() {
     var input: HTMLInputElement = document.createElement('input');
-    input.setAttribute("accept", ".txt");
+    input.setAttribute('accept', '.txt');
     input.type = 'file';
 
     input.onchange = input.onchange = (e: Event) => {

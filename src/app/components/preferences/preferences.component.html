@@ -11,15 +11,6 @@
           <span class="slider round"></span>
         </label>
       </div>
-      <div class="preferences-entry preferences-toggle-entry">
-        <label class="preferences-toggle-label" for="shuffle-words">
-          Shuffle words
-        </label>
-        <label class="preferences-toggle-switch switch">
-          <input type="checkbox" [(ngModel)]="shuffleWords" (change)="onShuffleWordsChanged()" id="shuffle-words" />
-          <span class="slider round"></span>
-        </label>
-      </div>
       <div class="preferences-entry preferences-language" *ngFor="let lang of Language | keyvalue">
         <label class="language-option">
           <div class="flag-icon" [ngClass]="'flag-icon-' + getISOForLangauge(lang.value)"></div>
