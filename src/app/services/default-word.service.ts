@@ -22,7 +22,9 @@ export class DefaultWordService implements WordService {
   private DEFAULT_WORD_AMOUNT = 100;
 
   constructor(private preferencesService: PreferencesService) {
-    this.loadLanguage(preferencesService.getPreference(Preference.LANGUAGE)).then(this.notifySubscribers.bind(this));
+    this.loadLanguage(
+      preferencesService.getPreference(Preference.LANGUAGE)
+    ).then(this.notifySubscribers.bind(this));
     preferencesService.addListener(this.onPreferenceUpdated.bind(this));
   }
 
@@ -49,17 +51,19 @@ export class DefaultWordService implements WordService {
     if (format === TextFormat.WORDS || format === TextFormat.BOTH) {
       this.words = text.split(/\s+/);
       this.wordsCopy = [];
-    } 
+    }
     if (format === TextFormat.SENTENCES || format === TextFormat.BOTH) {
       let tempSentences = [];
-      let lines = text.split(/\r|\n/);
-      lines.forEach((line) => tempSentences.push(line.split(/\r|\n|\s/)));
+      let lines = text.match(/[^\r\n]+/g);
+      lines.forEach((line) => {
+        tempSentences.push(line.split(/\s+/));
+      });
       this.sentenes = tempSentences;
       this.sentencesCopy = [];
     }
   }
 
-  async loadTextViaUrl(format: TextFormat, url: string): Promise<boolean> {
+  private async loadTextViaUrl(format: TextFormat, url: string): Promise<boolean> {
     try {
       let text = await this.getTextViaUrl(url);
       this.parseText(format, text);
@@ -70,7 +74,7 @@ export class DefaultWordService implements WordService {
     return false;
   }
 
-  async loadTextViaFile(format: TextFormat, file: File): Promise<boolean> {
+  private async loadTextViaFile(format: TextFormat, file: File): Promise<boolean> {
     try {
       let text = await this.getTextViaFile(file);
       this.parseText(format, text);
@@ -99,7 +103,13 @@ export class DefaultWordService implements WordService {
     }
   }
 
-  loadLanguage(language: Language): Promise<[boolean,boolean]> {
+  loadFile(file: File) : Promise<void> {
+    return this.loadTextViaFile(TextFormat.BOTH, file).then(
+      this.notifySubscribers.bind(this)
+    );
+  }
+
+  loadLanguage(language: Language): Promise<[boolean, boolean]> {
     return Promise.all([
       this.loadTextViaUrl(
         TextFormat.WORDS,
@@ -153,7 +163,7 @@ export class DefaultWordService implements WordService {
     }
   }
 
-  notifySubscribers() {
+  private notifySubscribers() {
     this.listeners.forEach((listener) => listener());
   }
 

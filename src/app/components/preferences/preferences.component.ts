@@ -72,7 +72,7 @@ export class PreferencesComponent implements OnInit {
 
     input.onchange = input.onchange = (e: Event) => {
       var file = (<HTMLInputElement>e.target).files[0];
-      this.wordService.loadTextViaFile(TextFormat.WORDS, file);
+      this.wordService.loadFile(file);
     };
 
     input.click();

@@ -12,9 +12,7 @@ export abstract class WordService {
 
   abstract loadLanguage(language: Language): Promise<[boolean,boolean]>
 
-  abstract loadTextViaUrl(format: TextFormat, url: string): Promise<boolean>;
-
-  abstract loadTextViaFile(format: TextFormat, file: File): Promise<boolean>;
+  abstract loadFile(file : File) : Promise<void>;
 
   abstract addListener(listenerFunction: () => void): void;
 }
