@@ -1,10 +1,8 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
-import { Preference, Language } from '../../models/Preference';
+import { Preference, Language, Theme } from '../../models/Preference';
 import { WordService } from '../../services/word.service';
 import { ThemeService } from '../../services/theme.service';
-import { Theme } from 'src/app/models/Theme';
-import { TextFormat } from 'src/app/models/TextSource';
 
 @Component({
   selector: 'app-preferences',
@@ -16,17 +14,23 @@ export class PreferencesComponent implements OnInit {
 
   showPreferences = false;
   Language = Language;
+  Theme = Theme;
+  
 
-  useDarkMode: boolean;
+  followSystemTheme: boolean;
   language: Language;
+  theme : Theme;
+
+  openedPreferencesGroup : string;
 
   constructor(
     private preferencesService: PreferencesService,
     private wordService: WordService,
     private themeService : ThemeService
   ) {
-    this.useDarkMode = preferencesService.getPreference(Preference.THEME) === Theme.DARK;
+    this.theme = preferencesService.getPreference(Preference.THEME);
     this.language = preferencesService.getPreference(Preference.LANGUAGE);
+    this.followSystemTheme = preferencesService.getPreference(Preference.FOLLOW_SYSTEM_THEME);
 
     preferencesService.addListener(this.onPreferenceUpdated.bind(this));
   }
@@ -38,10 +42,13 @@ export class PreferencesComponent implements OnInit {
     preferenceValue: any
   ) {
     if (updatedPreference === Preference.THEME) {
-      this.useDarkMode = preferenceValue == Theme.DARK;
+      this.theme = preferenceValue;
     }
     if (updatedPreference === Preference.LANGUAGE) {
       this.language = preferenceValue;
+    }
+    if (updatedPreference === Preference.FOLLOW_SYSTEM_THEME) {
+      this.followSystemTheme = preferenceValue;
     }
   }
 
@@ -52,12 +59,17 @@ export class PreferencesComponent implements OnInit {
   togglePreferences() {
     this.showPreferences = !this.showPreferences;
     this.toggled.emit(this.showPreferences);
+    this.openedPreferencesGroup = "";
   }
 
-  onDarkModeChanged() {
+  onThemeChanged() {
     this.preferencesService.setPreference(
       Preference.THEME,
-      this.useDarkMode ? Theme.DARK : Theme.LIGHT
+      this.theme
+    );
+    this.preferencesService.setPreference(
+      Preference.FOLLOW_SYSTEM_THEME,
+      this.followSystemTheme
     );
   }
 
@@ -113,5 +125,10 @@ export class PreferencesComponent implements OnInit {
       default:
         return '🏳️';
     }
+  }
+
+  togglePreferencesGroup(group : string) {
+
+    this.openedPreferencesGroup = this.openedPreferencesGroup === group ? "" : group;
   }
 }

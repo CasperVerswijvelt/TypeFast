@@ -1,35 +1,160 @@
 <div class="preferences-wrapper" [class.preferences-show]="showPreferences">
-  <div class="preferences-background" (click)="onPreferencesIconClicked()"></div>
+  <div
+    class="preferences-background"
+    (click)="onPreferencesIconClicked()"
+  ></div>
   <div class="preferences">
     <div class="preferences-list">
-      <div class="preferences-entry preferences-toggle-entry">
-        <label class="preferences-toggle-label" for="dark-mode">
-          Dark mode
-        </label>
-        <label class="preferences-toggle-switch switch">
-          <input type="checkbox" [(ngModel)]="useDarkMode" (change)="onDarkModeChanged()" id="dark-mode" />
-          <span class="slider round"></span>
-        </label>
+
+      <!-- Theme preferences group -->
+      <div
+        class="preferences-group"
+        [class.preferences-group-opened]="openedPreferencesGroup === 'theme'"
+      >
+        <div
+          class="preferences-group-title"
+          (click)="togglePreferencesGroup('theme')"
+        >
+          <div class="preferences-group-title-key">Theme</div>
+          <div class="preferences-group-title-value capitalize">
+            {{ theme }}
+          </div>
+          <div class="preferences-group-title-arrow">
+            <svg
+              version="1.1"
+              id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 330.002 330.002"
+              style="enable-background: new 0 0 330.002 330.002;"
+              xml:space="preserve"
+            >
+              <path
+                id="XMLID_105_"
+                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
+	c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
+	C331.972,223.623,330.628,214.221,324.001,209.25z"
+              />
+            </svg>
+          </div>
+        </div>
+        <div class="preferences-group-entries preferences-group-entries-theme">
+          <div
+            class="preferences-entry preferences-language"
+            *ngFor="let them of Theme | keyvalue"
+          >
+            <label class="language-option">
+              <div
+                class="theme-icon"
+                [ngClass]="'theme-icon-' + them.value"
+              ></div>
+              <input
+                type="radio"
+                name="theme"
+                [checked]="theme === them.value"
+                [value]="them.value"
+                (change)="theme = them.value; onThemeChanged()"
+              />
+              <span class="checkmark"></span>
+              {{ them.value }}
+            </label>
+          </div>
+
+          <div class="preferences-entry preferences-toggle-entry">
+            <label class="preferences-toggle-label" for="follow-system">
+              Follow system
+            </label>
+            <label class="preferences-toggle-switch switch">
+              <input
+                type="checkbox"
+                [(ngModel)]="followSystemTheme"
+                (change)="onThemeChanged()"
+                id="follow-system"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
       </div>
-      <div class="preferences-entry preferences-language" *ngFor="let lang of Language | keyvalue">
-        <label class="language-option">
-          <div class="flag-icon" [ngClass]="'flag-icon-' + getISOForLangauge(lang.value)"></div>
-          <input type="radio" name="language" [checked]="language === lang.value" [value]="lang.value"
-            (change)="language = lang.value;onLanguageChanged();" />
-          <span class="checkmark"></span>
-          {{lang.value}}
-        </label>
+
+      <!-- Language preferences group -->
+      <div
+        class="preferences-group"
+        [class.preferences-group-opened]="openedPreferencesGroup === 'language'"
+      >
+        <div
+          class="preferences-group-title"
+          (click)="togglePreferencesGroup('language')"
+        >
+          <div class="preferences-group-title-key">Language</div>
+          <div class="preferences-group-title-value capitalize">
+            {{ language }}
+          </div>
+          <div class="preferences-group-title-arrow">
+            <svg
+              version="1.1"
+              id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 330.002 330.002"
+              style="enable-background: new 0 0 330.002 330.002;"
+              xml:space="preserve"
+            >
+              <path
+                id="XMLID_105_"
+                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
+	c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
+	C331.972,223.623,330.628,214.221,324.001,209.25z"
+              />
+            </svg>
+          </div>
+        </div>
+        <div class="preferences-group-entries preferences-group-entries-language">
+          <div
+            class="preferences-entry preferences-language"
+            *ngFor="let lang of Language | keyvalue"
+          >
+            <label class="language-option">
+              <div
+                class="flag-icon"
+                [ngClass]="'flag-icon-' + getISOForLangauge(lang.value)"
+              ></div>
+              <input
+                type="radio"
+                name="language"
+                [checked]="language === lang.value"
+                [value]="lang.value"
+                (change)="language = lang.value; onLanguageChanged()"
+              />
+              <span class="checkmark"></span>
+              {{ lang.value }}
+            </label>
+          </div>
+        </div>
       </div>
-      <div class="preferences-entry preferences-language"  title="Load a custom word list: this text file should contain newline or space seperated words.">
+      <div
+        class="preferences-entry preferences-language"
+        title="Load a custom word list: this text file should contain newline or space seperated words."
+      >
         <div class="language-option" (click)="onClickLoadCustomList()">
           Load custom list
         </div>
       </div>
     </div>
     <button class="preferences-icon" (click)="onPreferencesIconClicked()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
         <path
-          d="M24 14v-4c-1.619 0-2.906.267-3.705-1.476-.697-1.663.604-2.596 1.604-3.596l-2.829-2.828c-1.033 1.033-1.908 2.307-3.666 1.575-1.674-.686-1.404-2.334-1.404-3.675h-4c0 1.312.278 2.985-1.404 3.675-1.761.733-2.646-.553-3.667-1.574l-2.829 2.828c1.033 1.033 2.308 1.909 1.575 3.667-.348.849-1.176 1.404-2.094 1.404h-1.581v4c1.471 0 2.973-.281 3.704 1.475.698 1.661-.604 2.596-1.604 3.596l2.829 2.829c1-1 1.943-2.282 3.667-1.575 1.673.687 1.404 2.332 1.404 3.675h4c0-1.244-.276-2.967 1.475-3.704 1.645-.692 2.586.595 3.596 1.604l2.828-2.829c-1-1-2.301-1.933-1.604-3.595l.03-.072c.687-1.673 2.332-1.404 3.675-1.404zm-12 2c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4z" />
+          d="M24 14v-4c-1.619 0-2.906.267-3.705-1.476-.697-1.663.604-2.596 1.604-3.596l-2.829-2.828c-1.033 1.033-1.908 2.307-3.666 1.575-1.674-.686-1.404-2.334-1.404-3.675h-4c0 1.312.278 2.985-1.404 3.675-1.761.733-2.646-.553-3.667-1.574l-2.829 2.828c1.033 1.033 2.308 1.909 1.575 3.667-.348.849-1.176 1.404-2.094 1.404h-1.581v4c1.471 0 2.973-.281 3.704 1.475.698 1.661-.604 2.596-1.604 3.596l2.829 2.829c1-1 1.943-2.282 3.667-1.575 1.673.687 1.404 2.332 1.404 3.675h4c0-1.244-.276-2.967 1.475-3.704 1.645-.692 2.586.595 3.596 1.604l2.828-2.829c-1-1-2.301-1.933-1.604-3.595l.03-.072c.687-1.673 2.332-1.404 3.675-1.404zm-12 2c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4z"
+        />
       </svg>
     </button>
   </div>

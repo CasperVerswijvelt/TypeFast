@@ -1,5 +1,3 @@
-import { Theme } from './Theme';
-
 export enum Preference {
   LANGUAGE = 'word_language',
   THEME = 'theme',
@@ -23,8 +21,15 @@ export enum Language {
   SPANISH = 'spanish',
 }
 
+export enum Theme {
+  DARK = 'dark',
+  LIGHT = 'light',
+}
+
+
 export interface Preferences {
   word_language?: Language;
   theme?: Theme;
   follow_system_theme?: boolean;
 }
+

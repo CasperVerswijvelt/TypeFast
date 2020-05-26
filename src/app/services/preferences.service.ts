@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WordService } from './word.service';
-import { Preference, Preferences, Language } from '../models/Preference';
-import { Theme } from '../models/Theme';
-import { createOfflineCompileUrlResolver } from '@angular/compiler';
+import { Preference, Preferences, Language, Theme } from '../models/Preference';
 
 @Injectable({
   providedIn: 'root',

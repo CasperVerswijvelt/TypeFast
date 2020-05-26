@@ -17,7 +17,7 @@ app-root {
 }
 
 app-root {
-  overflow-y: scroll;
+  overflow-y: auto;
   overflow-x: hidden;
   position: relative;
 }
@@ -83,6 +83,10 @@ input:checked+.slider:before {
   border-radius: 50%;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 
 // Themes (default is dark)
 
@@ -99,7 +103,7 @@ input:checked+.slider:before {
 
     .preferences-list {
       background-color: #cececeee;
-      color: rgb(15, 15, 15);
+      color: #424242;
 
     }
 
@@ -115,6 +119,18 @@ input:checked+.slider:before {
 
       &:hover {
         background-color: rgba(128, 128, 128, 0.233);
+      }
+    }
+
+    .preferences-group-entries {
+      background-color: #b7b7b766;
+    }
+
+    .preferences-group-title-arrow {
+     
+      svg {
+       
+        fill: rgb(26, 26, 26);
       }
     }
 

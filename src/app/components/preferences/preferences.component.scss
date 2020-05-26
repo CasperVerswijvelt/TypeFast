@@ -1,5 +1,5 @@
 .preferences-wrapper {
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
 }
@@ -51,14 +51,14 @@
   border-radius: 6px;
   margin-right: 10px;
   color: white;
-  width: 210px;
+  width: 225px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
-  overflow: hidden;
+  overflow-x: hidden;
   display: flex;
   flex-direction: column;
-  overflow: scroll;
+  overflow-y: auto;
 
   label {
     text-transform: capitalize;
@@ -66,8 +66,7 @@
 }
 
 .preferences-entry {
-
-  transition: background-color .2s;
+  transition: background-color 0.2s;
   background-color: transparent;
 
   &:nth-child(even) {
@@ -80,17 +79,17 @@
   }
 
   &.preferences-toggle-entry {
-
     display: flex;
 
     .preferences-toggle-label {
       flex: 1;
+      font-weight: bold;
       margin-right: -60px;
       padding: 9px 50px 9px 16px;
     }
 
     .preferences-toggle-switch {
-      margin: 8px 16px 8px 8px
+      margin: 8px 16px 8px 8px;
     }
   }
 }
@@ -101,10 +100,10 @@
   transition: opacity 0.2s;
   width: 100%;
   height: 100%;
+  background-color: #00000033;
 }
 
 .preferences-show {
-
   .preferences-background,
   .preferences-list {
     opacity: 1;
@@ -142,7 +141,7 @@
   }
 
   /* Show the checkmark when checked */
-  input:checked~.checkmark:after {
+  input:checked ~ .checkmark:after {
     display: block;
   }
 
@@ -159,5 +158,69 @@
 
   .flag-icon {
     margin-right: 5px;
+  }
+}
+
+.preferences-group {
+  .preferences-group-title {
+    padding: 9px 16px;
+    cursor: pointer;
+
+    display: flex;
+    .preferences-group-title-key {
+      flex: 1;
+      font-weight: bold;
+    }
+  }
+  .preferences-group-entries {
+    height: auto;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .4s;
+    background-color: #00000066;
+
+    .preferences-toggle-label {
+      font-weight: normal;
+    }
+  }
+
+  .preferences-group-title-arrow {
+    margin-left: 6px;
+    height: 18px;
+    width: 18px;
+    position: relative;
+   
+    svg {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate3d(-50%,-50%,0) rotate(-90deg);
+      fill: white;
+      width: 80%;
+      transition: transform .4s;
+      transform-origin: center;
+    }
+  }
+
+  &.preferences-group-opened {
+    .preferences-group-entries {
+
+      max-height: 100px;
+
+      &.preferences-group-entries-theme {
+        max-height: 96px;
+      }
+
+      &.preferences-group-entries-language {
+        max-height: 420px;
+      }
+    }
+
+    .preferences-group-title-arrow {
+     
+      svg {
+        transform: translate3d(-50%,-50%,0) rotate(-180deg);
+      }
+    }
   }
 }
