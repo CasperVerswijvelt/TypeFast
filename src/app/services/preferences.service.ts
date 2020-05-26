@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WordService } from './word.service';
-import { Preference, Preferences, Language, Theme } from '../models/Preference';
+import { Preference, Preferences, Language, Theme, WordMode } from '../models/Preference';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +12,8 @@ export class PreferencesService {
   private defaults: Preferences = {
     theme: Theme.LIGHT,
     word_language: Language.ENGLISH,
+    follow_system_theme: false,
+    default_word_mode: WordMode.WORDS
   };
 
   constructor() {

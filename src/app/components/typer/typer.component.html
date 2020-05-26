@@ -6,7 +6,7 @@
         <div class="word" *ngFor="let word of words">{{word}}</div>
       </div>
     </div>
-    <input [(ngModel)]="wordInput" (input)="wordInputChanged($event.target.value)" type="text" spellcheck="false" placeholder="type here" autofocus autocomplete="off" autocapitalize="off"
+    <input [(ngModel)]="wordInput" (input)="wordInputChanged($event.target.value)" (keydown.enter)="wordInput = wordInput + ' '; wordInputChanged(wordInput)" type="text" spellcheck="false" placeholder="type here" autofocus autocomplete="off" autocapitalize="off"
       class="word-input" tabindex="3">
   </div>
 
@@ -34,7 +34,7 @@
         </svg>
       </button>
     </div>
-    <div>
+    <div class="type-test-buttons">
       <button type="button" class="type-test-restart" tabindex="0" (click)="onRestartClicked()">
         <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync-alt"
           class="svg-inline--fa fa-sync-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">

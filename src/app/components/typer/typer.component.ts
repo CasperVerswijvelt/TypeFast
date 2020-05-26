@@ -9,7 +9,7 @@ import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
 import { timer, Observable, Subscription } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
-import { Preference } from '../../models/Preference';
+import { Preference, WordMode } from '../../models/Preference';
 
 @Component({
   selector: 'app-typer',
@@ -23,6 +23,8 @@ export class TyperComponent implements OnInit {
   currentIndex: number;
   wordInput: string;
   leftOffset: number = 0;
+
+  wordMode: WordMode;
 
   currentWordElement: HTMLElement;
   containerElement: HTMLElement;
@@ -40,7 +42,13 @@ export class TyperComponent implements OnInit {
     private wordService: WordService,
     private cdRef: ChangeDetectorRef,
     private preferencesService: PreferencesService
-  ) {}
+  ) {
+    this.wordService.addListener(this.setupTest.bind(this));
+    this.wordMode = preferencesService.getPreference(
+      Preference.DEFAULT_WORD_MODE
+    );
+    this.preferencesService.addListener(this.onPreferenceUpdated.bind(this));
+  }
 
   ngOnInit(): void {
     this.containerElement = document.getElementsByClassName(
@@ -54,7 +62,6 @@ export class TyperComponent implements OnInit {
 
     this.updateTimer(0);
 
-    this.wordService.addListener(this.setupTest.bind(this));
     this.focusFunctionReady.emit(this.focusInput.bind(this));
     this.focusInput();
   }
@@ -129,6 +136,16 @@ export class TyperComponent implements OnInit {
     }
   }
 
+  onInputKeyPress(event: KeyboardEvent) {
+    console.log(event);
+  }
+
+  onPreferenceUpdated(preference: Preference, value: any) {
+    if (preference === Preference.DEFAULT_WORD_MODE) {
+      this.setupTest();
+    }
+  }
+
   startTest() {
     this.secondTimer = timer(0, 1000).subscribe(this.onSecond.bind(this));
     this.testStarted = true;
@@ -150,8 +167,12 @@ export class TyperComponent implements OnInit {
     }
   }
 
-  getWords () : string [] {
-    return this.wordService.getWords(); // TODO dynamic with mode
+  getWords(): string[] {
+    return this.preferencesService.getPreference(
+      Preference.DEFAULT_WORD_MODE
+    ) === WordMode.SENTENCES
+      ? this.wordService.getSentence()
+      : this.wordService.getWords();
   }
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {

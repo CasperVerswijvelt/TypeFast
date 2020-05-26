@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
-import { Preference, Language, Theme } from '../../models/Preference';
+import { Preference, Language, Theme, WordMode } from '../../models/Preference';
 import { WordService } from '../../services/word.service';
 import { ThemeService } from '../../services/theme.service';
 
@@ -15,11 +15,13 @@ export class PreferencesComponent implements OnInit {
   showPreferences = false;
   Language = Language;
   Theme = Theme;
+  WordMode = WordMode;
   
 
   followSystemTheme: boolean;
   language: Language;
   theme : Theme;
+  defaultWordMode: WordMode;
 
   openedPreferencesGroup : string;
 
@@ -31,6 +33,7 @@ export class PreferencesComponent implements OnInit {
     this.theme = preferencesService.getPreference(Preference.THEME);
     this.language = preferencesService.getPreference(Preference.LANGUAGE);
     this.followSystemTheme = preferencesService.getPreference(Preference.FOLLOW_SYSTEM_THEME);
+    this.defaultWordMode = preferencesService.getPreference(Preference.DEFAULT_WORD_MODE);
 
     preferencesService.addListener(this.onPreferenceUpdated.bind(this));
   }
@@ -43,12 +46,15 @@ export class PreferencesComponent implements OnInit {
   ) {
     if (updatedPreference === Preference.THEME) {
       this.theme = preferenceValue;
-    }
+    } else
     if (updatedPreference === Preference.LANGUAGE) {
       this.language = preferenceValue;
-    }
+    } else
     if (updatedPreference === Preference.FOLLOW_SYSTEM_THEME) {
       this.followSystemTheme = preferenceValue;
+    } else
+    if (updatedPreference === Preference.DEFAULT_WORD_MODE) {
+      this.defaultWordMode = preferenceValue;
     }
   }
 
@@ -75,6 +81,10 @@ export class PreferencesComponent implements OnInit {
 
   onLanguageChanged() {
     this.preferencesService.setPreference(Preference.LANGUAGE, this.language);
+  }
+
+  onDefaultWordModeChanged() {
+    this.preferencesService.setPreference(Preference.DEFAULT_WORD_MODE, this.defaultWordMode);
   }
 
   onClickLoadCustomList() {
