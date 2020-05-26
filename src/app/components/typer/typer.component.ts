@@ -151,7 +151,7 @@ export class TyperComponent implements OnInit {
   }
 
   getWords () : string [] {
-    return this.wordService.getWords(); // TODO dynamic with mode
+    return this.wordService.getSentence(); // TODO dynamic with mode
   }
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {

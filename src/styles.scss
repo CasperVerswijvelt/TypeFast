@@ -9,15 +9,17 @@ body {
 html,
 body,
 app-root {
-  width: 100%;
-  height: 100%;
   margin: 0;
   padding: 0;
-  position: relative;
+  height: 100%;
+  width: 100%;
+  display: block;
 }
 
 app-root {
-  position: initial;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  position: relative;
 }
 
 /* The switch - the box around the slider */
