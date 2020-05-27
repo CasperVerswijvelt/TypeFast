@@ -18,14 +18,12 @@ export class DefaultWordService implements WordService {
 
   private wordListLoaded = false;
   private sentenceListLoaded = false;
-  private listeners: ((wordMode : WordMode) => void)[] = [];
+  private listeners: ((wordMode: WordMode) => void)[] = [];
 
   private DEFAULT_WORD_AMOUNT = 100;
 
   constructor(private preferencesService: PreferencesService) {
-    this.loadLanguage(
-      preferencesService.getPreference(Preference.LANGUAGE)
-    );
+    this.loadLanguage(preferencesService.getPreference(Preference.LANGUAGE));
     preferencesService.addListener(this.onPreferenceUpdated.bind(this));
   }
 
@@ -66,7 +64,10 @@ export class DefaultWordService implements WordService {
     }
   }
 
-  private async loadTextViaUrl(format: TextFormat, url: string): Promise<boolean> {
+  private async loadTextViaUrl(
+    format: TextFormat,
+    url: string
+  ): Promise<boolean> {
     try {
       let text = await this.getTextViaUrl(url);
       this.parseText(format, text);
@@ -77,7 +78,10 @@ export class DefaultWordService implements WordService {
     return false;
   }
 
-  private async loadTextViaFile(format: TextFormat, file: File): Promise<boolean> {
+  private async loadTextViaFile(
+    format: TextFormat,
+    file: File
+  ): Promise<boolean> {
     try {
       let text = await this.getTextViaFile(file);
       this.parseText(format, text);
@@ -102,30 +106,32 @@ export class DefaultWordService implements WordService {
 
   private onPreferenceUpdated(preference: Preference, value: any) {
     if (preference === Preference.LANGUAGE) {
-      this.loadLanguage(value).then(this.notifySubscribers.bind(this));
+      this.loadLanguage(value);
     }
   }
 
-  loadFile(file: File) : Promise<void> {
-    return this.loadTextViaFile(TextFormat.BOTH, file).then(
-      this.notifySubscribers.bind(this)
-    );
+  loadFile(file: File): Promise<void> {
+    return this.loadTextViaFile(TextFormat.BOTH, file).then(() => {
+      this.notifySubscribers(WordMode.WORDS);
+      this.notifySubscribers(WordMode.SENTENCES);
+    });
   }
 
   loadLanguage(language: Language): Promise<[void, void]> {
-
-      return Promise.all([this.loadTextViaUrl(
+    return Promise.all([
+      this.loadTextViaUrl(
         TextFormat.WORDS,
         `assets/languages/${language}/words.txt`
-      ).then((value:boolean) => {
+      ).then((value: boolean) => {
         if (value) this.notifySubscribers(WordMode.WORDS);
       }),
       this.loadTextViaUrl(
         TextFormat.SENTENCES,
         `assets/languages/${language}/sentences.txt`
-      ).then((value:boolean) => {
+      ).then((value: boolean) => {
         if (value) this.notifySubscribers(WordMode.SENTENCES);
-      })])
+      }),
+    ]);
   }
 
   getWords(wordCount?: number): string[] {
@@ -161,7 +167,7 @@ export class DefaultWordService implements WordService {
     )[0];
   }
 
-  addListener(listenerFunction: (wordMode : WordMode) => void): void {
+  addListener(listenerFunction: (wordMode: WordMode) => void): void {
     this.listeners.push(listenerFunction);
 
     if (this.wordListLoaded) {
@@ -172,7 +178,7 @@ export class DefaultWordService implements WordService {
     }
   }
 
-  private notifySubscribers(wordMode : WordMode) {
+  private notifySubscribers(wordMode: WordMode) {
     this.listeners.forEach((listener) => listener(wordMode));
   }
 }
