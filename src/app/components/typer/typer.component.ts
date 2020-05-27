@@ -19,7 +19,7 @@ import { Preference, WordMode } from '../../models/Preference';
 export class TyperComponent implements OnInit {
   @Output() focusFunctionReady = new EventEmitter<() => void>();
 
-  words: string[];
+  words: string[] = ["Loading..."];
   currentIndex: number;
   wordInput: string;
   leftOffset: number = 0;
@@ -43,7 +43,7 @@ export class TyperComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     private preferencesService: PreferencesService
   ) {
-    this.wordService.addListener(this.setupTest.bind(this));
+    this.wordService.addListener(this.onUpdatedWordList.bind(this));
     this.wordMode = preferencesService.getPreference(
       Preference.DEFAULT_WORD_MODE
     );
@@ -76,9 +76,7 @@ export class TyperComponent implements OnInit {
     this.leftOffset = 0;
     this.words = [];
     this.cdRef.detectChanges();
-    while (this.words.length < 20) {
-      this.words = this.words.concat(this.getWords());
-    }
+    this.fillWordList();
     this.cdRef.detectChanges();
     this.testResults = {
       correctCharacterCount: 0,
@@ -136,12 +134,14 @@ export class TyperComponent implements OnInit {
     }
   }
 
-  onInputKeyPress(event: KeyboardEvent) {
-    console.log(event);
-  }
-
   onPreferenceUpdated(preference: Preference, value: any) {
     if (preference === Preference.DEFAULT_WORD_MODE) {
+      this.setupTest();
+    }
+  }
+
+  onUpdatedWordList( wordMode: WordMode) {
+    if (wordMode === this.wordMode) {
       this.setupTest();
     }
   }
@@ -162,6 +162,10 @@ export class TyperComponent implements OnInit {
     this.syncCurrentWordElement();
     this.syncLeft();
 
+    this.fillWordList();
+  }
+
+  private fillWordList() {
     while (this.currentIndex > this.words.length - 20) {
       this.words = this.words.concat(this.getWords());
     }

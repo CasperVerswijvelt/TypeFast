@@ -1,7 +1,7 @@
 import { Injectable, SystemJsNgModuleLoader } from '@angular/core';
 import { WordService } from './word.service';
 import { PreferencesService } from './preferences.service';
-import { Preference, Language } from '../models/Preference';
+import { Preference, Language, WordMode } from '../models/Preference';
 import { TextFormat } from '../models/TextSource';
 
 @Injectable({
@@ -17,14 +17,15 @@ export class DefaultWordService implements WordService {
   private sentencesCopy: string[][] = [];
 
   private wordListLoaded = false;
-  private listeners: (() => void)[] = [];
+  private sentenceListLoaded = false;
+  private listeners: ((wordMode : WordMode) => void)[] = [];
 
   private DEFAULT_WORD_AMOUNT = 100;
 
   constructor(private preferencesService: PreferencesService) {
     this.loadLanguage(
       preferencesService.getPreference(Preference.LANGUAGE)
-    ).then(this.notifySubscribers.bind(this));
+    );
     preferencesService.addListener(this.onPreferenceUpdated.bind(this));
   }
 
@@ -51,6 +52,7 @@ export class DefaultWordService implements WordService {
     if (format === TextFormat.WORDS || format === TextFormat.BOTH) {
       this.words = text.split(/\s+/);
       this.wordsCopy = [];
+      this.wordListLoaded = true;
     }
     if (format === TextFormat.SENTENCES || format === TextFormat.BOTH) {
       let tempSentences = [];
@@ -60,6 +62,7 @@ export class DefaultWordService implements WordService {
       });
       this.sentenes = tempSentences;
       this.sentencesCopy = [];
+      this.sentenceListLoaded = true;
     }
   }
 
@@ -109,17 +112,20 @@ export class DefaultWordService implements WordService {
     );
   }
 
-  loadLanguage(language: Language): Promise<[boolean, boolean]> {
-    return Promise.all([
-      this.loadTextViaUrl(
+  loadLanguage(language: Language): Promise<[void, void]> {
+
+      return Promise.all([this.loadTextViaUrl(
         TextFormat.WORDS,
         `assets/languages/${language}/words.txt`
-      ),
+      ).then((value:boolean) => {
+        if (value) this.notifySubscribers(WordMode.WORDS);
+      }),
       this.loadTextViaUrl(
         TextFormat.SENTENCES,
         `assets/languages/${language}/sentences.txt`
-      ),
-    ]);
+      ).then((value:boolean) => {
+        if (value) this.notifySubscribers(WordMode.SENTENCES);
+      })])
   }
 
   getWords(wordCount?: number): string[] {
@@ -155,21 +161,18 @@ export class DefaultWordService implements WordService {
     )[0];
   }
 
-  addListener(listenerFunction: () => void): void {
+  addListener(listenerFunction: (wordMode : WordMode) => void): void {
     this.listeners.push(listenerFunction);
 
     if (this.wordListLoaded) {
-      listenerFunction();
+      listenerFunction(WordMode.WORDS);
+    }
+    if (this.sentenceListLoaded) {
+      listenerFunction(WordMode.SENTENCES);
     }
   }
 
-  private notifySubscribers() {
-    this.listeners.forEach((listener) => listener());
-  }
-
-  private loadWordListText(text: string) {
-    this.words = text.split(/\r?\n?\s/);
-    this.wordListLoaded = true;
-    this.notifySubscribers();
+  private notifySubscribers(wordMode : WordMode) {
+    this.listeners.forEach((listener) => listener(wordMode));
   }
 }

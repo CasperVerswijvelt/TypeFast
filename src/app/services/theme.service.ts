@@ -35,7 +35,6 @@ export class ThemeService {
   }
 
   private onSystemThemeUpdated(event: MediaQueryListEvent) {
-    console.log(event);
     this.setTheme(
       event.matches
         ? Theme.DARK
