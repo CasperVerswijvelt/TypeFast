@@ -3,8 +3,9 @@ body {
 }
 
 * {
-  font-family: Roboto, sans-serif;  
+  font-family: Roboto, sans-serif;
   box-sizing: border-box;
+  margin: 0;
 }
 
 html,
@@ -47,8 +48,8 @@ app-root {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
 .slider:before {
@@ -59,19 +60,19 @@ app-root {
   left: 3px;
   bottom: 2px;
   background-color: white;
-  -webkit-transition: .4s;
-  transition: .4s;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
 }
 
-input:checked+.slider {
-  background-color: #2196F3;
+input:checked + .slider {
+  background-color: #2196f3;
 }
 
-input:focus+.slider {
-  box-shadow: 0 0 1px #2196F3;
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196f3;
 }
 
-input:checked+.slider:before {
+input:checked + .slider:before {
   transform: translateX(15px);
 }
 
@@ -169,11 +170,44 @@ input:checked+.slider:before {
   }
 }
 
+// tooltip
+
+.tooltip {
+  background-color: rgba(128, 128, 128, 0.25);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+
+*:hover > .tooltip {
+  opacity: 1;
+  pointer-events: initial;
+}
+
+.info-icon {
+  background-color: gray;
+  mask-image: url('assets/icons/info-circle-solid.svg');
+  mask-position: center;
+  mask-repeat: no-repeat;
+  width: 19px;
+  height:19px;
+  display: inline-block;
+  cursor: pointer;
+}
+
+// Flag icons
+
+.flag-icon-dev {
+  background-image: url('assets/icons/curly-brackets.svg');
+}
 
 // Themes (default is dark)
 
 #body.theme--light {
-
   background-color: rgb(219, 219, 219);
 
   .title {
@@ -186,11 +220,9 @@ input:checked+.slider:before {
 
   // Preferences component
   app-preferences {
-
     .preferences-list {
       background-color: #cececeee;
       color: #424242;
-
     }
 
     .checkmark:after {
@@ -198,7 +230,6 @@ input:checked+.slider:before {
     }
 
     .preferences-entry {
-
       &:nth-child(even) {
         background-color: rgba(128, 128, 128, 0.103);
       }
@@ -213,17 +244,13 @@ input:checked+.slider:before {
     }
 
     .preferences-group-title-arrow {
-     
       svg {
-       
         fill: rgb(26, 26, 26);
       }
     }
-
   }
 
   app-typer {
-
     .word {
       color: rgba(26, 26, 26, 0.74);
 
@@ -247,11 +274,9 @@ input:checked+.slider:before {
       color: rgba(32, 32, 32, 0.582);
 
       tr {
-
         &:nth-child(even) {
           background-color: rgba(51, 51, 51, 0.07);
         }
-
       }
     }
 
@@ -260,22 +285,16 @@ input:checked+.slider:before {
 
       .type-test-timer-increase,
       .type-test-timer-decrease {
-
         svg {
-
           fill: rgb(48, 48, 48);
         }
       }
     }
 
     .type-test-restart {
-
       svg {
-
         fill: rgb(48, 48, 48);
       }
-
     }
-
   }
 }

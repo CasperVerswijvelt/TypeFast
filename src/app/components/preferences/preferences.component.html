@@ -174,7 +174,7 @@
         <div class="preferences-group-entries preferences-group-entries-language">
           <div
             class="preferences-entry preferences-language"
-            *ngFor="let lang of Language | keyvalue"
+            *ngFor="let lang of Language | keyvalue: originalOrder"
           >
             <label class="preferences-select-option">
               <div

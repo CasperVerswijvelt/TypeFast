@@ -51,7 +51,7 @@
   border-radius: 6px;
   margin-right: 10px;
   color: white;
-  width: 225px;
+  width: 240px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s;
@@ -176,8 +176,12 @@
   .preferences-group-title {
     padding: 9px 16px;
     cursor: pointer;
-
     display: flex;
+
+    .preferences-group-title-value {
+      padding-left: 10px;
+    }
+
     .preferences-group-title-key {
       flex: 1;
       font-weight: bold;
@@ -223,7 +227,7 @@
       }
 
       &.preferences-group-entries-language {
-        max-height: 434px;
+        max-height: 465px;
       }
 
       &.preferences-group-entries-word-mode {

@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
-import { timer, Observable, Subscription } from 'rxjs';
+import { timer, Subscription } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
 import { Preference, WordMode } from '../../models/Preference';
 

@@ -3,6 +3,7 @@ import { PreferencesService } from '../../services/preferences.service';
 import { Preference, Language, Theme, WordMode } from '../../models/Preference';
 import { WordService } from '../../services/word.service';
 import { ThemeService } from '../../services/theme.service';
+import { KeyValue } from '@angular/common';
 
 @Component({
   selector: 'app-preferences',
@@ -25,6 +26,10 @@ export class PreferencesComponent implements OnInit {
 
   openedPreferencesGroup : string;
   currentlyLoadingLanguage : Language;
+
+  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+    return 0;
+  }
 
   constructor(
     private preferencesService: PreferencesService,
@@ -139,8 +144,10 @@ export class PreferencesComponent implements OnInit {
         return 'de';
       case Language.ARABIC:
         return 'sa';
+      case Language.PROGRAMMING:
+        return 'dev';
       default:
-        return '🏳️';
+        return 'unknown';
     }
   }
 

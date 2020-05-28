@@ -18,13 +18,13 @@ export class DefaultWordService implements WordService {
 
   private wordListLoaded = false;
   private sentenceListLoaded = false;
-  private currentSource : string;
+  private currentSource: string;
   private wordListListeners: ((
     wordMode: WordMode,
     wordListName: string
   ) => void)[] = [];
   private languageFetchListeners: ((
-    language : Language,
+    language: Language,
     promise: Promise<void>
   ) => void)[] = [];
 
@@ -134,23 +134,21 @@ export class DefaultWordService implements WordService {
         TextFormat.WORDS,
         `assets/languages/${language}/words.txt`
       ).then((value: boolean) => {
-        if (value) {
-          this.notifyWordListSubscribers(WordMode.WORDS, langString);
-          this.currentSource = langString;
-        }
+        this.notifyWordListSubscribers(WordMode.WORDS, langString);
+        this.currentSource = langString;
+        if (!value) this.loadDefaultList(TextFormat.WORDS);
       }),
       this.loadTextViaUrl(
         TextFormat.SENTENCES,
         `assets/languages/${language}/sentences.txt`
       ).then((value: boolean) => {
-        if (value) {
-          this.notifyWordListSubscribers(WordMode.SENTENCES, langString);
-          this.currentSource = langString;
-        }
+        this.notifyWordListSubscribers(WordMode.SENTENCES, langString);
+        this.currentSource = langString;
+        if (!value) this.loadDefaultList(TextFormat.WORDS);
       }),
     ]);
 
-    this.notifyLanguageFetchSubscribers(language,promise);
+    this.notifyLanguageFetchSubscribers(language, promise);
 
     return promise;
   }
@@ -188,7 +186,9 @@ export class DefaultWordService implements WordService {
     )[0];
   }
 
-  addWordListListener(listenerFunction: (wordMode: WordMode, wordListName: string) => void): void {
+  addWordListListener(
+    listenerFunction: (wordMode: WordMode, wordListName: string) => void
+  ): void {
     this.wordListListeners.push(listenerFunction);
 
     if (this.wordListLoaded) {
@@ -199,15 +199,24 @@ export class DefaultWordService implements WordService {
     }
   }
 
-  addLanguageFetchListener(onLanguageFetch: (language : Language,promise: Promise<void>) => void): void {
+  addLanguageFetchListener(
+    onLanguageFetch: (language: Language, promise: Promise<void>) => void
+  ): void {
     this.languageFetchListeners.push(onLanguageFetch);
   }
 
   private notifyWordListSubscribers(wordMode: WordMode, wordListName: string) {
-    this.wordListListeners.forEach((listener) => listener(wordMode, wordListName));
+    this.wordListListeners.forEach((listener) =>
+      listener(wordMode, wordListName)
+    );
   }
 
-  private notifyLanguageFetchSubscribers(language : Language, promise : Promise<any>) {
-    this.languageFetchListeners.forEach((listener) => listener(language, promise));
+  private notifyLanguageFetchSubscribers(
+    language: Language,
+    promise: Promise<any>
+  ) {
+    this.languageFetchListeners.forEach((listener) =>
+      listener(language, promise)
+    );
   }
 }
