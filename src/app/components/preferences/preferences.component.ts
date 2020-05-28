@@ -24,6 +24,7 @@ export class PreferencesComponent implements OnInit {
   defaultWordMode: WordMode;
 
   openedPreferencesGroup : string;
+  currentlyLoadingLanguage : Language;
 
   constructor(
     private preferencesService: PreferencesService,
@@ -36,6 +37,7 @@ export class PreferencesComponent implements OnInit {
     this.defaultWordMode = preferencesService.getPreference(Preference.DEFAULT_WORD_MODE);
 
     preferencesService.addListener(this.onPreferenceUpdated.bind(this));
+    wordService.addLanguageFetchListener(this.onLanguageFetch.bind(this));
   }
 
   ngOnInit(): void {}
@@ -56,6 +58,11 @@ export class PreferencesComponent implements OnInit {
     if (updatedPreference === Preference.DEFAULT_WORD_MODE) {
       this.defaultWordMode = preferenceValue;
     }
+  }
+
+  private onLanguageFetch(language : Language, promise : Promise<any>) {
+    this.currentlyLoadingLanguage = language;
+    promise.then(() => this.currentlyLoadingLanguage = undefined)
   }
 
   onPreferencesIconClicked() {

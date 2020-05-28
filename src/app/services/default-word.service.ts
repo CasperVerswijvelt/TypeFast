@@ -18,7 +18,15 @@ export class DefaultWordService implements WordService {
 
   private wordListLoaded = false;
   private sentenceListLoaded = false;
-  private listeners: ((wordMode: WordMode) => void)[] = [];
+  private currentSource : string;
+  private wordListListeners: ((
+    wordMode: WordMode,
+    wordListName: string
+  ) => void)[] = [];
+  private languageFetchListeners: ((
+    language : Language,
+    promise: Promise<void>
+  ) => void)[] = [];
 
   private DEFAULT_WORD_AMOUNT = 100;
 
@@ -112,26 +120,39 @@ export class DefaultWordService implements WordService {
 
   loadFile(file: File): Promise<void> {
     return this.loadTextViaFile(TextFormat.BOTH, file).then(() => {
-      this.notifySubscribers(WordMode.WORDS);
-      this.notifySubscribers(WordMode.SENTENCES);
+      this.currentSource = file.name;
+      this.notifyWordListSubscribers(WordMode.WORDS, file.name);
+      this.notifyWordListSubscribers(WordMode.SENTENCES, file.name);
     });
   }
 
   loadLanguage(language: Language): Promise<[void, void]> {
-    return Promise.all([
+    let langString =
+      language.charAt(0).toUpperCase() + (language as string).slice(1);
+    let promise = Promise.all([
       this.loadTextViaUrl(
         TextFormat.WORDS,
         `assets/languages/${language}/words.txt`
       ).then((value: boolean) => {
-        if (value) this.notifySubscribers(WordMode.WORDS);
+        if (value) {
+          this.notifyWordListSubscribers(WordMode.WORDS, langString);
+          this.currentSource = langString;
+        }
       }),
       this.loadTextViaUrl(
         TextFormat.SENTENCES,
         `assets/languages/${language}/sentences.txt`
       ).then((value: boolean) => {
-        if (value) this.notifySubscribers(WordMode.SENTENCES);
+        if (value) {
+          this.notifyWordListSubscribers(WordMode.SENTENCES, langString);
+          this.currentSource = langString;
+        }
       }),
     ]);
+
+    this.notifyLanguageFetchSubscribers(language,promise);
+
+    return promise;
   }
 
   getWords(wordCount?: number): string[] {
@@ -167,18 +188,26 @@ export class DefaultWordService implements WordService {
     )[0];
   }
 
-  addListener(listenerFunction: (wordMode: WordMode) => void): void {
-    this.listeners.push(listenerFunction);
+  addWordListListener(listenerFunction: (wordMode: WordMode, wordListName: string) => void): void {
+    this.wordListListeners.push(listenerFunction);
 
     if (this.wordListLoaded) {
-      listenerFunction(WordMode.WORDS);
+      listenerFunction(WordMode.WORDS, this.currentSource);
     }
     if (this.sentenceListLoaded) {
-      listenerFunction(WordMode.SENTENCES);
+      listenerFunction(WordMode.SENTENCES, this.currentSource);
     }
   }
 
-  private notifySubscribers(wordMode: WordMode) {
-    this.listeners.forEach((listener) => listener(wordMode));
+  addLanguageFetchListener(onLanguageFetch: (language : Language,promise: Promise<void>) => void): void {
+    this.languageFetchListeners.push(onLanguageFetch);
+  }
+
+  private notifyWordListSubscribers(wordMode: WordMode, wordListName: string) {
+    this.wordListListeners.forEach((listener) => listener(wordMode, wordListName));
+  }
+
+  private notifyLanguageFetchSubscribers(language : Language, promise : Promise<any>) {
+    this.languageFetchListeners.forEach((listener) => listener(language, promise));
   }
 }

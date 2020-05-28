@@ -45,7 +45,7 @@
             class="preferences-entry preferences-language"
             *ngFor="let them of Theme | keyvalue"
           >
-            <label class="language-option">
+            <label class="preferences-select-option">
               <div
                 class="theme-icon"
                 [ngClass]="'theme-icon-' + them.value"
@@ -118,7 +118,7 @@
            class="preferences-entry preferences-language"
            *ngFor="let mode of WordMode | keyvalue"
          >
-           <label class="language-option">
+           <label class="preferences-select-option">
              <div
                class="word-mode-icon"
                [ngClass]="'word-mode-icon-' + mode.value"
@@ -176,7 +176,7 @@
             class="preferences-entry preferences-language"
             *ngFor="let lang of Language | keyvalue"
           >
-            <label class="language-option">
+            <label class="preferences-select-option">
               <div
                 class="flag-icon"
                 [ngClass]="'flag-icon-' + getISOForLangauge(lang.value)"
@@ -188,7 +188,9 @@
                 [value]="lang.value"
                 (change)="language = lang.value; onLanguageChanged()"
               />
-              <span class="checkmark"></span>
+              <span class="checkmark"  [class.checkmark-loading]="currentlyLoadingLanguage === lang.value">
+                <div class="spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+              </span>
               {{ lang.value }}
             </label>
           </div>
@@ -200,7 +202,7 @@
         class="preferences-entry preferences-language"
         title="Load a custom word list: this text file should contain newline or space seperated words."
       >
-        <div class="language-option" (click)="onClickLoadCustomList()">
+        <div class="preferences-select-option" (click)="onClickLoadCustomList()">
           Load custom list
         </div>
       </div>

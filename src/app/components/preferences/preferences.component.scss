@@ -111,7 +111,7 @@
   }
 }
 
-.language-option {
+.preferences-select-option {
   display: block;
   position: relative;
   padding: 6px 51px 6px 16px;
@@ -140,8 +140,19 @@
     display: none;
   }
 
+  .spinner {
+    display: none;
+  }
+  
+  /* Show the loader when loading */
+  input:checked ~ .checkmark.checkmark-loading {
+    .spinner {
+      display: block;
+    }
+  }
+
   /* Show the checkmark when checked */
-  input:checked ~ .checkmark:after {
+  input:checked ~ .checkmark:not(.checkmark-loading):after {
     display: block;
   }
 

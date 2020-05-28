@@ -64,20 +64,12 @@
       <td>{{(testResults?.stats?.wordAccuracy * 100 | number : '1.2-2') + "%"}}</td>
     </tr>
     <tr>
-      <th>Correct characters</th>
-      <td>{{testResults?.correctCharacterCount * 1}}</td>
+      <th>Word list</th>
+      <td>{{wordListName}}</td>
     </tr>
     <tr>
-      <th>Incorrect characters</th>
-      <td>{{testResults?.incorrectCharacterCount * 1}}</td>
-    </tr>
-    <tr>
-      <th>Correct words</th>
-      <td>{{testResults?.correctWordCount * 1}}</td>
-    </tr>
-    <tr>
-      <th>Incorrect words</th>
-      <td>{{testResults?.incorrectWordCount * 1}}</td>
+      <th>Word mode</th>
+      <td class="capitalize">{{wordMode}}</td>
     </tr>
     <tr>
       <th>Time elapsed</th>

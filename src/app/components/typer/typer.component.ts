@@ -37,13 +37,14 @@ export class TyperComponent implements OnInit {
 
   private secondTimer: Subscription;
   testStarted: boolean;
+  wordListName: string = "";
 
   constructor(
     private wordService: WordService,
     private cdRef: ChangeDetectorRef,
     private preferencesService: PreferencesService
   ) {
-    this.wordService.addListener(this.onUpdatedWordList.bind(this));
+    this.wordService.addWordListListener(this.onUpdatedWordList.bind(this));
     this.wordMode = preferencesService.getPreference(
       Preference.DEFAULT_WORD_MODE
     );
@@ -141,9 +142,10 @@ export class TyperComponent implements OnInit {
     }
   }
 
-  onUpdatedWordList( wordMode: WordMode) {
+  onUpdatedWordList( wordMode: WordMode, wordListName : string) {
     if (wordMode === this.wordMode) {
       this.setupTest();
+      this.wordListName = wordListName
     }
   }
 

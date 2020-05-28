@@ -63,7 +63,7 @@
   border: none;
   outline: none;
   padding: 0 0 0 calc(50% - 80px);
-  width: calc(50% + 80px);
+  width: 100%;
   caret-color: white;
   transition: color .2s;
 
@@ -87,7 +87,7 @@
   width: 300px;
   overflow: hidden;
   order: 3;
-  margin: auto;
+  margin: auto auto 40px auto;
 
   th,
   td {
@@ -97,13 +97,17 @@
   th {
     text-align: right;
     padding-right: 12px;
-    padding-left: 24px;
+    padding-left: 18px;
     width: 160px;
   }
 
   td {
     text-align: left;
-    padding-right: 24px;
+    padding-right: 18px;
+    width: 140px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   tr {
@@ -133,7 +137,7 @@
 .type-test-controls {
   position: relative;
   order: 1;
-  margin: 25px auto auto auto;
+  margin: 40px auto auto auto;
 }
 
 .type-test-timer {

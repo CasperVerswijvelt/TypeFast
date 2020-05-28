@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { TextFormat } from '../models/TextSource';
 import { Language, WordMode } from '../models/Preference';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -14,5 +15,7 @@ export abstract class WordService {
 
   abstract loadFile(file : File) : Promise<void>;
 
-  abstract addListener(onUpdatedWordList: (wordMode : WordMode) => void): void;
+  abstract addWordListListener(onUpdatedWordList: (wordMode : WordMode, wordListName : string) => void): void;
+
+  abstract addLanguageFetchListener(onLanguageFetch : (language: Language, promise : Promise<void>) => void): void;
 }
