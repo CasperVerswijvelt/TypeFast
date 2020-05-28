@@ -136,13 +136,13 @@ export class TyperComponent implements OnInit {
 
   onPreferenceUpdated(preference: Preference, value: any) {
     if (preference === Preference.DEFAULT_WORD_MODE) {
+      this.wordMode = value;
       this.setupTest();
     }
   }
 
   onUpdatedWordList( wordMode: WordMode) {
     if (wordMode === this.wordMode) {
-      console.log(`word list for mode '${wordMode}' updated and setsing up test`)
       this.setupTest();
     }
   }
@@ -178,7 +178,6 @@ export class TyperComponent implements OnInit {
     ) === WordMode.SENTENCES
       ? this.wordService.getSentence()
       : this.wordService.getWords();
-      console.log('return', words);
       return words;
   }
 

@@ -71,11 +71,9 @@ export class DefaultWordService implements WordService {
     try {
       let text = await this.getTextViaUrl(url);
       this.parseText(format, text);
-      console.log(`Sucesfully loaded ${url}`)
       return true;
     } catch (e) {
       this.loadDefaultList(format);
-      console.log(`Couldn't load ${url}`, e);
     }
     return false;
   }
