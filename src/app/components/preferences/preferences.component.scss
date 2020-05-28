@@ -69,10 +69,6 @@
   transition: background-color 0.2s;
   background-color: transparent;
 
-  &:nth-child(even) {
-    background-color: rgba(128, 128, 128, 0.04);
-  }
-
   &:hover {
     cursor: pointer;
     background-color: rgba(128, 128, 128, 0.08);
@@ -177,6 +173,11 @@
     padding: 9px 16px;
     cursor: pointer;
     display: flex;
+    transition: background-color .2s;
+
+    &:hover {
+      background-color: rgba(128, 128, 128, 0.08);
+    }
 
     .preferences-group-title-value {
       padding-left: 10px;
