@@ -141,6 +141,7 @@ export class TyperComponent implements OnInit {
   }
 
   onUpdatedWordList( wordMode: WordMode) {
+    console.log(`word list for mode '${wordMode}' updated, current wordMode is '${this.wordMode}'`)
     if (wordMode === this.wordMode) {
       this.setupTest();
     }
