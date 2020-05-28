@@ -142,7 +142,7 @@ export class DefaultWordService implements WordService {
     wordCount = wordCount !== undefined ? wordCount : this.DEFAULT_WORD_AMOUNT;
 
     while (res.length < wordCount) {
-      if (this.wordsCopy.length == 0) {
+      if (this.wordsCopy.length === 0) {
         this.wordsCopy = this.words.slice();
       }
       res.push(
@@ -159,7 +159,7 @@ export class DefaultWordService implements WordService {
   getSentence(): string[] {
     let res: string[] = [];
 
-    if (this.sentencesCopy.length == 0) {
+    if (this.sentencesCopy.length === 0) {
       this.sentencesCopy = this.sentenes.slice();
     }
 
