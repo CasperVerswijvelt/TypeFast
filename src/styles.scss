@@ -200,9 +200,78 @@ input:checked + .slider:before {
 }
 
 // Flag icons
+.flag-icon:before {
+  content: "\00a0";
+}
+
+.flag-icon {
+  background-size: contain;
+  background-position: 50%;
+  background-repeat: no-repeat;
+  position: relative;
+  display: inline-block;
+  width: 1.33333333em;
+  line-height: 1em;
+}
 
 .flag-icon-dev {
   background-image: url('assets/icons/curly-brackets.svg');
+}
+
+.flag-icon-sa {
+  background-image: url(assets/icons/flags/sa.svg);
+}
+
+.flag-icon-cn {
+  background-image: url(assets/icons/flags/cn.svg);
+}
+
+.flag-icon-nl {
+  background-image: url(assets/icons/flags/nl.svg);
+}
+
+.flag-icon-gb {
+  background-image: url(assets/icons/flags/gb.svg);
+}
+
+.flag-icon-fr {
+  background-image: url(assets/icons/flags/fr.svg);
+}
+
+.flag-icon-de {
+  background-image: url(assets/icons/flags/de.svg);
+}
+
+.flag-icon-in {
+  background-image: url(assets/icons/flags/in.svg);
+}
+
+.flag-icon-hu {
+  background-image: url(assets/icons/flags/hu.svg);
+}
+
+.flag-icon-it {
+  background-image: url(assets/icons/flags/it.svg);
+}
+
+.flag-icon-jp {
+  background-image: url(assets/icons/flags/jp.svg);
+}
+
+.flag-icon-kr {
+  background-image: url(assets/icons/flags/kr.svg);
+}
+
+.flag-icon-ru {
+  background-image: url(assets/icons/flags/ru.svg);
+}
+
+.flag-icon-pt {
+  background-image: url(assets/icons/flags/pt.svg);
+}
+
+.flag-icon-es {
+  background-image: url(assets/icons/flags/es.svg);
 }
 
 // Themes (default is dark)
