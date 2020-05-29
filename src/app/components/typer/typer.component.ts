@@ -102,8 +102,6 @@ export class TyperComponent implements OnInit {
     this.testStarted = false;
     this.syncCurrentWordElement();
     this.rightOffset = this.currentWordElement.getBoundingClientRect().width;
-    console.log('left', this.leftOffset);
-    console.log('right', this.rightOffset);
     this.syncOffset();
   }
 
