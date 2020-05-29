@@ -47,9 +47,8 @@
   </div>
 
   <table cellspacing="0" cellpadding="0" class="type-test-results">
-    <tr>
-      <th>WPM</th>
-      <td>{{testResults?.stats?.wpm * 1 | number : '1.0-1'}}</td>
+    <tr class="type-test-results-wpm">
+      <th colspan="2"><span class="type-test-results-wpm-value">{{testResults?.stats?.wpm * 1 | number : '1.0-1'}}</span>WPM</th>
     </tr>
     <tr>
       <th>CPM</th>
