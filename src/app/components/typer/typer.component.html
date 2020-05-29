@@ -1,46 +1,89 @@
 <div class="type-test-container" [class.type-test-started]="testStarted">
-
   <div class="type-test">
     <div class="word-container-wrapper">
       <div class="word-container">
-        <div class="word" *ngFor="let word of words">{{word}}</div>
+        <div class="word" *ngFor="let word of words">{{ word }}</div>
       </div>
     </div>
-    <input [(ngModel)]="wordInput" (input)="wordInputChanged($event.target.value)" (keydown.enter)="wordInput = wordInput + ' '; wordInputChanged(wordInput)" type="text" spellcheck="false" placeholder="type here" autofocus autocomplete="off" autocapitalize="off"
-      class="word-input" tabindex="3">
+    <input
+      [(ngModel)]="wordInput"
+      (input)="wordInputChanged($event.target.value)"
+      (keydown.enter)="wordInput = wordInput + ' '; wordInputChanged(wordInput)"
+      type="text"
+      spellcheck="false"
+      placeholder="type here"
+      autofocus
+      autocomplete="off"
+      autocapitalize="off"
+      class="word-input"
+      tabindex="3"
+    />
   </div>
 
   <div class="type-test-controls">
     <div class="type-test-timer">
-      <button class="type-test-timer-decrease" (click)="onDecreaseClicked()" tabindex="1">
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="minus-circle"
-          class="svg-inline--fa fa-minus-circle fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 512 512">
+      <button
+        class="type-test-timer-decrease"
+        (click)="onDecreaseClicked()"
+        tabindex="1"
+      >
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="minus"
+          class="svg-inline--fa fa-minus fa-w-14"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
+        >
           <path
-            d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zM124 296c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h264c6.6 0 12 5.4 12 12v56c0 6.6-5.4 12-12 12H124z">
-          </path>
+            d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+          ></path>
         </svg>
       </button>
       <div class="type-test-timer-time">
-        {{testTimeLeft | time}}
+        {{ testTimeLeft | time }}
       </div>
-      <button class="type-test-timer-decrease" (click)="onIncreaseClicked()" tabindex="2">
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="plus-circle"
-          class="svg-inline--fa fa-plus-circle fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 512 512">
+      <button
+        class="type-test-timer-decrease"
+        (click)="onIncreaseClicked()"
+        tabindex="2"
+      >
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="plus"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512"
+        >
           <path
-            d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm144 276c0 6.6-5.4 12-12 12h-92v92c0 6.6-5.4 12-12 12h-56c-6.6 0-12-5.4-12-12v-92h-92c-6.6 0-12-5.4-12-12v-56c0-6.6 5.4-12 12-12h92v-92c0-6.6 5.4-12 12-12h56c6.6 0 12 5.4 12 12v92h92c6.6 0 12 5.4 12 12v56z">
-          </path>
+            d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
+          ></path>
         </svg>
       </button>
     </div>
     <div class="type-test-buttons">
-      <button type="button" class="type-test-restart" tabindex="0" (click)="onRestartClicked()">
-        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="sync-alt"
-          class="svg-inline--fa fa-sync-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+      <button
+        type="button"
+        class="type-test-restart"
+        tabindex="0"
+        (click)="onRestartClicked()"
+      >
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          data-icon="sync-alt"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 512 512"
+        >
           <path
-            d="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z">
-          </path>
+            d="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z"
+          ></path>
         </svg>
       </button>
     </div>
@@ -48,31 +91,42 @@
 
   <table cellspacing="0" cellpadding="0" class="type-test-results">
     <tr class="type-test-results-wpm">
-      <th colspan="2"><span class="type-test-results-wpm-value">{{testResults?.stats?.wpm * 1 | number : '1.0-1'}}</span>WPM</th>
+      <th colspan="2">
+        <span class="type-test-results-wpm-value">{{
+          testResults?.stats?.wpm * 1 | number: "1.0-1"
+        }}</span
+        >WPM
+      </th>
     </tr>
     <tr>
       <th>CPM</th>
-      <td>{{testResults?.stats?.cpm * 1 | number : '1.0-1'}}</td>
+      <td>{{ testResults?.stats?.cpm * 1 | number: "1.0-1" }}</td>
     </tr>
     <tr>
       <th>Character accuracy</th>
-      <td>{{(testResults?.stats?.characterAccuracy * 100 | number : '1.2-2') + "%"}}</td>
+      <td>
+        {{
+          (testResults?.stats?.characterAccuracy * 100 | number: "1.2-2") + "%"
+        }}
+      </td>
     </tr>
     <tr>
       <th>Word accuracy</th>
-      <td>{{(testResults?.stats?.wordAccuracy * 100 | number : '1.2-2') + "%"}}</td>
+      <td>
+        {{ (testResults?.stats?.wordAccuracy * 100 | number: "1.2-2") + "%" }}
+      </td>
     </tr>
     <tr>
       <th>Word list</th>
-      <td>{{wordListName}}</td>
+      <td>{{ wordListName }}</td>
     </tr>
     <tr>
       <th>Word mode</th>
-      <td class="capitalize">{{wordMode}}</td>
+      <td class="capitalize">{{ wordMode }}</td>
     </tr>
     <tr>
       <th>Time elapsed</th>
-      <td>{{testResults?.timeElapsed * 1 | time}}</td>
+      <td>{{ testResults?.timeElapsed * 1 | time }}</td>
     </tr>
   </table>
 </div>
