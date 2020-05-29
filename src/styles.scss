@@ -229,11 +229,12 @@ input:checked + .slider:before {
       border-color: rgb(0, 0, 0);
     }
 
-    .preferences-entry, .preferences-group-title {
+    .preferences-entry:hover {
+      background-color: rgba(90, 90, 90, 0.075);
+    }
 
-      &:hover {
-        background-color: rgba(128, 128, 128, 0.123);
-      }
+    .preferences-group-title:hover {
+      background-color: rgba(90, 90, 90, 0.014);
     }
 
     

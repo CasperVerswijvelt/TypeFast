@@ -65,54 +65,16 @@
   }
 }
 
-.preferences-entry {
-  transition: background-color 0.2s;
-  background-color: transparent;
-
-  &:hover {
-    cursor: pointer;
-    background-color: rgba(128, 128, 128, 0.08);
-  }
-
-  &.preferences-toggle-entry {
-    display: flex;
-
-    .preferences-toggle-label {
-      flex: 1;
-      font-weight: bold;
-      margin-right: -60px;
-      padding: 9px 50px 9px 16px;
-    }
-
-    .preferences-toggle-switch {
-      margin: 8px 16px 8px 8px;
-    }
-  }
-}
-
-.preferences-background {
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
-  width: 100%;
-  height: 100%;
-  background-color: #00000033;
-}
-
-.preferences-show {
-  .preferences-background,
-  .preferences-list {
-    opacity: 1;
-    pointer-events: initial;
-  }
-}
-
 .preferences-select-option {
   display: block;
   position: relative;
   padding: 6px 51px 6px 16px;
   cursor: pointer;
   user-select: none;
+
+  &:nth-child(even) {
+    background-color: rgba(128, 128, 128, 0.04);
+  }
 
   input {
     position: absolute;
@@ -168,6 +130,48 @@
   }
 }
 
+.preferences-entry {
+  transition: background-color 0.2s;
+  background-color: transparent;
+
+  &:hover {
+    cursor: pointer;
+    background-color: rgba(128, 128, 128, 0.08);
+  }
+
+  &.preferences-toggle-entry {
+    display: flex;
+
+    .preferences-toggle-label {
+      flex: 1;
+      font-weight: bold;
+      margin-right: -60px;
+      padding: 9px 50px 9px 16px;
+    }
+
+    .preferences-toggle-switch {
+      margin: 8px 16px 8px 8px;
+    }
+  }
+}
+
+.preferences-background {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  width: 100%;
+  height: 100%;
+  background-color: #00000033;
+}
+
+.preferences-show {
+  .preferences-background,
+  .preferences-list {
+    opacity: 1;
+    pointer-events: initial;
+  }
+}
+
 .preferences-group {
   .preferences-group-title {
     padding: 9px 16px;
@@ -176,7 +180,7 @@
     transition: background-color .2s;
 
     &:hover {
-      background-color: rgba(128, 128, 128, 0.08);
+      background-color: rgba(128, 128, 128, 0.062);
     }
 
     .preferences-group-title-value {
