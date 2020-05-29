@@ -218,7 +218,7 @@
 
       <!-- Load custom list -->
       <div
-        class="preferences-entry preferences-language"
+        class="preferences-entry preferences-entry-bold"
         title="Load a custom word list: this text file should contain newline or space seperated words."
       >
         <div
@@ -227,6 +227,22 @@
         >
           Load custom list
         </div>
+      </div>
+
+      <!-- Reverse scroll -->
+      <div class="preferences-entry preferences-toggle-entry">
+        <label class="preferences-toggle-label" for="reverse-scroll">
+          Reverse scroll
+        </label>
+        <label class="preferences-toggle-switch switch">
+          <input
+            type="checkbox"
+            [(ngModel)]="reverseScroll"
+            (change)="onReverseScrollChanged()"
+            id="reverse-scroll"
+          />
+          <span class="slider round"></span>
+        </label>
       </div>
     </div>
     <button class="preferences-icon" (click)="onPreferencesIconClicked()">

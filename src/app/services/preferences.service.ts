@@ -13,7 +13,8 @@ export class PreferencesService {
     theme: Theme.LIGHT,
     word_language: Language.ENGLISH,
     follow_system_theme: false,
-    default_word_mode: WordMode.WORDS
+    default_word_mode: WordMode.WORDS,
+    reverse_scroll: false
   };
 
   constructor() {

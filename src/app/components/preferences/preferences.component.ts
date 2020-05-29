@@ -23,6 +23,7 @@ export class PreferencesComponent implements OnInit {
   language: Language;
   theme : Theme;
   defaultWordMode: WordMode;
+  reverseScroll : boolean;
 
   openedPreferencesGroup : string;
   currentlyLoadingLanguage : Language;
@@ -40,6 +41,7 @@ export class PreferencesComponent implements OnInit {
     this.language = preferencesService.getPreference(Preference.LANGUAGE);
     this.followSystemTheme = preferencesService.getPreference(Preference.FOLLOW_SYSTEM_THEME);
     this.defaultWordMode = preferencesService.getPreference(Preference.DEFAULT_WORD_MODE);
+    this.reverseScroll = preferencesService.getPreference(Preference.REVERSE_SCROLL);
 
     preferencesService.addListener(this.onPreferenceUpdated.bind(this));
     wordService.addLanguageFetchListener(this.onLanguageFetch.bind(this));
@@ -62,6 +64,9 @@ export class PreferencesComponent implements OnInit {
     } else
     if (updatedPreference === Preference.DEFAULT_WORD_MODE) {
       this.defaultWordMode = preferenceValue;
+    } else
+    if (updatedPreference === Preference.REVERSE_SCROLL) {
+      this.reverseScroll = this.reverseScroll;
     }
   }
 
@@ -97,6 +102,10 @@ export class PreferencesComponent implements OnInit {
 
   onDefaultWordModeChanged() {
     this.preferencesService.setPreference(Preference.DEFAULT_WORD_MODE, this.defaultWordMode);
+  }
+
+  onReverseScrollChanged() {
+    this.preferencesService.setPreference(Preference.REVERSE_SCROLL, this.reverseScroll);
   }
 
   onClickLoadCustomList() {

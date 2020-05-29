@@ -15,7 +15,7 @@ export abstract class WordService {
 
   abstract loadFile(file : File) : Promise<void>;
 
-  abstract addWordListListener(onUpdatedWordList: (wordMode : WordMode, wordListName : string) => void): void;
+  abstract addWordListListener(onUpdatedWordList: (wordMode : WordMode, wordListName : string, shouldReverseScroll : boolean) => void): void;
 
   abstract addLanguageFetchListener(onLanguageFetch : (language: Language, promise : Promise<void>) => void): void;
 }

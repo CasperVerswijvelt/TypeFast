@@ -9,7 +9,7 @@ import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
 import { timer, Subscription } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
-import { Preference, WordMode } from '../../models/Preference';
+import { Preference, WordMode, Language } from '../../models/Preference';
 
 @Component({
   selector: 'app-typer',
@@ -23,6 +23,7 @@ export class TyperComponent implements OnInit {
   currentIndex: number;
   wordInput: string;
   leftOffset: number = 0;
+  rightOffset: number = 0;
 
   wordMode: WordMode;
 
@@ -38,6 +39,10 @@ export class TyperComponent implements OnInit {
   private secondTimer: Subscription;
   testStarted: boolean;
   wordListName: string = "";
+  reverseScroll = false;
+  private reverseScrollPreference : boolean;
+  private reverseScrollWordList : boolean;
+
 
   constructor(
     private wordService: WordService,
@@ -48,6 +53,10 @@ export class TyperComponent implements OnInit {
     this.wordMode = preferencesService.getPreference(
       Preference.DEFAULT_WORD_MODE
     );
+    this.reverseScrollPreference = preferencesService.getPreference(
+      Preference.REVERSE_SCROLL
+    );
+    
     this.preferencesService.addListener(this.onPreferenceUpdated.bind(this));
   }
 
@@ -91,7 +100,11 @@ export class TyperComponent implements OnInit {
     this.inputElement.disabled = false;
 
     this.testStarted = false;
-    this.syncLeft();
+    this.syncCurrentWordElement();
+    this.rightOffset = this.currentWordElement.getBoundingClientRect().width;
+    console.log('left', this.leftOffset);
+    console.log('right', this.rightOffset);
+    this.syncOffset();
   }
 
   focusInput() {
@@ -139,11 +152,17 @@ export class TyperComponent implements OnInit {
     if (preference === Preference.DEFAULT_WORD_MODE) {
       this.wordMode = value;
       this.setupTest();
+    } else if (preference === Preference.REVERSE_SCROLL) {
+      this.reverseScrollPreference = value;
+      this.syncReverseScroll()
+      this.syncOffset();
     }
   }
 
-  onUpdatedWordList( wordMode: WordMode, wordListName : string) {
+  onUpdatedWordList( wordMode: WordMode, wordListName : string, shouldReverseScroll : boolean) {
     if (wordMode === this.wordMode) {
+      this.reverseScrollWordList = shouldReverseScroll;
+      this.syncReverseScroll();
       this.setupTest();
       this.wordListName = wordListName
     }
@@ -163,7 +182,8 @@ export class TyperComponent implements OnInit {
     this.leftOffset =
       this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncCurrentWordElement();
-    this.syncLeft();
+    this.rightOffset = this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
+    this.syncOffset();
 
     this.fillWordList();
   }
@@ -172,6 +192,12 @@ export class TyperComponent implements OnInit {
     while (this.currentIndex > this.words.length - 20) {
       this.words = this.words.concat(this.getWords());
     }
+  }
+
+  private syncReverseScroll() {
+
+    this.reverseScroll = this.reverseScrollPreference !== this.reverseScrollWordList;
+
   }
 
   getWords(): string[] {
@@ -270,8 +296,14 @@ export class TyperComponent implements OnInit {
     ] as HTMLElement;
   }
 
-  syncLeft() {
-    this.containerElement.style.marginLeft = `calc(50% - 80px - ${this.leftOffset}px)`;
+  syncOffset() {
+    if (this.reverseScroll) {
+      this.containerElement.style.marginLeft = null;
+      this.containerElement.style.marginRight = `calc(50% + 80px - ${this.rightOffset}px)`;
+    } else {
+      this.containerElement.style.marginRight = null;
+      this.containerElement.style.marginLeft = `calc(50% - 80px - ${this.leftOffset}px)`;
+    }
   }
 
   onTimeRunsOut() {

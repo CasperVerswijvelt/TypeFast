@@ -4,7 +4,8 @@ export enum Preference {
   LANGUAGE = 'word_language',
   THEME = 'theme',
   FOLLOW_SYSTEM_THEME = 'follow_system_theme',
-  DEFAULT_WORD_MODE = 'default_word_mode'
+  DEFAULT_WORD_MODE = 'default_word_mode',
+  REVERSE_SCROLL = 'reverse_scroll'
 }
 
 export enum Language {
@@ -40,6 +41,7 @@ export interface Preferences {
   word_language?: Language;
   theme?: Theme;
   follow_system_theme?: boolean;
-  default_word_mode?: WordMode
+  default_word_mode?: WordMode;
+  reverse_scroll?: boolean;
 }
 

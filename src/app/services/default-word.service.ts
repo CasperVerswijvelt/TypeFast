@@ -21,7 +21,8 @@ export class DefaultWordService implements WordService {
   private currentSource: string;
   private wordListListeners: ((
     wordMode: WordMode,
-    wordListName: string
+    wordListName: string,
+    shouldReverseScroll: boolean
   ) => void)[] = [];
   private languageFetchListeners: ((
     language: Language,
@@ -121,8 +122,8 @@ export class DefaultWordService implements WordService {
   loadFile(file: File): Promise<void> {
     return this.loadTextViaFile(TextFormat.BOTH, file).then(() => {
       this.currentSource = file.name;
-      this.notifyWordListSubscribers(WordMode.WORDS, file.name);
-      this.notifyWordListSubscribers(WordMode.SENTENCES, file.name);
+      this.notifyWordListSubscribers(WordMode.WORDS, file.name, false);
+      this.notifyWordListSubscribers(WordMode.SENTENCES, file.name, false);
     });
   }
 
@@ -134,7 +135,7 @@ export class DefaultWordService implements WordService {
         TextFormat.WORDS,
         `assets/languages/${language}/words.txt`
       ).then((value: boolean) => {
-        this.notifyWordListSubscribers(WordMode.WORDS, langString);
+        this.notifyWordListSubscribers(WordMode.WORDS, langString, this.shouldReverseScroll(language));
         this.currentSource = langString;
         if (!value) this.loadDefaultList(TextFormat.WORDS);
       }),
@@ -142,7 +143,7 @@ export class DefaultWordService implements WordService {
         TextFormat.SENTENCES,
         `assets/languages/${language}/sentences.txt`
       ).then((value: boolean) => {
-        this.notifyWordListSubscribers(WordMode.SENTENCES, langString);
+        this.notifyWordListSubscribers(WordMode.SENTENCES, langString, this.shouldReverseScroll(language));
         this.currentSource = langString;
         if (!value) this.loadDefaultList(TextFormat.WORDS);
       }),
@@ -187,15 +188,15 @@ export class DefaultWordService implements WordService {
   }
 
   addWordListListener(
-    listenerFunction: (wordMode: WordMode, wordListName: string) => void
+    listenerFunction: (wordMode: WordMode, wordListName: string, shouldReverseScroll : boolean) => void
   ): void {
     this.wordListListeners.push(listenerFunction);
 
     if (this.wordListLoaded) {
-      listenerFunction(WordMode.WORDS, this.currentSource);
+      listenerFunction(WordMode.WORDS, this.currentSource, false);
     }
     if (this.sentenceListLoaded) {
-      listenerFunction(WordMode.SENTENCES, this.currentSource);
+      listenerFunction(WordMode.SENTENCES, this.currentSource, false);
     }
   }
 
@@ -205,9 +206,9 @@ export class DefaultWordService implements WordService {
     this.languageFetchListeners.push(onLanguageFetch);
   }
 
-  private notifyWordListSubscribers(wordMode: WordMode, wordListName: string) {
+  private notifyWordListSubscribers(wordMode: WordMode, wordListName: string, shouldReverseScroll : boolean) {
     this.wordListListeners.forEach((listener) =>
-      listener(wordMode, wordListName)
+      listener(wordMode, wordListName, shouldReverseScroll)
     );
   }
 
@@ -218,5 +219,9 @@ export class DefaultWordService implements WordService {
     this.languageFetchListeners.forEach((listener) =>
       listener(language, promise)
     );
+  }
+
+  private shouldReverseScroll(language : Language) {
+    return language == Language.ARABIC;
   }
 }
