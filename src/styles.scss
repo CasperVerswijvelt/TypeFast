@@ -173,23 +173,37 @@ input:checked + .slider:before {
 // tooltip
 
 .tooltip {
-  background-color: rgba(128, 128, 128, 0.25);
-  color: white;
+  background-color: rgba(54, 54, 54, 0.705);
+  color: rgb(218, 218, 218);
   padding: 5px 10px;
   border-radius: 4px;
-  font-size: 13px;
+  font-size: 15px;
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none;    
+  max-width: 300px;
   transition: opacity 0.2s;
+  overflow-wrap: break-word;
+  white-space: break-spaces;
+  font-weight: normal;
+  text-align: initial;
+  width: max-content;
+  z-index: 1;
 }
 
-*:hover > .tooltip {
-  opacity: 1;
-  pointer-events: initial;
+*:hover {
+  & > .tooltip {
+    opacity: 1;
+    pointer-events: initial;
+  }
+}
+
+.info-icon-tooltip-container {
+  float: right;
+  height: 19px;
 }
 
 .info-icon {
-  background-color: gray;
+  background-color: rgba(128, 128, 128, 0.151);
   mask-image: url('assets/icons/info-circle-solid.svg');
   mask-position: center;
   mask-repeat: no-repeat;
@@ -285,6 +299,10 @@ input:checked + .slider:before {
 
   .spinner div:after {
     background: rgb(0, 0, 0);
+  }
+
+  .info-icon {
+    background-color: rgba(128, 128, 128, 0.26);
   }
 
   // Preferences component

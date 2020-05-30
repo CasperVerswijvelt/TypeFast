@@ -115,7 +115,7 @@ $word-spacing: 20px;
 
   td {
     text-align: left;
-    padding-right: 18px;
+    padding-right: 10px;
     width: 140px;
     max-width: 140px;
     white-space: nowrap;
@@ -241,6 +241,16 @@ $word-spacing: 20px;
     opacity: 1;
   }
 
+}
+
+.type-test-results-wpm th {
+  position: relative;
+}
+
+.info-icon-tooltip-wpm {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
 }
 
 @media (max-width: 400px) {

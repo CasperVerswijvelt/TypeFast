@@ -217,15 +217,18 @@
       </div>
 
       <!-- Load custom list -->
-      <div
-        class="preferences-entry preferences-entry-bold"
-        title="Load a custom word list: this text file should contain newline or space seperated words."
-      >
+      <div class="preferences-entry preferences-entry-bold">
         <div
-          class="preferences-select-option"
+          class="preferences-padding"
           (click)="onClickLoadCustomList()"
         >
           Load custom list
+          <div popper class="info-icon-tooltip-container">
+            <div class="info-icon"></div>
+            <div class="tooltip">
+              Load a custom word/sentence list: this text file should contain newline seperated sentences or space seperated words.
+            </div>
+          </div>
         </div>
       </div>
 

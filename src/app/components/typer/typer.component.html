@@ -1,4 +1,8 @@
-<div class="type-test-container" [class.type-test-started]="testStarted" [class.type-test-reverse-scroll]="reverseScroll">
+<div
+  class="type-test-container"
+  [class.type-test-started]="testStarted"
+  [class.type-test-reverse-scroll]="reverseScroll"
+>
   <div class="type-test">
     <div class="word-container-wrapper">
       <div class="word-container">
@@ -96,11 +100,24 @@
           testResults?.stats?.wpm * 1 | number: "1.0-0"
         }}</span
         >WPM
+        <div popper class="info-icon-tooltip-container info-icon-tooltip-wpm">
+          <div class="info-icon"></div>
+          <div class="tooltip">Words per minute, CPM divided by 5
+          </div>
+        </div>
       </th>
     </tr>
     <tr>
       <th>CPM</th>
-      <td>{{ testResults?.stats?.cpm * 1 | number: "1.0-0" }}</td>
+      <td>
+        {{ testResults?.stats?.cpm * 1 | number: "1.0-0" }}
+        <div popper class="info-icon-tooltip-container">
+          <div class="info-icon"></div>
+          <div class="tooltip">
+            The amount of correct characters typed, divided by the test duration in minutes. Characters that were positioned correctly in words that were not completely correct, are still counted as correct.
+          </div>
+        </div>
+      </td>
     </tr>
     <tr>
       <th>Character accuracy</th>
@@ -108,12 +125,32 @@
         {{
           (testResults?.stats?.characterAccuracy * 100 | number: "1.2-2") + "%"
         }}
+        <div popper class="info-icon-tooltip-container">
+          <div class="info-icon"></div>
+          <div class="tooltip">
+            Character accuracy is the amount of characters you typed correct,
+            divided by the sum of correct characters and incorrect characters.
+            <br />
+            <br />
+            Characters that were placed at the right position, but in an
+            incorrect word, will still be counted as correct for calculating
+            this value.
+          </div>
+        </div>
       </td>
     </tr>
     <tr>
       <th>Word accuracy</th>
       <td>
         {{ (testResults?.stats?.wordAccuracy * 100 | number: "1.2-2") + "%" }}
+        <div popper class="info-icon-tooltip-container">
+          <div class="info-icon"></div>
+          <div class="tooltip">
+            Word accuracy is the amount of words you typed completely correct,
+            divided by the total number of words typed. Correcting your mistakes will
+            boost this value!
+          </div>
+        </div>
       </td>
     </tr>
     <tr>
@@ -126,7 +163,9 @@
     </tr>
     <tr>
       <th>Time elapsed</th>
-      <td>{{ testResults?.timeElapsed * 1 | time }}</td>
+      <td>
+        {{ testResults?.timeElapsed * 1 | time }}
+      </td>
     </tr>
   </table>
 </div>

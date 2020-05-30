@@ -103,11 +103,11 @@ export class DefaultWordService implements WordService {
 
   private loadDefaultList(format: TextFormat) {
     if (format === TextFormat.WORDS) {
-      this.words = ['This', 'language', "doesn't", 'have', 'any', 'words.'];
+      this.words = ['This', 'list', "doesn't", 'have', 'any', 'words.'];
       this.wordsCopy = [];
     } else if (format === TextFormat.SENTENCES) {
       this.sentenes = [
-        ['This', 'language', "doesn't", 'have', 'any', 'sentences.'],
+        ['This', 'list', "doesn't", 'have', 'any', 'sentences.'],
       ];
       this.sentencesCopy = [];
     }
