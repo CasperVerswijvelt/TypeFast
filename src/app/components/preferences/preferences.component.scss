@@ -1,3 +1,10 @@
+
+$preferences-offset: 16px;
+$preferences-entry-padding-side: 16px;
+$preferences-entry-padding-vertical: 9px;
+$preferences-entry-height: 31px;
+$preferences-entry-main-height: 37px;
+
 .preferences-wrapper {
   position: fixed;
   width: 100%;
@@ -6,8 +13,8 @@
 
 .preferences {
   position: absolute;
-  right: 16px;
-  top: 16px;
+  right: $preferences-offset;
+  top: $preferences-offset;
   display: flex;
   pointer-events: none;
   max-height: calc(100vh - 32px);
@@ -65,12 +72,8 @@
   }
 }
 
-.preferences-entry-bold {
-  font-weight: bold;
-}
-
 .preferences-padding {
-  padding: 6px 16px 6px 16px
+  padding:$preferences-entry-padding-vertical $preferences-entry-padding-side;
 }
 
 .preferences-select-option {
@@ -141,6 +144,7 @@
 .preferences-entry {
   transition: background-color 0.2s;
   background-color: transparent;
+  height: $preferences-entry-height;
 
   &:hover {
     cursor: pointer;
@@ -154,13 +158,18 @@
       flex: 1;
       font-weight: bold;
       margin-right: -60px;
-      padding: 9px 50px 9px 16px;
+      padding: $preferences-entry-padding-vertical 50px $preferences-entry-padding-vertical $preferences-entry-padding-side;
     }
 
     .preferences-toggle-switch {
-      margin: 8px 16px 8px 8px;
+      margin: 8px $preferences-entry-padding-side 8px 8px;
     }
   }
+}
+
+.preferences-entry-main {
+  font-weight: bold;
+  height: $preferences-entry-main-height;
 }
 
 .preferences-background {
@@ -182,7 +191,7 @@
 
 .preferences-group {
   .preferences-group-title {
-    padding: 9px 16px;
+    padding: $preferences-entry-padding-vertical $preferences-entry-padding-side;
     cursor: pointer;
     display: flex;
     transition: background-color .2s;
@@ -192,7 +201,7 @@
     }
 
     .preferences-group-title-value {
-      padding-left: 10px;
+      padding-left: $preferences-entry-padding-side;
     }
 
     .preferences-group-title-key {

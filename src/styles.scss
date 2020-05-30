@@ -29,7 +29,7 @@ app-root {
   position: relative;
   display: inline-block;
   width: 36px;
-  height: 20px;
+  height: 19px;
 }
 
 /* Hide default HTML checkbox */
@@ -47,7 +47,7 @@ app-root {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #ccc;
+  background-color: #4a4a4a;
   -webkit-transition: 0.4s;
   transition: 0.4s;
 }
@@ -55,10 +55,10 @@ app-root {
 .slider:before {
   position: absolute;
   content: "";
-  height: 16px;
-  width: 16px;
+  height: 13px;
+  width: 13px;
   left: 3px;
-  bottom: 2px;
+  bottom: 3px;
   background-color: white;
   -webkit-transition: 0.4s;
   transition: 0.4s;
@@ -73,7 +73,7 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  transform: translateX(15px);
+  transform: translateX(16px);
 }
 
 /* Rounded sliders */
@@ -303,6 +303,10 @@ input:checked + .slider:before {
 
   .info-icon {
     background-color: rgba(128, 128, 128, 0.26);
+  }
+
+  .slider {
+    background-color: #adadad;
   }
 
   // Preferences component
