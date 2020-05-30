@@ -188,6 +188,7 @@ input:checked + .slider:before {
   text-align: initial;
   width: max-content;
   z-index: 1;
+  text-transform: none;
 }
 
 *:hover {

@@ -102,8 +102,7 @@
         >WPM
         <div popper class="info-icon-tooltip-container info-icon-tooltip-wpm">
           <div class="info-icon"></div>
-          <div class="tooltip">Words per minute, CPM divided by 5
-          </div>
+          <div class="tooltip">Words per minute, CPM divided by 5</div>
         </div>
       </th>
     </tr>
@@ -114,7 +113,9 @@
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
-            The amount of correct characters typed, divided by the test duration in minutes. Characters that were positioned correctly in words that were not completely correct, are still counted as correct.
+            The amount of correct characters typed, divided by the test duration
+            in minutes. Characters that were positioned correctly in words that
+            were not completely correct, are still counted as correct.
           </div>
         </div>
       </td>
@@ -147,19 +148,44 @@
           <div class="info-icon"></div>
           <div class="tooltip">
             Word accuracy is the amount of words you typed completely correct,
-            divided by the total number of words typed. Correcting your mistakes will
-            boost this value!
+            divided by the total number of words typed. Correcting your mistakes
+            will boost this value!
           </div>
         </div>
       </td>
     </tr>
     <tr>
       <th>Word list</th>
-      <td title="{{wordListName}}">{{ wordListName }}</td>
+      <td title="{{ wordListName }}">
+        {{ wordListName }}
+        <div popper class="info-icon-tooltip-container">
+          <div class="info-icon"></div>
+          <div class="tooltip">
+            Change the word list in the preferences menu in the upper right
+            corner, or load your own text file.
+          </div>
+        </div>
+      </td>
     </tr>
     <tr>
       <th>Word mode</th>
-      <td class="capitalize">{{ wordMode }}</td>
+      <td class="capitalize">
+        {{ wordMode }}
+        <div popper class="info-icon-tooltip-container">
+          <div class="info-icon"></div>
+          <div class="tooltip">
+            Change your preferred word mode in the preferences menu in the upper right corner:
+            <ul>
+              <li>
+                 Word mode: random words
+              </li>
+              <li>
+                Sentence mode: actual sentences
+              </li>
+            </ul>
+          </div>
+        </div>
+      </td>
     </tr>
     <tr>
       <th>Time elapsed</th>
