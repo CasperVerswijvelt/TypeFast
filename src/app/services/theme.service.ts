@@ -1,16 +1,25 @@
 import { Injectable } from '@angular/core';
 import { PreferencesService } from './preferences.service';
 import { Preference, Theme } from '../models/Preference';
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ThemeService {
-  constructor(private preferencesService: PreferencesService) {
-    this.setTheme();
-    preferencesService.addListener(this.onPreferenceUpdated.bind(this));
+  private preferences: Map<string, BehaviorSubject<any>>;
 
+  constructor(private preferencesService: PreferencesService) {
     let mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+
+    this.preferences = preferencesService.getPreferences();
+
+    this.preferences
+      .get(Preference.THEME)
+      .subscribe(this.onThemePreferenceUpdated.bind(this));
+    this.preferences
+      .get(Preference.FOLLOW_SYSTEM_THEME)
+      .subscribe(this.onFollowSystemPreferenceUpdated.bind(this));
 
     // To make safari work
     if (mediaQueryList.addEventListener) {
@@ -23,35 +32,28 @@ export class ThemeService {
     }
   }
 
-  private onPreferenceUpdated(
-    updatedPreference: Preference,
-    preferenceValue: any
-  ) {
-    if (updatedPreference === Preference.THEME) {
-      this.setTheme(preferenceValue as Theme);
-    } else if (updatedPreference === Preference.FOLLOW_SYSTEM_THEME) {
-      this.setTheme();
-    }
+  private onThemePreferenceUpdated(value: any) {
+    this.setTheme(value);
+  }
+
+  private onFollowSystemPreferenceUpdated(value: any) {
+    this.setTheme();
   }
 
   private onSystemThemeUpdated(event: MediaQueryListEvent) {
     this.setTheme(
-      event.matches
-        ? Theme.DARK
-        : this.preferencesService.getPreference(Preference.THEME)
+      event.matches ? Theme.DARK : this.preferences.get(Preference.THEME).value
     );
   }
 
   setTheme(theme?: Theme) {
     let _theme: Theme = theme
       ? theme
-      : this.preferencesService.getPreference(
-          Preference.FOLLOW_SYSTEM_THEME
-        ) === true &&
+      : this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value &&
         window.matchMedia &&
         window.matchMedia('(prefers-color-scheme: dark)').matches
       ? Theme.DARK
-      : this.preferencesService.getPreference(Preference.THEME);
+      : this.preferences.get(Preference.THEME).value;
     document.body.className = `theme--${_theme as string}`;
   }
 }

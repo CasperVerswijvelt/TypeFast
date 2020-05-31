@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
-import { timer, Subscription } from 'rxjs';
+import { timer, Subscription, BehaviorSubject } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
 import { Preference, WordMode, Language } from '../../models/Preference';
 
@@ -19,7 +19,7 @@ import { Preference, WordMode, Language } from '../../models/Preference';
 export class TyperComponent implements OnInit {
   @Output() focusFunctionReady = new EventEmitter<() => void>();
 
-  words: string[] = ["Loading..."];
+  words: string[] = ['Loading...'];
   currentIndex: number;
   wordInput: string;
   leftOffset: number = 0;
@@ -38,11 +38,12 @@ export class TyperComponent implements OnInit {
 
   private secondTimer: Subscription;
   testStarted: boolean;
-  wordListName: string = "";
+  wordListName: string = '';
   reverseScroll = false;
-  private reverseScrollPreference : boolean;
-  private reverseScrollWordList : boolean;
+  private reverseScrollPreference: boolean;
+  private reverseScrollWordList: boolean;
 
+  private preferences: Map<string, BehaviorSubject<any>>;
 
   constructor(
     private wordService: WordService,
@@ -50,14 +51,15 @@ export class TyperComponent implements OnInit {
     private preferencesService: PreferencesService
   ) {
     this.wordService.addWordListListener(this.onUpdatedWordList.bind(this));
-    this.wordMode = preferencesService.getPreference(
-      Preference.DEFAULT_WORD_MODE
-    );
-    this.reverseScrollPreference = preferencesService.getPreference(
-      Preference.REVERSE_SCROLL
-    );
-    
-    this.preferencesService.addListener(this.onPreferenceUpdated.bind(this));
+
+    this.preferences = preferencesService.getPreferences();
+
+    this.preferences
+      .get(Preference.DEFAULT_WORD_MODE)
+      .subscribe(this.onDefaultWordModePreferenceUpdated.bind(this));
+    this.preferences
+      .get(Preference.REVERSE_SCROLL)
+      .subscribe(this.onReverseScrollPreferenceUpdated.bind(this));
   }
 
   ngOnInit(): void {
@@ -146,23 +148,28 @@ export class TyperComponent implements OnInit {
     }
   }
 
-  onPreferenceUpdated(preference: Preference, value: any) {
-    if (preference === Preference.DEFAULT_WORD_MODE) {
-      this.wordMode = value;
-      this.setupTest();
-    } else if (preference === Preference.REVERSE_SCROLL) {
-      this.reverseScrollPreference = value;
-      this.syncReverseScroll()
-      this.syncOffset();
-    }
+  private onDefaultWordModePreferenceUpdated(value: any) {
+    console.log('wordMode');
+    this.wordMode = value;
+    setTimeout(this.setupTest.bind(this));
   }
 
-  onUpdatedWordList( wordMode: WordMode, wordListName : string, shouldReverseScroll : boolean) {
+  private onReverseScrollPreferenceUpdated(value: any) {
+    console.log('reverse scroll');
+    this.syncReverseScroll();
+    this.syncOffset();
+  }
+
+  onUpdatedWordList(
+    wordMode: WordMode,
+    wordListName: string,
+    shouldReverseScroll: boolean
+  ) {
     if (wordMode === this.wordMode) {
       this.reverseScrollWordList = shouldReverseScroll;
       this.syncReverseScroll();
       this.setupTest();
-      this.wordListName = wordListName
+      this.wordListName = wordListName;
     }
   }
 
@@ -180,7 +187,8 @@ export class TyperComponent implements OnInit {
     this.leftOffset =
       this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncCurrentWordElement();
-    this.rightOffset = this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
+    this.rightOffset =
+      this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncOffset();
 
     this.fillWordList();
@@ -193,18 +201,18 @@ export class TyperComponent implements OnInit {
   }
 
   private syncReverseScroll() {
-
-    this.reverseScroll = this.reverseScrollPreference !== this.reverseScrollWordList;
-
+    this.reverseScroll =
+      this.preferences.get(Preference.REVERSE_SCROLL).value !==
+      this.reverseScrollWordList;
   }
 
   getWords(): string[] {
-    let words = this.preferencesService.getPreference(
-      Preference.DEFAULT_WORD_MODE
-    ) === WordMode.SENTENCES
-      ? this.wordService.getSentence()
-      : this.wordService.getWords();
-      return words;
+    let words =
+      this.preferencesService.getPreference(Preference.DEFAULT_WORD_MODE) ===
+      WordMode.SENTENCES
+        ? this.wordService.getSentence()
+        : this.wordService.getWords();
+    return words;
   }
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {
@@ -295,6 +303,8 @@ export class TyperComponent implements OnInit {
   }
 
   syncOffset() {
+    if (!this.containerElement) return;
+
     if (this.reverseScroll) {
       this.containerElement.style.marginLeft = null;
       this.containerElement.style.marginRight = `calc(50% + 80px - ${this.rightOffset}px)`;

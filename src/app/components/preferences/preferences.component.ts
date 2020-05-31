@@ -17,31 +17,39 @@ export class PreferencesComponent implements OnInit {
   Language = Language;
   Theme = Theme;
   WordMode = WordMode;
-  
 
   followSystemTheme: boolean;
   language: Language;
-  theme : Theme;
+  theme: Theme;
   defaultWordMode: WordMode;
-  reverseScroll : boolean;
+  reverseScroll: boolean;
 
-  openedPreferencesGroup : string;
-  currentlyLoadingLanguage : Language;
+  openedPreferencesGroup: string;
+  currentlyLoadingLanguage: Language;
 
-  originalOrder = (a: KeyValue<number,string>, b: KeyValue<number,string>): number => {
+  originalOrder = (
+    a: KeyValue<number, string>,
+    b: KeyValue<number, string>
+  ): number => {
     return 0;
-  }
+  };
 
   constructor(
     private preferencesService: PreferencesService,
     private wordService: WordService,
-    private themeService : ThemeService
+    private themeService: ThemeService
   ) {
     this.theme = preferencesService.getPreference(Preference.THEME);
     this.language = preferencesService.getPreference(Preference.LANGUAGE);
-    this.followSystemTheme = preferencesService.getPreference(Preference.FOLLOW_SYSTEM_THEME);
-    this.defaultWordMode = preferencesService.getPreference(Preference.DEFAULT_WORD_MODE);
-    this.reverseScroll = preferencesService.getPreference(Preference.REVERSE_SCROLL);
+    this.followSystemTheme = preferencesService.getPreference(
+      Preference.FOLLOW_SYSTEM_THEME
+    );
+    this.defaultWordMode = preferencesService.getPreference(
+      Preference.DEFAULT_WORD_MODE
+    );
+    this.reverseScroll = preferencesService.getPreference(
+      Preference.REVERSE_SCROLL
+    );
 
     preferencesService.addListener(this.onPreferenceUpdated.bind(this));
     wordService.addLanguageFetchListener(this.onLanguageFetch.bind(this));
@@ -55,24 +63,20 @@ export class PreferencesComponent implements OnInit {
   ) {
     if (updatedPreference === Preference.THEME) {
       this.theme = preferenceValue;
-    } else
-    if (updatedPreference === Preference.LANGUAGE) {
+    } else if (updatedPreference === Preference.LANGUAGE) {
       this.language = preferenceValue;
-    } else
-    if (updatedPreference === Preference.FOLLOW_SYSTEM_THEME) {
+    } else if (updatedPreference === Preference.FOLLOW_SYSTEM_THEME) {
       this.followSystemTheme = preferenceValue;
-    } else
-    if (updatedPreference === Preference.DEFAULT_WORD_MODE) {
+    } else if (updatedPreference === Preference.DEFAULT_WORD_MODE) {
       this.defaultWordMode = preferenceValue;
-    } else
-    if (updatedPreference === Preference.REVERSE_SCROLL) {
+    } else if (updatedPreference === Preference.REVERSE_SCROLL) {
       this.reverseScroll = this.reverseScroll;
     }
   }
 
-  private onLanguageFetch(language : Language, promise : Promise<any>) {
+  private onLanguageFetch(language: Language, promise: Promise<any>) {
     this.currentlyLoadingLanguage = language;
-    promise.then(() => this.currentlyLoadingLanguage = undefined)
+    promise.then(() => (this.currentlyLoadingLanguage = undefined));
   }
 
   onPreferencesIconClicked() {
@@ -82,14 +86,14 @@ export class PreferencesComponent implements OnInit {
   togglePreferences() {
     this.showPreferences = !this.showPreferences;
     this.toggled.emit(this.showPreferences);
-    this.openedPreferencesGroup = "";
+    this.openedPreferencesGroup = '';
   }
 
   onThemeChanged() {
-    this.preferencesService.setPreference(
-      Preference.THEME,
-      this.theme
-    );
+    this.preferencesService.setPreference(Preference.THEME, this.theme);
+  }
+
+  onFollowSystemThemeChanged() {
     this.preferencesService.setPreference(
       Preference.FOLLOW_SYSTEM_THEME,
       this.followSystemTheme
@@ -101,11 +105,17 @@ export class PreferencesComponent implements OnInit {
   }
 
   onDefaultWordModeChanged() {
-    this.preferencesService.setPreference(Preference.DEFAULT_WORD_MODE, this.defaultWordMode);
+    this.preferencesService.setPreference(
+      Preference.DEFAULT_WORD_MODE,
+      this.defaultWordMode
+    );
   }
 
   onReverseScrollChanged() {
-    this.preferencesService.setPreference(Preference.REVERSE_SCROLL, this.reverseScroll);
+    this.preferencesService.setPreference(
+      Preference.REVERSE_SCROLL,
+      this.reverseScroll
+    );
   }
 
   onClickLoadCustomList() {
@@ -160,8 +170,8 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  togglePreferencesGroup(group : string) {
-
-    this.openedPreferencesGroup = this.openedPreferencesGroup === group ? "" : group;
+  togglePreferencesGroup(group: string) {
+    this.openedPreferencesGroup =
+      this.openedPreferencesGroup === group ? '' : group;
   }
 }
