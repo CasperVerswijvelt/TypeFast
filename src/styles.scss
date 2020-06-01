@@ -306,7 +306,7 @@ input:checked + .slider:before {
     background-color: rgba(128, 128, 128, 0.26);
   }
 
-  .slider {
+  input:not(:checked) + .slider {
     background-color: #adadad;
   }
 

@@ -1,0 +1,89 @@
+$max-tab-count: 5;
+$tab-wrap-border-radius: 12px;
+
+.about-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.336);
+  width: 100%;
+  height: 100%;
+}
+.tab-wrap {
+  transition: 0.3s box-shadow ease;
+  border-radius: $tab-wrap-border-radius;
+  max-width: calc(100% - 20px);
+  max-height:  calc(100% - 20px);
+  width: 750px;
+  display: flex;
+  flex-wrap: wrap;
+  position: relative;
+  list-style: none;
+  background-color: #fff;
+  margin: 16px;
+}
+
+.tab {
+  display: none;
+  @for $i from 1 through $max-tab-count {
+    &:checked:nth-of-type(#{$i}) ~ .tab__content:nth-of-type(#{$i}) {
+      opacity: 1;
+      position: relative;
+      top: 0;
+      z-index: 100;
+      transform: translateY(0px);
+      text-shadow: 0 0 0;
+    }
+  }
+  &:first-of-type:not(:last-of-type) + label {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  &:not(:first-of-type):not(:last-of-type) + label {
+    border-radius: 0;
+  }
+  &:last-of-type:not(:first-of-type) + label {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  &:checked + label {
+    background-color: #fff;
+    cursor: default;
+    &:hover {
+      background-color: #fff;
+    }
+  }
+  + label {
+    border-radius: $tab-wrap-border-radius $tab-wrap-border-radius 0 0;
+    cursor: pointer;
+    display: block;
+    text-decoration: none;
+    color: #333;
+    flex-grow: 3;
+    text-align: center;
+    background-color: #f2f2f2;
+    user-select: none;
+    text-align: center;
+    transition: 0.3s background-color ease;
+    height: 50px;
+    box-sizing: border-box;
+    padding: 15px;
+    &:hover {
+      background-color: #f9f9f9;
+    }
+  }
+  &__content {
+    padding: 10px 25px;
+    background-color: transparent;
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+    opacity: 0;
+    left: 0;
+    height: 400px;;
+    transform: translateY(-3px);
+    border-radius: $tab-wrap-border-radius;
+    overflow-x: hidden;
+  overflow-y: auto;
+  }
+}
