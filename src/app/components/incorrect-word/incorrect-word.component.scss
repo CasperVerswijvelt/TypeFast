@@ -1,0 +1,38 @@
+.character-incorrect {
+    color: red;
+}
+.character-missing {
+    opacity: .3;
+}
+
+
+.expected {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transition: opacity .2s;
+    user-select: none;
+}
+
+.value {
+    transition: opacity .2s;
+}
+
+.wrapper {
+    position: relative;
+    width: auto;
+    display: inline-block;
+
+    &:hover {
+
+        .expected {
+            opacity: 1;
+        }
+
+        .value {
+            opacity: 0;
+        }
+
+    }
+}

@@ -156,6 +156,10 @@ $word-spacing: 20px;
       padding-right: 5px;
     }
   }
+
+  .type-test-results-incorrect-words {
+    cursor: pointer;
+  }
 }
 
 .type-test-controls {
@@ -251,6 +255,80 @@ $word-spacing: 20px;
   position: absolute;
   bottom: 6px;
   right: 10px;
+}
+
+.type-test-incorrect-words-modal {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+
+  &.type-test-incorrect-words-modal-show {
+    opacity: 1;
+    pointer-events: initial;
+  }
+
+  .type-test-incorrect-words-modal-background {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+
+  .type-test-incorrect-words-modal-inner {
+    
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%,-50%, 0);
+    min-width: auto;
+    width: 300px;
+    height: auto;
+    max-width: 90%;
+    max-height: 90%;
+    background-color: rgba(7, 7, 7, 0.95);
+    border-radius: 15px;
+    color: white;
+
+    .incorrect-words-modal-title {
+      text-align: center;
+      width: 100%;
+      padding: 16px;
+    }
+
+    .info-icon-tooltip-incorrect-words {
+      position: absolute;
+      right:16px;
+      top: 16px
+    }
+
+    .incorrect-words-modal-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: auto;
+    }
+
+    .type-test-incorrect-words-modal-entry {
+      font-size: 1.5em;
+      width: 100%;
+      text-align: center;
+      padding: 4px;
+
+      &:nth-child(odd) {
+        background-color: rgba(128, 128, 128, 0.025);
+      }
+
+      app-incorrect-word {
+        padding: 8px;
+      }
+    }
+
+  }
 }
 
 @media (max-width: 400px) {

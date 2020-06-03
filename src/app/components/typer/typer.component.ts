@@ -38,6 +38,8 @@ export class TyperComponent implements OnInit {
   wordListName: string = '';
   reverseScroll = false;
 
+  incorrectWordsOpen = false;
+
   preferences: Map<string, BehaviorSubject<any>>;
   
   private leftOffset: number = 0;
@@ -409,5 +411,9 @@ export class TyperComponent implements OnInit {
   onRestartClicked() {
     this.setupTest();
     this.focusInput();
+  }
+
+  onIncorrectWordCountClicked() {
+    this.incorrectWordsOpen = true;
   }
 }

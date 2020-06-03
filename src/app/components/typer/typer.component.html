@@ -168,9 +168,9 @@
           <div class="tooltip">
             Change the word list in the preferences menu in the upper right
             corner, or load your own text file.
-            <br>
-            <br>
-            {{"Loaded list: " + wordListName}}
+            <br />
+            <br />
+            {{ "Loaded list: " + wordListName }}
           </div>
         </div>
       </td>
@@ -196,6 +196,20 @@
         </div>
       </td>
     </tr>
+    <tr class="type-test-results-incorrect-words">
+      <th>Incorrect words</th>
+      <td>
+        <span (click)="onIncorrectWordCountClicked()">{{
+          testResults?.incorrectWordCount * 1
+        }}</span>
+        <div popper class="info-icon-tooltip-container">
+          <div class="info-icon"></div>
+          <div class="tooltip">
+            To see which words you got wrong, click on this row.
+          </div>
+        </div>
+      </td>
+    </tr>
     <tr>
       <th>Time elapsed</th>
       <td>
@@ -203,4 +217,42 @@
       </td>
     </tr>
   </table>
+</div>
+
+<div
+  [class.type-test-incorrect-words-modal-show]="incorrectWordsOpen"
+  class="type-test-incorrect-words-modal"
+>
+  <div
+    class="type-test-incorrect-words-modal-background"
+    (click)="incorrectWordsOpen = false"
+  ></div>
+  <div class="type-test-incorrect-words-modal-inner">
+    <h2 class="incorrect-words-modal-title">
+      Incorrect words
+    </h2>
+    <p *ngIf="testResults?.incorrectWords.length === 0">
+      No incorrect words have been registered yet.
+    </p>
+    <div popper class="info-icon-tooltip-container info-icon-tooltip-incorrect-words">
+      <div class="info-icon"></div>
+      <div class="tooltip">
+        Characters marked red do not match the expected character.<br>
+        Greyed out characters were not typed at all.
+        <br>
+        <br>
+        Hover over the word to see the expected word.</div>
+    </div>
+    <div class="incorrect-words-modal-list">
+      <div
+      class="type-test-incorrect-words-modal-entry"
+      *ngFor="let word of testResults?.incorrectWords"
+    >
+      <app-incorrect-word
+        [expected]="word.expected"
+        [value]="word.value"
+      ></app-incorrect-word>
+    </div>
+    </div>
+  </div>
 </div>

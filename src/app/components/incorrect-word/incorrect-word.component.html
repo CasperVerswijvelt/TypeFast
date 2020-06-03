@@ -1,0 +1,8 @@
+<div class="wrapper">
+    <span class="value">
+        <span *ngFor="let character of valueLetters" [className]="character.class">{{character.char}}</span>
+    </span>
+    <span class="expected">
+        {{expected}}
+    </span>
+</div>
