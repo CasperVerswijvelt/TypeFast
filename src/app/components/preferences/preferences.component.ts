@@ -66,7 +66,7 @@ export class PreferencesComponent implements OnInit {
   onFollowSystemThemeChanged(event: Event) {
     this.preferencesService.setPreference(
       Preference.FOLLOW_SYSTEM_THEME,
-      (event.target as HTMLInputElement).value
+      (event.target as HTMLInputElement).checked
     );
   }
 

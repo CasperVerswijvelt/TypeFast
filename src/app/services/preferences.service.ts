@@ -13,10 +13,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PreferencesService {
-  private listeners: ((
-    updatedPreference: Preference,
-    value: any
-  ) => void)[] = [];
 
   private defaults: Preferences = {
     theme: Theme.LIGHT,
@@ -81,16 +77,7 @@ export class PreferencesService {
     pref[key as string] = value;
 
     localStorage.setItem('preferences', JSON.stringify(pref));
-    this.notifySubscribers(key, value);
     this.preferencesSubjects.get(key).next(value);
-  }
-
-  addListener(
-    listener: (updatedPreference: Preference, peferenceValue: any) => void
-  ) {
-    if (listener) {
-      this.listeners.push(listener);
-    }
   }
 
   private onStorage(event: StorageEvent) {
@@ -102,16 +89,9 @@ export class PreferencesService {
         Object.keys(this.defaults).forEach((key) => {
           if (oldObj[key] !== newObj[key]) {
             this.preferencesSubjects[key].next(newObj[key]);
-            this.notifySubscribers(key as Preference, newObj[key]);
           }
         });
       } catch (e) {}
     }
-  }
-
-  private notifySubscribers(updatedPreference: Preference, value: any) {
-    this.listeners.forEach((listener) => {
-      listener(updatedPreference, value);
-    });
   }
 }

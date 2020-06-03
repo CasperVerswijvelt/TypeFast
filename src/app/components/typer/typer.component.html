@@ -109,7 +109,7 @@
     <tr>
       <th>CPM</th>
       <td>
-        {{ testResults?.stats?.cpm * 1 | number: "1.0-0" }}
+        <span>{{ testResults?.stats?.cpm * 1 | number: "1.0-0" }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
@@ -123,9 +123,12 @@
     <tr>
       <th>Character accuracy</th>
       <td>
-        {{
-          (testResults?.stats?.characterAccuracy * 100 | number: "1.2-2") + "%"
-        }}
+        <span>
+          {{
+            (testResults?.stats?.characterAccuracy * 100 | number: "1.2-2") +
+              "%"
+          }}</span
+        >
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
@@ -143,7 +146,9 @@
     <tr>
       <th>Word accuracy</th>
       <td>
-        {{ (testResults?.stats?.wordAccuracy * 100 | number: "1.2-2") + "%" }}
+        <span>{{
+          (testResults?.stats?.wordAccuracy * 100 | number: "1.2-2") + "%"
+        }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
@@ -157,12 +162,15 @@
     <tr>
       <th>Word list</th>
       <td title="{{ wordListName }}">
-        {{ wordListName }}
+        <span>{{ wordListName }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
             Change the word list in the preferences menu in the upper right
             corner, or load your own text file.
+            <br>
+            <br>
+            {{"Loaded list: " + wordListName}}
           </div>
         </div>
       </td>
@@ -170,14 +178,15 @@
     <tr>
       <th>Word mode</th>
       <td class="capitalize">
-        {{ preferences.get('default_word_mode').value }}
+        <span>{{ preferences.get("default_word_mode").value }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
-            Change your preferred word mode in the preferences menu in the upper right corner:
+            Change your preferred word mode in the preferences menu in the upper
+            right corner:
             <ul>
               <li>
-                 Word mode: random words
+                Word mode: random words
               </li>
               <li>
                 Sentence mode: actual sentences

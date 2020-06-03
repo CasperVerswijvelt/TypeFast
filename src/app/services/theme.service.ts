@@ -21,30 +21,54 @@ export class ThemeService {
       .get(Preference.FOLLOW_SYSTEM_THEME)
       .subscribe(this.onFollowSystemPreferenceUpdated.bind(this));
 
-    // To make safari work
+    // Listen to localstorage changes
     if (mediaQueryList.addEventListener) {
       mediaQueryList.addEventListener(
         'change',
         this.onSystemThemeUpdated.bind(this)
       );
+
+      // Safari compatibility, it uses deprecated method
     } else if (mediaQueryList.addListener) {
       mediaQueryList.addListener(this.onSystemThemeUpdated.bind(this));
     }
   }
 
   private onThemePreferenceUpdated(value: any) {
-    this.setTheme(value);
+    this.updateTheme(
+      window.matchMedia('(prefers-color-scheme: dark)').matches,
+      value,
+      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value
+    );
   }
 
   private onFollowSystemPreferenceUpdated(value: any) {
-    this.setTheme(
-      value ? Theme.DARK : this.preferences.get(Preference.THEME).value
+    this.updateTheme(
+      window.matchMedia('(prefers-color-scheme: dark)').matches,
+      this.preferences.get(Preference.THEME).value,
+      value
     );
   }
 
   private onSystemThemeUpdated(event: MediaQueryListEvent) {
+    this.updateTheme(
+      event.matches,
+      this.preferences.get(Preference.THEME).value,
+      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value
+    );
+  }
+
+  private updateTheme(
+    matchesPreferkDark: boolean,
+    themePreference: Theme,
+    followSystemThemePreference: boolean
+  ) {
     this.setTheme(
-      event.matches ? Theme.DARK : this.preferences.get(Preference.THEME).value
+      followSystemThemePreference
+        ? matchesPreferkDark
+          ? Theme.DARK
+          : themePreference
+        : themePreference
     );
   }
 

@@ -22,4 +22,8 @@ import { PopperDirective } from './popper.directive';
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(private themeService : ThemeService) {
+    
+  }
+}

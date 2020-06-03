@@ -25,7 +25,7 @@
             <input type="radio" name="theme" [checked]="preferences.get('theme').value === them.value" [value]="them.value"
               (change)="onThemeChanged($event)" />
             <span class="checkmark"></span>
-            {{ preferences.get('theme').value }}
+            {{ them.value }}
           </label>
 
           <div class="preferences-entry preferences-toggle-entry">
