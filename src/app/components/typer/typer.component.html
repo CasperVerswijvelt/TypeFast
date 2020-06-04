@@ -102,23 +102,14 @@
         >WPM
         <div popper class="info-icon-tooltip-container info-icon-tooltip-wpm">
           <div class="info-icon"></div>
-          <div class="tooltip">Words per minute, CPM divided by 5</div>
-        </div>
-      </th>
-    </tr>
-    <tr>
-      <th>CPM</th>
-      <td>
-        <span>{{ testResults?.stats?.cpm * 1 | number: "1.0-0" }}</span>
-        <div popper class="info-icon-tooltip-container">
-          <div class="info-icon"></div>
-          <div class="tooltip">
-            The amount of correct characters typed, divided by the test duration
+          <div class="tooltip">Words per minute, CPM divided by 5.
+            <br><br>
+            CPM: The amount of correct characters typed, divided by the test duration
             in minutes. Characters that were positioned correctly in words that
             were not completely correct, are still counted as correct.
           </div>
         </div>
-      </td>
+      </th>
     </tr>
     <tr>
       <th>Character accuracy</th>
