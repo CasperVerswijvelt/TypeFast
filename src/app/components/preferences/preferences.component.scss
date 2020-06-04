@@ -163,6 +163,7 @@ $preferences-entry-main-height: 37px;
       font-weight: bold;
       margin-right: -60px;
       padding: $preferences-entry-padding-vertical 50px $preferences-entry-padding-vertical $preferences-entry-padding-side;
+      cursor: pointer;
     }
 
     .preferences-toggle-switch {
