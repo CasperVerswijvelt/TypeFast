@@ -13,14 +13,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class PreferencesService {
-
   private defaults: Preferences = {
     theme: Theme.LIGHT,
     word_language: Language.ENGLISH,
     follow_system_theme: false,
     default_word_mode: WordMode.WORDS,
     reverse_scroll: false,
-    default_test_duration: 60
+    default_test_duration: 60,
   };
 
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();
@@ -82,12 +81,13 @@ export class PreferencesService {
   }
 
   clearPreferences() {
-    localStorage.removeItem('preferences');
-
-    for (let defaultPreference in this.defaults) {
-      this.preferencesSubjects.get(
-        defaultPreference
-      ).next(this.defaults[defaultPreference]);
+    if (localStorage.getItem('preferences') !== null) {
+      localStorage.removeItem('preferences');
+      for (let defaultPreference in this.defaults) {
+        this.preferencesSubjects
+          .get(defaultPreference)
+          .next(this.defaults[defaultPreference]);
+      }
     }
   }
 
