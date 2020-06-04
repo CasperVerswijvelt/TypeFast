@@ -5,6 +5,10 @@ $preferences-entry-padding-vertical: 9px;
 $preferences-entry-height: 31px;
 $preferences-entry-main-height: 37px;
 
+* {
+  user-select: none;
+}
+
 .preferences-wrapper {
   position: fixed;
   width: 100%;

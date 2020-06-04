@@ -7,9 +7,10 @@ import {
 } from '@angular/core';
 import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
-import { timer, Subscription } from 'rxjs';
+import { timer, Subscription, BehaviorSubject } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
 import { Preference, WordMode, Language } from '../../models/Preference';
+import { skip } from 'rxjs/operators';
 
 @Component({
   selector: 'app-typer',
@@ -19,12 +20,9 @@ import { Preference, WordMode, Language } from '../../models/Preference';
 export class TyperComponent implements OnInit {
   @Output() focusFunctionReady = new EventEmitter<() => void>();
 
-  words: string[] = ["Loading..."];
-  currentIndex: number;
-  wordInput: string;
-  leftOffset: number = 0;
-  rightOffset: number = 0;
+  words: string[] = ['Loading...'];
 
+  wordInput: string;
   wordMode: WordMode;
 
   currentWordElement: HTMLElement;
@@ -33,16 +31,22 @@ export class TyperComponent implements OnInit {
 
   testResults: TestResults;
 
-  testTime = 60;
+  testTime;
   testTimeLeft: number;
 
-  private secondTimer: Subscription;
   testStarted: boolean;
-  wordListName: string = "";
+  wordListName: string = '';
   reverseScroll = false;
-  private reverseScrollPreference : boolean;
-  private reverseScrollWordList : boolean;
 
+  incorrectWordsOpen = false;
+
+  preferences: Map<string, BehaviorSubject<any>>;
+  
+  private leftOffset: number = 0;
+  private rightOffset: number = 0;
+  private currentIndex: number;
+  private reverseScrollWordList: boolean;
+  private secondTimer: Subscription;
 
   constructor(
     private wordService: WordService,
@@ -50,14 +54,19 @@ export class TyperComponent implements OnInit {
     private preferencesService: PreferencesService
   ) {
     this.wordService.addWordListListener(this.onUpdatedWordList.bind(this));
-    this.wordMode = preferencesService.getPreference(
-      Preference.DEFAULT_WORD_MODE
-    );
-    this.reverseScrollPreference = preferencesService.getPreference(
-      Preference.REVERSE_SCROLL
-    );
-    
-    this.preferencesService.addListener(this.onPreferenceUpdated.bind(this));
+
+    this.preferences = preferencesService.getPreferences();
+
+    this.preferences
+      .get(Preference.DEFAULT_WORD_MODE)
+      .pipe(skip(1))
+      .subscribe(this.onDefaultWordModePreferenceUpdated.bind(this));
+    this.preferences
+      .get(Preference.REVERSE_SCROLL)
+      .pipe(skip(1))
+      .subscribe(this.onReverseScrollPreferenceUpdated.bind(this));
+
+    this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION).value
   }
 
   ngOnInit(): void {
@@ -146,23 +155,25 @@ export class TyperComponent implements OnInit {
     }
   }
 
-  onPreferenceUpdated(preference: Preference, value: any) {
-    if (preference === Preference.DEFAULT_WORD_MODE) {
-      this.wordMode = value;
-      this.setupTest();
-    } else if (preference === Preference.REVERSE_SCROLL) {
-      this.reverseScrollPreference = value;
-      this.syncReverseScroll()
-      this.syncOffset();
-    }
+  private onDefaultWordModePreferenceUpdated(value: any) {
+    this.setupTest();
   }
 
-  onUpdatedWordList( wordMode: WordMode, wordListName : string, shouldReverseScroll : boolean) {
-    if (wordMode === this.wordMode) {
+  private onReverseScrollPreferenceUpdated(value: any) {
+    this.syncReverseScroll();
+    this.syncOffset();
+  }
+
+  onUpdatedWordList(
+    wordMode: WordMode,
+    wordListName: string,
+    shouldReverseScroll: boolean
+  ) {
+    if (wordMode === this.preferences.get(Preference.DEFAULT_WORD_MODE).value) {
       this.reverseScrollWordList = shouldReverseScroll;
+      this.wordListName = wordListName;
       this.syncReverseScroll();
       this.setupTest();
-      this.wordListName = wordListName
     }
   }
 
@@ -180,7 +191,8 @@ export class TyperComponent implements OnInit {
     this.leftOffset =
       this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncCurrentWordElement();
-    this.rightOffset = this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
+    this.rightOffset =
+      this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncOffset();
 
     this.fillWordList();
@@ -193,18 +205,18 @@ export class TyperComponent implements OnInit {
   }
 
   private syncReverseScroll() {
-
-    this.reverseScroll = this.reverseScrollPreference !== this.reverseScrollWordList;
-
+    this.reverseScroll =
+      this.preferences.get(Preference.REVERSE_SCROLL).value !==
+      this.reverseScrollWordList;
   }
 
   getWords(): string[] {
-    let words = this.preferencesService.getPreference(
-      Preference.DEFAULT_WORD_MODE
-    ) === WordMode.SENTENCES
-      ? this.wordService.getSentence()
-      : this.wordService.getWords();
-      return words;
+    let words =
+      this.preferences.get(Preference.DEFAULT_WORD_MODE).value ===
+      WordMode.SENTENCES
+        ? this.wordService.getSentence()
+        : this.wordService.getWords();
+    return words;
   }
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {
@@ -295,6 +307,8 @@ export class TyperComponent implements OnInit {
   }
 
   syncOffset() {
+    if (!this.containerElement) return;
+
     if (this.reverseScroll) {
       this.containerElement.style.marginLeft = null;
       this.containerElement.style.marginRight = `calc(50% + 80px - ${this.rightOffset}px)`;
@@ -375,6 +389,8 @@ export class TyperComponent implements OnInit {
 
     this.testTime -= decrease;
 
+    this.preferencesService.setPreference(Preference.DEFAULT_TEST_DURATION, this.testTime);
+
     this.updateTimer(0);
   }
 
@@ -393,11 +409,17 @@ export class TyperComponent implements OnInit {
 
     this.testTime += increase;
 
+    this.preferencesService.setPreference(Preference.DEFAULT_TEST_DURATION, this.testTime);
+
     this.updateTimer(0);
   }
 
   onRestartClicked() {
     this.setupTest();
     this.focusInput();
+  }
+
+  onIncorrectWordCountClicked() {
+    this.incorrectWordsOpen = true;
   }
 }
