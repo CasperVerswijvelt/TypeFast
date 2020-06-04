@@ -144,6 +144,22 @@
           <span class="slider round"></span>
         </label>
       </div>
+
+      <!-- Reset preferences -->
+      <div class="preferences-entry preferences-entry-main">
+        <div
+          class="preferences-padding"
+          (click)="onClickResetPreferences()"
+        >
+          Reset preferences
+          <div popper class="info-icon-tooltip-container">
+            <div class="info-icon"></div>
+            <div class="tooltip">
+              Clears the preferences from the browser.
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <button class="preferences-icon" (click)="onPreferencesIconClicked()">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">

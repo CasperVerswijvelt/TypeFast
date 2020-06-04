@@ -20,6 +20,7 @@ export class PreferencesService {
     follow_system_theme: false,
     default_word_mode: WordMode.WORDS,
     reverse_scroll: false,
+    default_test_duration: 60
   };
 
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();
@@ -78,6 +79,16 @@ export class PreferencesService {
 
     localStorage.setItem('preferences', JSON.stringify(pref));
     this.preferencesSubjects.get(key).next(value);
+  }
+
+  clearPreferences() {
+    localStorage.removeItem('preferences');
+
+    for (let defaultPreference in this.defaults) {
+      this.preferencesSubjects.get(
+        defaultPreference
+      ).next(this.defaults[defaultPreference]);
+    }
   }
 
   private onStorage(event: StorageEvent) {

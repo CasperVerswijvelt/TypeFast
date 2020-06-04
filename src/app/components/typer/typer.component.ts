@@ -31,7 +31,7 @@ export class TyperComponent implements OnInit {
 
   testResults: TestResults;
 
-  testTime = 60;
+  testTime;
   testTimeLeft: number;
 
   testStarted: boolean;
@@ -65,6 +65,8 @@ export class TyperComponent implements OnInit {
       .get(Preference.REVERSE_SCROLL)
       .pipe(skip(1))
       .subscribe(this.onReverseScrollPreferenceUpdated.bind(this));
+
+    this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION).value
   }
 
   ngOnInit(): void {
@@ -387,6 +389,8 @@ export class TyperComponent implements OnInit {
 
     this.testTime -= decrease;
 
+    this.preferencesService.setPreference(Preference.DEFAULT_TEST_DURATION, this.testTime);
+
     this.updateTimer(0);
   }
 
@@ -404,6 +408,8 @@ export class TyperComponent implements OnInit {
     });
 
     this.testTime += increase;
+
+    this.preferencesService.setPreference(Preference.DEFAULT_TEST_DURATION, this.testTime);
 
     this.updateTimer(0);
   }

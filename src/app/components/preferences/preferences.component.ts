@@ -33,7 +33,8 @@ export class PreferencesComponent implements OnInit {
 
   constructor(
     private preferencesService: PreferencesService,
-    private wordService: WordService) {
+    private wordService: WordService
+  ) {
     this.preferences = preferencesService.getPreferences();
 
     wordService.addLanguageFetchListener(this.onLanguageFetch.bind(this));
@@ -102,6 +103,16 @@ export class PreferencesComponent implements OnInit {
     };
 
     input.click();
+  }
+
+  onClickResetPreferences() {
+    if (
+      confirm(
+        "Are you sure you want to reset your preferences? This can't be undone!"
+      ) == true
+    ) {
+      this.preferencesService.clearPreferences();
+    }
   }
 
   getISOForLangauge(language: Language): string {
