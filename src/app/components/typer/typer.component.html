@@ -196,12 +196,13 @@
         </div>
       </td>
     </tr>
-    <tr class="type-test-results-incorrect-words">
+    <tr
+      class="type-test-results-incorrect-words"
+      (click)="onIncorrectWordCountClicked()"
+    >
       <th>Incorrect words</th>
       <td>
-        <span (click)="onIncorrectWordCountClicked()">{{
-          testResults?.incorrectWordCount * 1
-        }}</span>
+        <span>{{ testResults?.incorrectWordCount * 1 }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
@@ -230,29 +231,42 @@
   <div class="type-test-incorrect-words-modal-inner">
     <h2 class="incorrect-words-modal-title">
       Incorrect words
+      <div
+        popper
+        class="info-icon-tooltip-container info-icon-tooltip-incorrect-words"
+      >
+        <div class="info-icon"></div>
+        <div class="tooltip">
+          Characters marked red do not match the expected character.<br />
+          Greyed out characters were not typed at all.
+          <br />
+          <br />
+          Hover over the word to see the expected word.
+        </div>
+      </div>
     </h2>
-    <p *ngIf="testResults?.incorrectWords.length === 0">
+    <p
+      class="incorrect-words-placeholder"
+      *ngIf="testResults?.incorrectWords.length === 0"
+    >
       No incorrect words have been registered yet.
     </p>
-    <div popper class="info-icon-tooltip-container info-icon-tooltip-incorrect-words">
-      <div class="info-icon"></div>
-      <div class="tooltip">
-        Characters marked red do not match the expected character.<br>
-        Greyed out characters were not typed at all.
-        <br>
-        <br>
-        Hover over the word to see the expected word.</div>
-    </div>
     <div class="incorrect-words-modal-list">
       <div
-      class="type-test-incorrect-words-modal-entry"
-      *ngFor="let word of testResults?.incorrectWords"
+        class="type-test-incorrect-words-modal-entry"
+        *ngFor="let word of testResults?.incorrectWords"
+      >
+        <app-incorrect-word
+          [expected]="word.expected"
+          [value]="word.value"
+        ></app-incorrect-word>
+      </div>
+    </div>
+    <button
+      class="incorrect-words-modal-close"
+      (click)="incorrectWordsOpen = false"
     >
-      <app-incorrect-word
-        [expected]="word.expected"
-        [value]="word.value"
-      ></app-incorrect-word>
-    </div>
-    </div>
+      Close
+    </button>
   </div>
 </div>

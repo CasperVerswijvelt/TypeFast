@@ -88,7 +88,7 @@ export class PreferencesService {
 
         Object.keys(this.defaults).forEach((key) => {
           if (oldObj[key] !== newObj[key]) {
-            this.preferencesSubjects[key].next(newObj[key]);
+            this.preferencesSubjects.get(key).next(newObj[key]);
           }
         });
       } catch (e) {}

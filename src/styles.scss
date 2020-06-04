@@ -388,5 +388,37 @@ input:checked + .slider:before {
         fill: rgb(48, 48, 48);
       }
     }
+
+
+
+
+    .type-test-incorrect-words-modal {
+    
+      .type-test-incorrect-words-modal-background {
+       
+        background-color: rgba(0, 0, 0, 0.7);
+      }
+    
+      .type-test-incorrect-words-modal-inner {
+        
+        background-color: rgb(245, 245, 245);
+        color: rgb(37, 37, 37);
+    
+        .type-test-incorrect-words-modal-entry {
+    
+          &:nth-child(odd) {
+            background-color: rgb(228, 228, 228);
+          }
+        }
+    
+        .incorrect-words-modal-close {
+          background-color: rgb(177, 0, 0);
+          color: white;
+        }
+      }
+    }
+
+
+
   }
 }

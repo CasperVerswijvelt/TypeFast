@@ -276,7 +276,7 @@ $word-spacing: 20px;
   .type-test-incorrect-words-modal-background {
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
+    background-color: rgba(0, 0, 0, 0.9);
   }
 
   .type-test-incorrect-words-modal-inner {
@@ -286,24 +286,34 @@ $word-spacing: 20px;
     left: 50%;
     transform: translate3d(-50%,-50%, 0);
     min-width: auto;
-    width: 300px;
+    width: 330px;
     height: auto;
     max-width: 90%;
     max-height: 90%;
-    background-color: rgba(7, 7, 7, 0.95);
+    background-color: rgba(7, 7, 7);
     border-radius: 15px;
     color: white;
+    display: flex;
+    flex-direction: column;
 
     .incorrect-words-modal-title {
       text-align: center;
+      font-weight: bold;
       width: 100%;
       padding: 16px;
+      flex: 0;
     }
 
     .info-icon-tooltip-incorrect-words {
       position: absolute;
       right:16px;
       top: 16px
+    }
+
+    .incorrect-words-placeholder {
+      padding: 16px;
+      opacity: .8;
+      text-align: center;
     }
 
     .incorrect-words-modal-list {
@@ -317,14 +327,27 @@ $word-spacing: 20px;
       font-size: 1.5em;
       width: 100%;
       text-align: center;
-      padding: 4px;
 
       &:nth-child(odd) {
-        background-color: rgba(128, 128, 128, 0.025);
+        background-color: rgb(10, 10, 10);
       }
+    }
 
-      app-incorrect-word {
-        padding: 8px;
+    .incorrect-words-modal-close {
+      border: none;
+      border-radius: 50px;
+      background-color: rgb(177, 0, 0);
+      opacity: .8;
+      color: white;
+      font-size: 16px;
+      padding: 8px;
+      width: 50%;
+      margin: 16px auto;
+
+      &:hover {
+
+        cursor: pointer;
+        opacity: 1;
       }
     }
 
