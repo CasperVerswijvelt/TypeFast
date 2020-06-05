@@ -21,7 +21,7 @@ $preferences-entry-main-height: 37px;
   top: $preferences-offset;
   display: flex;
   pointer-events: none;
-  max-height: calc(100vh - 32px);
+  max-height: calc(100% - 32px);
 }
 
 .preferences-icon {
