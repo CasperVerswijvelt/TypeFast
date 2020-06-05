@@ -296,6 +296,7 @@ input:checked + .slider:before {
 
   .title {
     color: rgb(24, 24, 24);
+    user-select: none;
   }
 
   .spinner div:after {
