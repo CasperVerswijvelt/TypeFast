@@ -124,7 +124,7 @@ $word-spacing: 20px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      flex:1
+      flex: 1;
     }
 
     .info-icon-tooltip-container {
@@ -266,7 +266,7 @@ $word-spacing: 20px;
 
   opacity: 0;
   pointer-events: none;
-  transition: opacity .2s;
+  transition: opacity 0.2s;
 
   &.type-test-incorrect-words-modal-show {
     opacity: 1;
@@ -280,11 +280,10 @@ $word-spacing: 20px;
   }
 
   .type-test-incorrect-words-modal-inner {
-    
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate3d(-50%,-50%, 0);
+    transform: translate3d(-50%, -50%, 0);
     min-width: auto;
     width: 330px;
     height: auto;
@@ -305,13 +304,13 @@ $word-spacing: 20px;
 
     .info-icon-tooltip-incorrect-words {
       position: absolute;
-      right:16px;
-      top: 16px
+      right: 16px;
+      top: 16px;
     }
 
     .incorrect-words-placeholder {
       padding: 16px;
-      opacity: .8;
+      opacity: 0.8;
       text-align: center;
     }
 
@@ -336,7 +335,7 @@ $word-spacing: 20px;
       border: none;
       border-radius: 50px;
       background-color: rgb(177, 0, 0);
-      opacity: .8;
+      opacity: 0.8;
       color: white;
       font-size: 16px;
       padding: 8px;
@@ -344,12 +343,10 @@ $word-spacing: 20px;
       margin: 16px auto;
 
       &:hover {
-
         cursor: pointer;
         opacity: 1;
       }
     }
-
   }
 }
 
