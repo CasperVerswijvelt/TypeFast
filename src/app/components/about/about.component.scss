@@ -93,6 +93,26 @@ $tab-wrap-border-radius: 12px;
   }
 }
 
+.close-button {
+  cursor: pointer;
+  display: block;
+  text-decoration: none;
+  color: #2e2e2e;
+  background-color: rgba(255, 80, 80, 0.5);
+  flex: 0 0 50px;
+  text-align: center;
+  user-select: none;
+  text-align: center;
+  transition: 0.3s background-color ease;
+  height: 50px;
+  box-sizing: border-box;
+  padding: 15px;
+
+  &:hover {
+    background-color: rgba(255, 80, 80, 0.7);
+  }
+}
+
 .image-button {
   margin: auto;
   display: block;
