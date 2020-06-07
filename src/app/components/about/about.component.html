@@ -1,58 +1,108 @@
-<div class="about-wrapper">
-  <div class="tab-wrap">
+<div class="about-wrapper" (click)="closeAbout()">
+  <div class="tab-wrap" (click)="$event.stopPropagation()">
     <!-- active tab on page load gets checked attribute -->
     <input type="radio" id="about-tab" name="tabGroup1" class="tab" checked />
     <label for="about-tab">About</label>
 
-    <input type="radio" id="calculations-tab" name="tabGroup1" class="tab" />
-    <label for="calculations-tab">Calculations</label>
+    <input type="radio" id="features-tab" name="tabGroup1" class="tab" />
+    <label for="features-tab">Features</label>
 
-    <input type="radio" id="contribute-tab" name="tabGroup1" class="tab" />
-    <label for="contribute-tab">Contribute</label>
+    <!-- <input type="radio" id="calculations-tab" name="tabGroup1" class="tab" />
+    <label for="calculations-tab">Calculations</label> -->
 
     <input type="radio" id="feedback-tab" name="tabGroup1" class="tab" />
     <label for="feedback-tab">Feedback</label>
 
     <div class="tab__content">
-      <h3>Short Section</h3>
+      <h3>About TypeFast.io</h3>
       <p>
-        Praesent nonummy mi in odio. Nullam accumsan lorem in dui. Vestibulum
-        turpis sem, aliquet eget, lobortis pellentesque, rutrum eu, nisl. Nullam
-        accumsan lorem in dui. Donec pede justo, fringilla vel, aliquet nec,
-        vulputate eget, arcu.
+        TypeFast.io was created by me, Casper Verswijvelt, with versatility and
+        minimalism in mind. Many type-test sites have either cluttered/ugly user
+        interfaces or skimp out on features.
       </p>
+      <p>
+        With TypeFast.io I wanted to create something that had all the positives
+        from other applicationsm, but none of the negatives. It's up to you to
+        decide if I succeeded doing that, or not.
+      </p>
+      <p>
+        If you have any suggestions or feedback, be sure to check out the
+        'Feedback tab'.
+      </p>
+      <h3>
+        Support
+      </h3>
+      <p>
+        TypeFast.io is a side project that I work on in my free time. Domain and
+        hosting costs are paid for by myself and I do not plan on running ads
+        (it would ruin the design). If you enjoy this site and would like to
+        support it's future development, you can do so by donating via the button
+        below.
+      </p>
+
+      <a
+        href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7VF8RAUSY7T4L&source=url"
+        target="_blank"
+        class="image-button"
+      >
+        <img
+          src="https://www.paypalobjects.com/en_US/BE/i/btn/btn_donateCC_LG.gif"
+        />
+      </a>
     </div>
 
     <div class="tab__content">
-      <h3>Medium Section</h3>
-      <p>
-        Praesent nonummy mi in odio. Nullam accumsan lorem in dui. Vestibulum
-        turpis sem, aliquet eget, lobortis pellentesque, rutrum eu, nisl. Nullam
-        accumsan lorem in dui. Donec pede justo, fringilla vel, aliquet nec,
-        vulputate eget, arcu.
-      </p>
-
-      <p>
-        In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Morbi
-        mattis ullamcorper velit. Pellentesque posuere. Etiam ut purus mattis
-        mauris sodales aliquam. Praesent nec nisl a purus blandit viverra.
-      </p>
+      <h3>Features</h3>
+      <ul>
+        <li>
+          Light / dark theme (more to come?)
+        </li>
+        <li>
+          Option to follow system theme
+        </li>
+        <li>
+          Word / sentences mode
+        </li>
+        <li>
+          Multilanguage with 15 built-in word-sets.
+        </li>
+        <li>
+          Option to load your own custom word/sentence list
+        </li>
+        <li>
+          Option to reverse the word scrolling
+        </li>
+        <li>
+          Customizable test duration
+        </li>
+        <li>
+          See what words you typed wrong (click the 'Incorrect words' row in
+          results table)
+        </li>
+        <li>
+          Tab + Enter to restart test
+        </li>
+        <li>
+          Complete word by either Space or Enter key
+        </li>
+      </ul>
     </div>
 
+    <!-- <div class="tab__content">
+      <h3>Calculations</h3>
+      
+    </div> -->
+
     <div class="tab__content">
-      <h3>Long Section</h3>
+      <h3>Feedback</h3>
       <p>
-        Praesent nonummy mi in odio. Nullam accumsan lorem in dui. Vestibulum
-        turpis sem, aliquet eget, lobortis pellentesque, rutrum eu, nisl. Nullam
-        accumsan lorem in dui. Donec pede justo, fringilla vel, aliquet nec,
-        vulputate eget, arcu.
+        If you have any feedback, want to report a bug or want to request a feature, please join the TypeFast.io discord page.
+
+        Here you will also find changelogs and other useful information about TypeFast.io!
       </p>
+      <a class="image-button image-button-discord" href="https://discord.gg/SsHXt9t" target="_blank">
+        <img src="../../../assets/discord.png">
+      </a>
     </div>
-    <div class="tab__content">
-        <h3>Long Section</h3>
-        <p>
-          Feedback
-        </p>
-      </div>
   </div>
 </div>

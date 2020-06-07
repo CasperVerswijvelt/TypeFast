@@ -12,6 +12,23 @@ app-preferences {
     pointer-events: none;
 }
 
+app-about {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+
+    opacity: 0;
+    transition: opacity .2s;
+    pointer-events: none;
+
+    &.about-show {
+        opacity: 1;
+        pointer-events: initial;
+    }
+}
+
 .title {
     position: absolute;
     top: 1px;

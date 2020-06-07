@@ -179,7 +179,7 @@ input:checked + .slider:before {
   border-radius: 4px;
   font-size: 15px;
   opacity: 0;
-  pointer-events: none;    
+  pointer-events: none;
   max-width: 300px;
   transition: opacity 0.2s;
   overflow-wrap: break-word;
@@ -205,11 +205,11 @@ input:checked + .slider:before {
 
 .info-icon {
   background-color: rgba(128, 128, 128, 0.151);
-  mask-image: url('assets/icons/info-circle-solid.svg');
+  mask-image: url("assets/icons/info-circle-solid.svg");
   mask-position: center;
   mask-repeat: no-repeat;
   width: 19px;
-  height:19px;
+  height: 19px;
   display: inline-block;
   cursor: pointer;
 }
@@ -230,7 +230,7 @@ input:checked + .slider:before {
 }
 
 .flag-icon-dev {
-  background-image: url('assets/icons/curly-brackets.svg');
+  background-image: url("assets/icons/curly-brackets.svg");
 }
 
 .flag-icon-sa {
@@ -330,8 +330,6 @@ input:checked + .slider:before {
       background-color: rgba(90, 90, 90, 0.014);
     }
 
-    
-
     .preferences-group-entries {
       background-color: #b7b7b766;
     }
@@ -390,36 +388,55 @@ input:checked + .slider:before {
       }
     }
 
-
-
-
     .type-test-incorrect-words-modal {
-    
       .type-test-incorrect-words-modal-background {
-       
         background-color: rgba(0, 0, 0, 0.7);
       }
-    
+
       .type-test-incorrect-words-modal-inner {
-        
         background-color: rgb(245, 245, 245);
         color: rgb(37, 37, 37);
-    
+
         .type-test-incorrect-words-modal-entry {
-    
           &:nth-child(odd) {
             background-color: rgb(228, 228, 228);
           }
         }
-    
+
         .incorrect-words-modal-close {
           background-color: rgb(177, 0, 0);
           color: white;
         }
       }
     }
+  }
 
+  app-about {
+    .about-wrapper {
+      background-color: rgba(0, 0, 0, 0.336);
+    }
 
+    .tab-wrap {
+      background-color: #fff;
+    }
 
+    .tab {
+      &:checked + label {
+        background-color: #fff;
+        &:hover {
+          background-color: #fff;
+        }
+      }
+      + label {
+        color: #333;
+        background-color: #efefef;
+        &:hover {
+          background-color: #f9f9f9;
+        }
+      }
+      &__content {
+        color: rgb(85, 85, 85);
+      }
+    }
   }
 }

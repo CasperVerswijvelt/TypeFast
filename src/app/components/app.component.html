@@ -1,3 +1,4 @@
 <div class="title">type fast. alpha</div>
 <app-typer (focusFunctionReady)="onFocusFunctionReady($event)"></app-typer>
-<app-preferences (toggled)="onPreferencesToggled($event)"></app-preferences>
+<app-preferences (preferencesToggled)="onPreferencesToggled($event)" (aboutClicked)="preferencesAboutClicked()"></app-preferences>
+<app-about [class.about-show]="showAbout" (onAboutClosed)="closeAbout()"></app-about>

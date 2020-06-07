@@ -9,6 +9,8 @@ import { WordService } from '../services/word.service';
 export class AppComponent {
   title = 'Type fast.';
 
+  showAbout = false;
+
   private typeTestFocusFunction: () => void;
 
   onPreferencesToggled(show: boolean) {
@@ -21,5 +23,15 @@ export class AppComponent {
     if (focusFunction) {
       this.typeTestFocusFunction = focusFunction;
     }
+  }
+
+  preferencesAboutClicked() {
+    this.showAbout = true;
+    console.log(this.showAbout)
+  }
+
+  closeAbout() {
+    this.showAbout = false;
+    console.log(this.showAbout)
   }
 }

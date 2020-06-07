@@ -12,7 +12,8 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./preferences.component.scss'],
 })
 export class PreferencesComponent implements OnInit {
-  @Output() toggled = new EventEmitter<boolean>();
+  @Output() preferencesToggled = new EventEmitter<boolean>();
+  @Output() aboutClicked = new EventEmitter<void>();
 
   showPreferences = false;
   Language = Language;
@@ -48,12 +49,8 @@ export class PreferencesComponent implements OnInit {
   }
 
   onPreferencesIconClicked() {
-    this.togglePreferences();
-  }
-
-  togglePreferences() {
     this.showPreferences = !this.showPreferences;
-    this.toggled.emit(this.showPreferences);
+    this.preferencesToggled.emit(this.showPreferences);
     this.openedPreferencesGroup = '';
   }
 
@@ -103,6 +100,11 @@ export class PreferencesComponent implements OnInit {
     };
 
     input.click();
+  }
+
+  onClickAbout() {
+    this.aboutClicked.emit();
+    this.onPreferencesIconClicked();
   }
 
   onClickResetPreferences() {

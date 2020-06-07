@@ -12,9 +12,10 @@ import { PreferencesComponent } from './components/preferences/preferences.compo
 import { ThemeService } from './services/theme.service';
 import { PopperDirective } from './popper.directive';
 import { IncorrectWordComponent } from './components/incorrect-word/incorrect-word.component';
+import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
-  declarations: [AppComponent, TyperComponent, TimePipe, PreferencesComponent, PopperDirective, IncorrectWordComponent],
+  declarations: [AppComponent, TyperComponent, TimePipe, PreferencesComponent, PopperDirective, IncorrectWordComponent, AboutComponent],
   imports: [BrowserModule, FormsModule],
   providers: [
     { provide: WordService, useClass: DefaultWordService },
