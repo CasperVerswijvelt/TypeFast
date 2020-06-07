@@ -162,12 +162,12 @@ $preferences-entry-main-height: 37px;
       flex: 1;
       font-weight: bold;
       margin-right: -60px;
-      padding: $preferences-entry-padding-vertical 50px $preferences-entry-padding-vertical $preferences-entry-padding-side;
+      padding: 7px 50px 7px $preferences-entry-padding-side;
       cursor: pointer;
     }
 
     .preferences-toggle-switch {
-      margin: 8px $preferences-entry-padding-side 8px 8px;
+      margin: 6px $preferences-entry-padding-side
     }
   }
 }
@@ -175,6 +175,16 @@ $preferences-entry-main-height: 37px;
 .preferences-entry-main {
   font-weight: bold;
   height: $preferences-entry-main-height;
+
+  &.preferences-toggle-entry {
+    .preferences-toggle-label {
+      padding: $preferences-entry-padding-vertical 50px $preferences-entry-padding-vertical $preferences-entry-padding-side;
+    }
+  
+    .preferences-toggle-switch {
+      margin: 8px $preferences-entry-padding-side 8px 8px;
+    }
+  }
 }
 
 .preferences-background {
