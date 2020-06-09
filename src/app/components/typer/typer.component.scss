@@ -357,3 +357,33 @@ $word-spacing: 20px;
     padding-right: 10px;
   }
 }
+
+
+.word-container-classic {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: .5em;
+  max-height: 120px;
+  overflow: hidden;
+  max-width: 80%;
+  margin: auto;
+
+  .word {
+    
+    > div {
+      color: rgb(223, 223, 223);
+    }
+
+    .correct {
+      color: rgb(124, 124, 124);
+    }
+
+    .incorrect {
+      color: rgb(133, 0, 0);
+    }
+
+    .incorrect-extra {
+      color: rgb(71, 71, 71)
+    }
+  }
+}

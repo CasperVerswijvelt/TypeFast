@@ -42,6 +42,9 @@ export class TyperComponent implements OnInit {
 
   preferences: Map<string, BehaviorSubject<any>>;
   
+  uiWords = [];
+  
+
   private leftOffset: number = 0;
   private rightOffset: number = 0;
   private currentIndex: number;
@@ -144,6 +147,9 @@ export class TyperComponent implements OnInit {
         this.nextWord();
       }
     } else {
+
+      this.upateClassicTypeWord(this.wordInput, this.words[this.currentIndex]);
+
       if (
         this.words[this.currentIndex].slice(0, this.wordInput.length) !==
         this.wordInput
@@ -152,6 +158,40 @@ export class TyperComponent implements OnInit {
       } else {
         this.inputElement.classList.remove('input-incorrect');
       }
+    }
+    
+  }
+
+  private upateClassicTypeWord(value: string, expected: string) {
+
+    let word = this.uiWords[this.currentIndex];
+
+    word.characters = word.characters.splice(0, expected.length);
+
+    console.log(word.characters)
+    for (let i = 0; i < expected.length; i++) {
+
+      if (i >= value.length) {
+        word.characters[i].class = ""
+      } else {
+        if (value[i] === expected[i]) {
+          word.characters[i].class = "correct"
+        } else {
+          word.characters[i].class = "incorrect"
+        }
+      }
+    }
+
+    console.log(word.characters.length, expected.length)
+
+    // Extra typed characters
+    for (let i = expected.length; i < value.length; i++) {
+      word.characters.push(
+        {
+          character: value[i],
+          class: "incorrect-extra"
+        });
+        console.log('pushed')
     }
   }
 
@@ -200,8 +240,22 @@ export class TyperComponent implements OnInit {
 
   private fillWordList() {
     while (this.currentIndex > this.words.length - 20) {
-      this.words = this.words.concat(this.getWords());
+      let conc = this.getWords();
+      this.words = this.words.concat(conc);
+      this.uiWords = this.uiWords.concat(conc.map(word => {
+        let res = {
+          characters: word.split("").map(letter => {
+            return {
+              character: letter,
+              class: ""
+            }
+          })
+        }
+        return res;
+      }))
     }
+
+    console.log(this.uiWords)
   }
 
   private syncReverseScroll() {

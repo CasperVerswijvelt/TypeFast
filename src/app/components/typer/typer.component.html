@@ -22,6 +22,11 @@
       class="word-input"
       tabindex="3"
     />
+    <div class="word-container-classic">
+      <div class="word" *ngFor="let uiWord of uiWords">
+        <span class="character" [className]="character.class" *ngFor="let character of uiWord.characters">{{character.character}}</span>
+      </div>
+    </div>
   </div>
 
   <div class="type-test-controls">
