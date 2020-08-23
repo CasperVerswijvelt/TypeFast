@@ -25,8 +25,8 @@ $preferences-entry-main-height: 37px;
 
 .preferences-icon {
   padding: 5px;
-  width: 25px;
-  height: 25px;
+  width: 20px;
+  height: 20px;
   opacity: 0.5;
   background: no-repeat;
   display: block;
@@ -55,6 +55,14 @@ $preferences-entry-main-height: 37px;
   &:active {
     opacity: 1;
     border: none;
+  }
+}
+
+@media (min-width: 800px) {
+
+  .preferences-icon {
+    width: 25px;
+    height: 25px;
   }
 }
 
