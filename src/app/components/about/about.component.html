@@ -13,7 +13,10 @@
     <input type="radio" id="feedback-tab" name="tabGroup1" class="tab" />
     <label for="feedback-tab">Feedback</label>
 
-    <span class="close-button"  (click)="closeAbout()">
+    <input type="radio" id="contribute-tab" name="tabGroup1" class="tab" />
+    <label for="contribute-tab">Contribute</label>
+
+    <span class="close-button" (click)="closeAbout()">
       x
     </span>
 
@@ -44,14 +47,9 @@
         below.
       </p>
 
-      <a
-        href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7VF8RAUSY7T4L&source=url"
-        target="_blank"
-        class="image-button"
-      >
-        <img
-          src="https://www.paypalobjects.com/en_US/BE/i/btn/btn_donateCC_LG.gif"
-        />
+      <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7VF8RAUSY7T4L&source=url"
+        target="_blank" class="image-button">
+        <img src="https://www.paypalobjects.com/en_US/BE/i/btn/btn_donateCC_LG.gif" />
       </a>
     </div>
 
@@ -100,12 +98,31 @@
     <div class="tab__content">
       <h3>Feedback</h3>
       <p>
-        If you have any feedback, want to report a bug or want to request a feature, please join the TypeFast.io discord page.
-
+        If you have any feedback, want to report a bug or want to request a feature, please join the TypeFast.io discord
+        page.
+      </p>
+      <p>
         Here you will also find changelogs and other useful information about TypeFast.io!
       </p>
       <a class="image-button image-button-discord" href="https://discord.gg/SsHXt9t" target="_blank">
         <img src="assets/img/discord.png">
+      </a>
+    </div>
+
+    <div class="tab__content">
+      <h3>Contribute</h3>
+      <p>
+        This project is open-source!
+      </p>
+      <p>
+        If you have any issues or want to contribute to the project by fixing bugs,
+        improving existing features or implementing new features,
+        <a href="https://github.com/CasperVerswijvelt/TypeFast" target="_blank">
+          be sure to check out this project on GitHub!
+        </a>
+      </p>
+      <a class="image-button image-button-github" href="https://github.com/CasperVerswijvelt/TypeFast" target="_blank">
+        <img src="assets/img/github.png">
       </a>
     </div>
   </div>
