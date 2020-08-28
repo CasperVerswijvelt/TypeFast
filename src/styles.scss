@@ -1,6 +1,7 @@
 body {
   background-color: #080808;
-  transition: background-color 0.4s;
+  // TODO: only enable this transition after file load to make sure it doesnt animate the initial transition
+  //transition: background-color 0.4s;
 }
 
 * {
