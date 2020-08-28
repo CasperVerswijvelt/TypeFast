@@ -1,27 +1,30 @@
 # TypeFast
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.7.
+TypeFast is a minimalistic typing speed tester that keeps versatility in mind. You can visit a live version of the master branch at [TypeFast.io](https://typefast.io).
 
-## Development server
+## Getting Started
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+TypeFast is built using Angular.
 
-## Code scaffolding
+Run `npm install` to install all project dependencies.
+You can then use `npm start` to start the development server at `http://localhost:4200/`.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+## Contributing
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+If you would like to contribute to the project, feel free to fork this project and open a pull request.
 
-## Running unit tests
+## Authors
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+  - **Casper Verswijevlt** - *Everything* -
+    [CasperVerswijvelt](https://github.com/CasperVerswijvelt)
 
-## Running end-to-end tests
+See also the list of
+[contributors](https://github.com/PurpleBooth/a-good-readme-template/contributors)
+who participated in this project.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+## License
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+This project is licensed under the [MIT License](LICENSE)
+Creative Commons License - see the [LICENSE](LICENSE) file for
+details
