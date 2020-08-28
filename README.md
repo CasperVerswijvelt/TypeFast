@@ -3,10 +3,14 @@
 TypeFast is a minimalistic typing speed tester that keeps versatility in mind. You can visit a live version of the master branch at [TypeFast.io](https://typefast.io).
 
 ## Screenshtos
+Light theme                |  Dark theme
+:-------------------------:|:-------------------------:
+![Screenshot of light theme](screenshots/theme_light.png?raw=true "Light theme")  |  ![Screenshot of dark theme](screenshots/theme_dark.png?raw=true "Dark theme")
 
-![Screenshot of light theme](screenshots/theme_light.png?raw=true "Light theme")
-![Screenshot of dark theme](screenshots/theme_dark.png?raw=true "Dark theme")
-![All possible options in the preferences pane](screenshots/preferences.png?raw=true "All possible options in the preferences pane")
+
+Preferences                |
+:-------------------------:|
+<img src="screenshots/preferences.png" alt="All possible options in the preferences pane" width="300px"> |
 
 ## Getting Started
 
