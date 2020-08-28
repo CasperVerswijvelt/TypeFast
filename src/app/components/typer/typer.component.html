@@ -26,7 +26,12 @@
 
   <div class="type-test-controls">
     <div class="type-test-timer">
-      <button class="type-test-timer-decrease" (click)="onDecreaseClicked()" tabindex="1">
+      <button
+        class="type-test-timer-decrease"
+        (click)="onDecreaseClicked()"
+        tabindex="1"
+        title="Decrease test duration"
+      >
         <svg
           aria-hidden="true"
           focusable="false"
@@ -45,7 +50,12 @@
       <div class="type-test-timer-time">
         {{ testTimeLeft | time }}
       </div>
-      <button class="type-test-timer-decrease" (click)="onIncreaseClicked()" tabindex="2">
+      <button
+        class="type-test-timer-increase"
+        (click)="onIncreaseClicked()"
+        tabindex="2"
+        title="Increase test duration"
+      >
         <svg
           aria-hidden="true"
           focusable="false"
@@ -62,7 +72,7 @@
       </button>
     </div>
     <div class="type-test-buttons">
-      <button type="button" class="type-test-restart" tabindex="0" (click)="onRestartClicked()">
+      <button type="button" class="type-test-restart" tabindex="0" (click)="onRestartClicked()" title="Reset test">
         <svg
           aria-hidden="true"
           focusable="false"

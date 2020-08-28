@@ -83,7 +83,6 @@ export class PreferencesComponent implements OnInit {
 
   onClickAbout() {
     this.aboutClicked.emit();
-    this.onPreferencesIconClicked();
   }
 
   onClickResetPreferences() {

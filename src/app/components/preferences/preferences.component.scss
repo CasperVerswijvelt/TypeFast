@@ -60,8 +60,8 @@ $preferences-entry-main-height: 37px;
 
 @media (min-width: 800px) {
   .preferences-icon {
-    width: 25px;
-    height: 25px;
+    width: 23px;
+    height: 23px;
   }
 }
 
@@ -74,6 +74,13 @@ $preferences-entry-main-height: 37px;
 
 .preferences-icon-discord {
   margin-bottom: 2px;
+}
+
+.preferences-icon-info {
+  svg {
+    width: 75%;
+    height: 75%;
+  }
 }
 
 .preferences-icons {
