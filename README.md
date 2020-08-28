@@ -2,6 +2,12 @@
 
 TypeFast is a minimalistic typing speed tester that keeps versatility in mind. You can visit a live version of the master branch at [TypeFast.io](https://typefast.io).
 
+## Screenshtos
+
+![Screenshot of light theme](screenshots/theme_light.png?raw=true "Light theme")
+![Screenshot of dark theme](screenshots/theme_dark.png?raw=true "Dark theme")
+![All possible options in the preferences pane](screenshots/preferences.png?raw=true "All possible options in the preferences pane")
+
 ## Getting Started
 
 TypeFast is built using Angular.
