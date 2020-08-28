@@ -21,13 +21,7 @@
 
 .word-container-wrapper {
   width: 100%;
-  mask: linear-gradient(
-    to right,
-    transparent 0%,
-    black 30%,
-    black 70%,
-    transparent 100%
-  );
+  mask: linear-gradient(to right, transparent 0%, black 30%, black 70%, transparent 100%);
 }
 
 $word-center-offset: 80px;

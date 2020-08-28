@@ -1,46 +1,43 @@
 .character-incorrect {
-    color: red;
+  color: red;
 }
 .character-missing {
-    opacity: .3;
+  opacity: 0.3;
 }
 
-
 .expected {
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-    transition: opacity .2s;
-    user-select: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+  user-select: none;
 }
 
 .value {
-    transition: opacity .2s;
+  transition: opacity 0.2s;
 }
 
 .container {
-    position: relative;
-    width: auto;
-    display: inline-block;
+  position: relative;
+  width: auto;
+  display: inline-block;
 }
 
 .wrapper {
-    width: 100%;
-    height: 100%;
-    padding: 4px;
+  width: 100%;
+  height: 100%;
+  padding: 4px;
 
-    &:hover {
+  &:hover {
+    cursor: pointer;
 
-        cursor: pointer;
-
-        .expected {
-            opacity: 1;
-        }
-
-        .value {
-            opacity: 0;
-        }
-
+    .expected {
+      opacity: 1;
     }
+
+    .value {
+      opacity: 0;
+    }
+  }
 }

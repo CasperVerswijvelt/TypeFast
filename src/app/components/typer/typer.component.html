@@ -26,11 +26,7 @@
 
   <div class="type-test-controls">
     <div class="type-test-timer">
-      <button
-        class="type-test-timer-decrease"
-        (click)="onDecreaseClicked()"
-        tabindex="1"
-      >
+      <button class="type-test-timer-decrease" (click)="onDecreaseClicked()" tabindex="1">
         <svg
           aria-hidden="true"
           focusable="false"
@@ -49,11 +45,7 @@
       <div class="type-test-timer-time">
         {{ testTimeLeft | time }}
       </div>
-      <button
-        class="type-test-timer-decrease"
-        (click)="onIncreaseClicked()"
-        tabindex="2"
-      >
+      <button class="type-test-timer-decrease" (click)="onIncreaseClicked()" tabindex="2">
         <svg
           aria-hidden="true"
           focusable="false"
@@ -70,12 +62,7 @@
       </button>
     </div>
     <div class="type-test-buttons">
-      <button
-        type="button"
-        class="type-test-restart"
-        tabindex="0"
-        (click)="onRestartClicked()"
-      >
+      <button type="button" class="type-test-restart" tabindex="0" (click)="onRestartClicked()">
         <svg
           aria-hidden="true"
           focusable="false"
@@ -96,18 +83,14 @@
   <table cellspacing="0" cellpadding="0" class="type-test-results">
     <tr class="type-test-results-wpm">
       <th colspan="2">
-        <span class="type-test-results-wpm-value">{{
-          testResults?.stats?.wpm * 1 | number: "1.0-0"
-        }}</span
+        <span class="type-test-results-wpm-value">{{ testResults?.stats?.wpm * 1 | number: '1.0-0' }}</span
         >WPM
         <div popper class="info-icon-tooltip-container info-icon-tooltip-wpm">
           <div class="info-icon"></div>
           <div class="tooltip">
             Words per minute, CPM divided by 5. <br /><br />
-            CPM: The amount of correct characters typed, divided by the test
-            duration in minutes. Characters that were positioned correctly in
-            words that were not completely correct, are still counted as
-            correct.
+            CPM: The amount of correct characters typed, divided by the test duration in minutes. Characters that were
+            positioned correctly in words that were not completely correct, are still counted as correct.
           </div>
         </div>
       </th>
@@ -115,22 +98,16 @@
     <tr>
       <th>Character accuracy</th>
       <td>
-        <span>
-          {{
-            (testResults?.stats?.characterAccuracy * 100 | number: "1.2-2") +
-              "%"
-          }}</span
-        >
+        <span> {{ (testResults?.stats?.characterAccuracy * 100 | number: '1.2-2') + '%' }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
-            Character accuracy is the amount of characters you typed correct,
-            divided by the sum of correct characters and incorrect characters.
+            Character accuracy is the amount of characters you typed correct, divided by the sum of correct characters
+            and incorrect characters.
             <br />
             <br />
-            Characters that were placed at the right position, but in an
-            incorrect word, will still be counted as correct for calculating
-            this value.
+            Characters that were placed at the right position, but in an incorrect word, will still be counted as
+            correct for calculating this value.
           </div>
         </div>
       </td>
@@ -138,15 +115,12 @@
     <tr>
       <th>Word accuracy</th>
       <td>
-        <span>{{
-          (testResults?.stats?.wordAccuracy * 100 | number: "1.2-2") + "%"
-        }}</span>
+        <span>{{ (testResults?.stats?.wordAccuracy * 100 | number: '1.2-2') + '%' }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
-            Word accuracy is the amount of words you typed completely correct,
-            divided by the total number of words typed. Correcting your mistakes
-            will boost this value!
+            Word accuracy is the amount of words you typed completely correct, divided by the total number of words
+            typed. Correcting your mistakes will boost this value!
           </div>
         </div>
       </td>
@@ -158,11 +132,10 @@
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
-            Change the word list in the preferences menu in the upper right
-            corner, or load your own text file.
+            Change the word list in the preferences menu in the upper right corner, or load your own text file.
             <br />
             <br />
-            {{ "Loaded list: " + wordListName }}
+            {{ 'Loaded list: ' + wordListName }}
           </div>
         </div>
       </td>
@@ -170,36 +143,26 @@
     <tr>
       <th>Word mode</th>
       <td class="capitalize">
-        <span>{{ preferences.get("default_word_mode").value }}</span>
+        <span>{{ preferences.get('default_word_mode').value }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
-            Change your preferred word mode in the preferences menu in the upper
-            right corner:
+            Change your preferred word mode in the preferences menu in the upper right corner:
             <ul>
-              <li>
-                Word mode: random words
-              </li>
-              <li>
-                Sentence mode: actual sentences
-              </li>
+              <li>Word mode: random words</li>
+              <li>Sentence mode: actual sentences</li>
             </ul>
           </div>
         </div>
       </td>
     </tr>
-    <tr
-      class="type-test-results-incorrect-words"
-      (click)="onIncorrectWordCountClicked()"
-    >
+    <tr class="type-test-results-incorrect-words" (click)="onIncorrectWordCountClicked()">
       <th>Incorrect words</th>
       <td>
         <span>{{ testResults?.incorrectWordCount * 1 }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
-          <div class="tooltip">
-            To see which words you got wrong, click on this row.
-          </div>
+          <div class="tooltip">To see which words you got wrong, click on this row.</div>
         </div>
       </td>
     </tr>
@@ -212,21 +175,12 @@
   </table>
 </div>
 
-<div
-  [class.type-test-incorrect-words-modal-show]="incorrectWordsOpen"
-  class="type-test-incorrect-words-modal"
->
-  <div
-    class="type-test-incorrect-words-modal-background"
-    (click)="incorrectWordsOpen = false"
-  ></div>
+<div [class.type-test-incorrect-words-modal-show]="incorrectWordsOpen" class="type-test-incorrect-words-modal">
+  <div class="type-test-incorrect-words-modal-background" (click)="incorrectWordsOpen = false"></div>
   <div class="type-test-incorrect-words-modal-inner">
     <h2 class="incorrect-words-modal-title">
       Incorrect words
-      <div
-        popper
-        class="info-icon-tooltip-container info-icon-tooltip-incorrect-words"
-      >
+      <div popper class="info-icon-tooltip-container info-icon-tooltip-incorrect-words">
         <div class="info-icon"></div>
         <div class="tooltip">
           Characters marked red do not match the expected character.<br />
@@ -237,28 +191,14 @@
         </div>
       </div>
     </h2>
-    <p
-      class="incorrect-words-placeholder"
-      *ngIf="testResults?.incorrectWords.length === 0"
-    >
+    <p class="incorrect-words-placeholder" *ngIf="testResults?.incorrectWords.length === 0">
       No incorrect words have been registered yet.
     </p>
     <div class="incorrect-words-modal-list">
-      <div
-        class="type-test-incorrect-words-modal-entry"
-        *ngFor="let word of testResults?.incorrectWords"
-      >
-        <app-incorrect-word
-          [expected]="word.expected"
-          [value]="word.value"
-        ></app-incorrect-word>
+      <div class="type-test-incorrect-words-modal-entry" *ngFor="let word of testResults?.incorrectWords">
+        <app-incorrect-word [expected]="word.expected" [value]="word.value"></app-incorrect-word>
       </div>
     </div>
-    <button
-      class="incorrect-words-modal-close"
-      (click)="incorrectWordsOpen = false"
-    >
-      Close
-    </button>
+    <button class="incorrect-words-modal-close" (click)="incorrectWordsOpen = false">Close</button>
   </div>
 </div>

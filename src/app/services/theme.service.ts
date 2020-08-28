@@ -14,19 +14,12 @@ export class ThemeService {
 
     this.preferences = preferencesService.getPreferences();
 
-    this.preferences
-      .get(Preference.THEME)
-      .subscribe(this.onThemePreferenceUpdated.bind(this));
-    this.preferences
-      .get(Preference.FOLLOW_SYSTEM_THEME)
-      .subscribe(this.onFollowSystemPreferenceUpdated.bind(this));
+    this.preferences.get(Preference.THEME).subscribe(this.onThemePreferenceUpdated.bind(this));
+    this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).subscribe(this.onFollowSystemPreferenceUpdated.bind(this));
 
     // Listen to localstorage changes
     if (mediaQueryList.addEventListener) {
-      mediaQueryList.addEventListener(
-        'change',
-        this.onSystemThemeUpdated.bind(this)
-      );
+      mediaQueryList.addEventListener('change', this.onSystemThemeUpdated.bind(this));
 
       // Safari compatibility, it uses deprecated method
     } else if (mediaQueryList.addListener) {
@@ -58,18 +51,8 @@ export class ThemeService {
     );
   }
 
-  private updateTheme(
-    matchesPreferkDark: boolean,
-    themePreference: Theme,
-    followSystemThemePreference: boolean
-  ) {
-    this.setTheme(
-      followSystemThemePreference
-        ? matchesPreferkDark
-          ? Theme.DARK
-          : themePreference
-        : themePreference
-    );
+  private updateTheme(matchesPreferkDark: boolean, themePreference: Theme, followSystemThemePreference: boolean) {
+    this.setTheme(followSystemThemePreference ? (matchesPreferkDark ? Theme.DARK : themePreference) : themePreference);
   }
 
   setTheme(theme: Theme) {

@@ -10,31 +10,49 @@
             {{ preferences.get('theme').value }}
           </div>
           <div class="preferences-group-title-arrow">
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 330.002 330.002"
-              style="enable-background: new 0 0 330.002 330.002;" xml:space="preserve">
-              <path id="XMLID_105_" d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
+            <svg
+              version="1.1"
+              id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 330.002 330.002"
+              style="enable-background: new 0 0 330.002 330.002"
+              xml:space="preserve"
+            >
+              <path
+                id="XMLID_105_"
+                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
 	c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
-	C331.972,223.623,330.628,214.221,324.001,209.25z" />
+	C331.972,223.623,330.628,214.221,324.001,209.25z"
+              />
             </svg>
           </div>
         </div>
         <div class="preferences-group-entries preferences-group-entries-theme">
           <label class="preferences-entry preferences-select-option" *ngFor="let them of Theme | keyvalue">
             <div class="theme-icon" [ngClass]="'theme-icon-' + them.value"></div>
-            <input type="radio" name="theme" [checked]="preferences.get('theme').value === them.value"
-              [value]="them.value" (change)="onThemeChanged($event)" />
+            <input
+              type="radio"
+              name="theme"
+              [checked]="preferences.get('theme').value === them.value"
+              [value]="them.value"
+              (change)="onThemeChanged($event)"
+            />
             <span class="checkmark"></span>
             {{ them.value }}
           </label>
 
           <div class="preferences-entry preferences-toggle-entry">
-            <label class="preferences-toggle-label" for="follow-system">
-              Follow system
-            </label>
+            <label class="preferences-toggle-label" for="follow-system"> Follow system </label>
             <label class="preferences-toggle-switch switch">
-              <input type="checkbox" [ngModel]="preferences.get('follow_system_theme').value"
-                (change)="onFollowSystemThemeChanged($event)" id="follow-system" />
+              <input
+                type="checkbox"
+                [ngModel]="preferences.get('follow_system_theme').value"
+                (change)="onFollowSystemThemeChanged($event)"
+                id="follow-system"
+              />
               <span class="slider round"></span>
             </label>
           </div>
@@ -42,29 +60,43 @@
       </div>
 
       <!-- Default word mode preferences group -->
-      <div class="preferences-group" [class.preferences-group-opened]="
-          openedPreferencesGroup === 'default_word_mode'
-        ">
+      <div class="preferences-group" [class.preferences-group-opened]="openedPreferencesGroup === 'default_word_mode'">
         <div class="preferences-group-title" (click)="togglePreferencesGroup('default_word_mode')">
           <div class="preferences-group-title-key">Word mode</div>
           <div class="preferences-group-title-value capitalize">
             {{ preferences.get('default_word_mode').value }}
           </div>
           <div class="preferences-group-title-arrow">
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 330.002 330.002"
-              style="enable-background: new 0 0 330.002 330.002;" xml:space="preserve">
-              <path id="XMLID_105_" d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
+            <svg
+              version="1.1"
+              id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 330.002 330.002"
+              style="enable-background: new 0 0 330.002 330.002"
+              xml:space="preserve"
+            >
+              <path
+                id="XMLID_105_"
+                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
  c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
- C331.972,223.623,330.628,214.221,324.001,209.25z" />
+ C331.972,223.623,330.628,214.221,324.001,209.25z"
+              />
             </svg>
           </div>
         </div>
         <div class="preferences-group-entries preferences-group-entries-word-mode">
           <label class="preferences-entry preferences-select-option" *ngFor="let mode of WordMode | keyvalue">
             <div class="word-mode-icon" [ngClass]="'word-mode-icon-' + mode.value"></div>
-            <input type="radio" name="word_mode" [checked]="preferences.get('default_word_mode').value === mode.value"
-              [value]="mode.value" (change)="onDefaultWordModeChanged($event)" />
+            <input
+              type="radio"
+              name="word_mode"
+              [checked]="preferences.get('default_word_mode').value === mode.value"
+              [value]="mode.value"
+              (change)="onDefaultWordModeChanged($event)"
+            />
             <span class="checkmark"></span>
             {{ mode.value }}
           </label>
@@ -79,24 +111,40 @@
             {{ preferences.get('word_language').value }}
           </div>
           <div class="preferences-group-title-arrow">
-            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 330.002 330.002"
-              style="enable-background: new 0 0 330.002 330.002;" xml:space="preserve">
-              <path id="XMLID_105_" d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
+            <svg
+              version="1.1"
+              id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 330.002 330.002"
+              style="enable-background: new 0 0 330.002 330.002"
+              xml:space="preserve"
+            >
+              <path
+                id="XMLID_105_"
+                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
 	c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
-	C331.972,223.623,330.628,214.221,324.001,209.25z" />
+	C331.972,223.623,330.628,214.221,324.001,209.25z"
+              />
             </svg>
           </div>
         </div>
         <div class="preferences-group-entries preferences-group-entries-language">
-          <label class="preferences-entry preferences-select-option"
-            *ngFor="let lang of Language | keyvalue: originalOrder">
+          <label
+            class="preferences-entry preferences-select-option"
+            *ngFor="let lang of Language | keyvalue: originalOrder"
+          >
             <div class="flag-icon" [ngClass]="'flag-icon-' + getISOForLangauge(lang.value)"></div>
-            <input type="radio" name="language" [checked]="preferences.get('word_language').value === lang.value"
-              [value]="lang.value" (change)="onLanguageChanged($event)" />
-            <span class="checkmark" [class.checkmark-loading]="
-                currentlyLoadingLanguage === lang.value
-              ">
+            <input
+              type="radio"
+              name="language"
+              [checked]="preferences.get('word_language').value === lang.value"
+              [value]="lang.value"
+              (change)="onLanguageChanged($event)"
+            />
+            <span class="checkmark" [class.checkmark-loading]="currentlyLoadingLanguage === lang.value">
               <div class="spinner">
                 <div></div>
                 <div></div>
@@ -133,12 +181,14 @@
 
       <!-- Reverse scroll -->
       <div class="preferences-entry preferences-entry-main preferences-toggle-entry">
-        <label class="preferences-toggle-label" for="reverse-scroll">
-          Reverse scroll
-        </label>
+        <label class="preferences-toggle-label" for="reverse-scroll"> Reverse scroll </label>
         <label class="preferences-toggle-switch switch">
-          <input type="checkbox" [ngModel]="preferences.get('reverse_scroll').value"
-            (change)="onReverseScrollChanged($event)" id="reverse-scroll" />
+          <input
+            type="checkbox"
+            [ngModel]="preferences.get('reverse_scroll').value"
+            (change)="onReverseScrollChanged($event)"
+            id="reverse-scroll"
+          />
           <span class="slider round"></span>
         </label>
       </div>
@@ -149,9 +199,7 @@
           About / Feedback
           <div popper class="info-icon-tooltip-container">
             <div class="info-icon"></div>
-            <div class="tooltip">
-              About, help, feedback, support, etc.
-            </div>
+            <div class="tooltip">About, help, feedback, support, etc.</div>
           </div>
         </div>
       </div>
@@ -162,9 +210,7 @@
           Reset preferences
           <div popper class="info-icon-tooltip-container">
             <div class="info-icon"></div>
-            <div class="tooltip">
-              Clears the preferences from the browser.
-            </div>
+            <div class="tooltip">Clears the preferences from the browser.</div>
           </div>
         </div>
       </div>
@@ -173,23 +219,31 @@
       <a class="preferences-icon" (click)="onPreferencesIconClicked()">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path
-            d="M24 14v-4c-1.619 0-2.906.267-3.705-1.476-.697-1.663.604-2.596 1.604-3.596l-2.829-2.828c-1.033 1.033-1.908 2.307-3.666 1.575-1.674-.686-1.404-2.334-1.404-3.675h-4c0 1.312.278 2.985-1.404 3.675-1.761.733-2.646-.553-3.667-1.574l-2.829 2.828c1.033 1.033 2.308 1.909 1.575 3.667-.348.849-1.176 1.404-2.094 1.404h-1.581v4c1.471 0 2.973-.281 3.704 1.475.698 1.661-.604 2.596-1.604 3.596l2.829 2.829c1-1 1.943-2.282 3.667-1.575 1.673.687 1.404 2.332 1.404 3.675h4c0-1.244-.276-2.967 1.475-3.704 1.645-.692 2.586.595 3.596 1.604l2.828-2.829c-1-1-2.301-1.933-1.604-3.595l.03-.072c.687-1.673 2.332-1.404 3.675-1.404zm-12 2c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4z" />
+            d="M24 14v-4c-1.619 0-2.906.267-3.705-1.476-.697-1.663.604-2.596 1.604-3.596l-2.829-2.828c-1.033 1.033-1.908 2.307-3.666 1.575-1.674-.686-1.404-2.334-1.404-3.675h-4c0 1.312.278 2.985-1.404 3.675-1.761.733-2.646-.553-3.667-1.574l-2.829 2.828c1.033 1.033 2.308 1.909 1.575 3.667-.348.849-1.176 1.404-2.094 1.404h-1.581v4c1.471 0 2.973-.281 3.704 1.475.698 1.661-.604 2.596-1.604 3.596l2.829 2.829c1-1 1.943-2.282 3.667-1.575 1.673.687 1.404 2.332 1.404 3.675h4c0-1.244-.276-2.967 1.475-3.704 1.645-.692 2.586.595 3.596 1.604l2.828-2.829c-1-1-2.301-1.933-1.604-3.595l.03-.072c.687-1.673 2.332-1.404 3.675-1.404zm-12 2c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4z"
+          />
         </svg>
       </a>
-      <a class="preferences-icon preferences-icon-discord preferences-icon-extra" href="https://discord.gg/SsHXt9t"
-        target="_blank">
+      <a
+        class="preferences-icon preferences-icon-discord preferences-icon-extra"
+        href="https://discord.gg/SsHXt9t"
+        target="_blank"
+      >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 293">
           <path
-            d="M226.01 0H29.99C13.458 0 0 13.458 0 30.135v197.778c0 16.677 13.458 30.135 29.99 30.135h165.888l-7.753-27.063 18.725 17.408 17.7 16.384L256 292.57V30.135C256 13.458 242.542 0 226.01 0zm-56.466 191.05L159.9 179.2c19.163-5.413 26.478-17.408 26.478-17.408-5.998 3.95-11.703 6.73-16.823 8.63-7.314 3.072-14.336 5.12-21.21 6.3-14.043 2.633-26.917 1.902-37.888-.146-8.338-1.61-15.506-3.95-21.504-6.3-3.365-1.317-7.022-2.926-10.68-4.974-.44-.293-.878-.44-1.317-.73-.293-.146-.44-.293-.585-.44-2.633-1.463-4.096-2.487-4.096-2.487s7.022 11.703 25.6 17.262l-9.8 12.142c-32.33-1.024-44.617-22.235-44.617-22.235 0-47.104 21.065-85.285 21.065-85.285 21.065-15.8 41.106-15.36 41.106-15.36l1.463 1.755C80.75 77.53 68.608 89.088 68.608 89.088s3.218-1.755 8.63-4.242c15.653-6.875 28.087-8.777 33.207-9.216.878-.146 1.61-.293 2.487-.293 8.923-1.17 19.017-1.463 29.55-.293 13.897 1.61 28.818 5.705 44.032 14.043 0 0-11.557-10.97-36.425-18.578l2.048-2.34s20.04-.44 41.106 15.36c0 0 21.065 38.18 21.065 85.285 0 0-12.434 21.21-44.763 22.235zm-68.023-68.315c-8.338 0-14.92 7.314-14.92 16.238s6.73 16.238 14.92 16.238c8.338 0 14.92-7.314 14.92-16.238.146-8.923-6.583-16.238-14.92-16.238m53.394 0c-8.338 0-14.92 7.314-14.92 16.238s6.73 16.238 14.92 16.238c8.338 0 14.92-7.314 14.92-16.238s-6.583-16.238-14.92-16.238" />
+            d="M226.01 0H29.99C13.458 0 0 13.458 0 30.135v197.778c0 16.677 13.458 30.135 29.99 30.135h165.888l-7.753-27.063 18.725 17.408 17.7 16.384L256 292.57V30.135C256 13.458 242.542 0 226.01 0zm-56.466 191.05L159.9 179.2c19.163-5.413 26.478-17.408 26.478-17.408-5.998 3.95-11.703 6.73-16.823 8.63-7.314 3.072-14.336 5.12-21.21 6.3-14.043 2.633-26.917 1.902-37.888-.146-8.338-1.61-15.506-3.95-21.504-6.3-3.365-1.317-7.022-2.926-10.68-4.974-.44-.293-.878-.44-1.317-.73-.293-.146-.44-.293-.585-.44-2.633-1.463-4.096-2.487-4.096-2.487s7.022 11.703 25.6 17.262l-9.8 12.142c-32.33-1.024-44.617-22.235-44.617-22.235 0-47.104 21.065-85.285 21.065-85.285 21.065-15.8 41.106-15.36 41.106-15.36l1.463 1.755C80.75 77.53 68.608 89.088 68.608 89.088s3.218-1.755 8.63-4.242c15.653-6.875 28.087-8.777 33.207-9.216.878-.146 1.61-.293 2.487-.293 8.923-1.17 19.017-1.463 29.55-.293 13.897 1.61 28.818 5.705 44.032 14.043 0 0-11.557-10.97-36.425-18.578l2.048-2.34s20.04-.44 41.106 15.36c0 0 21.065 38.18 21.065 85.285 0 0-12.434 21.21-44.763 22.235zm-68.023-68.315c-8.338 0-14.92 7.314-14.92 16.238s6.73 16.238 14.92 16.238c8.338 0 14.92-7.314 14.92-16.238.146-8.923-6.583-16.238-14.92-16.238m53.394 0c-8.338 0-14.92 7.314-14.92 16.238s6.73 16.238 14.92 16.238c8.338 0 14.92-7.314 14.92-16.238s-6.583-16.238-14.92-16.238"
+          />
         </svg>
       </a>
-      <a class="preferences-icon preferences-icon-github preferences-icon-extra"
-        href="https://github.com/CasperVerswijvelt/TypeFast" target="_blank">
+      <a
+        class="preferences-icon preferences-icon-github preferences-icon-extra"
+        href="https://github.com/CasperVerswijvelt/TypeFast"
+        target="_blank"
+      >
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <title>GitHub icon</title>
           <path
-            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12">
-          </path>
+            d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+          ></path>
         </svg>
       </a>
     </div>

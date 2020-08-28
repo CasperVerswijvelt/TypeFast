@@ -9,9 +9,7 @@ import { TextFormat } from '../models/TextSource';
 })
 export class DefaultWordService implements WordService {
   private words: string[] = ['Word', 'list', 'not', 'initialized', 'yet.'];
-  private sentenes: string[][] = [
-    ['This', 'language', "doesn't", 'have', 'any', 'sentences.'],
-  ];
+  private sentenes: string[][] = [['This', 'language', "doesn't", 'have', 'any', 'sentences.']];
 
   private wordsCopy: string[] = [];
   private sentencesCopy: string[][] = [];
@@ -19,15 +17,8 @@ export class DefaultWordService implements WordService {
   private wordListLoaded = false;
   private sentenceListLoaded = false;
   private currentSource: string;
-  private wordListListeners: ((
-    wordMode: WordMode,
-    wordListName: string,
-    shouldReverseScroll: boolean
-  ) => void)[] = [];
-  private languageFetchListeners: ((
-    language: Language,
-    promise: Promise<void>
-  ) => void)[] = [];
+  private wordListListeners: ((wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) => void)[] = [];
+  private languageFetchListeners: ((language: Language, promise: Promise<void>) => void)[] = [];
 
   private DEFAULT_WORD_AMOUNT = 100;
 
@@ -51,8 +42,7 @@ export class DefaultWordService implements WordService {
 
   private getTextViaUrl(url: string): Promise<string> {
     return fetch(url).then((response) => {
-      if (response.status !== 200)
-        return Promise.reject("Text file couldn't be fetched");
+      if (response.status !== 200) return Promise.reject("Text file couldn't be fetched");
       return response.text();
     });
   }
@@ -75,10 +65,7 @@ export class DefaultWordService implements WordService {
     }
   }
 
-  private async loadTextViaUrl(
-    format: TextFormat,
-    url: string
-  ): Promise<boolean> {
+  private async loadTextViaUrl(format: TextFormat, url: string): Promise<boolean> {
     try {
       let text = await this.getTextViaUrl(url);
       this.parseText(format, text);
@@ -89,10 +76,7 @@ export class DefaultWordService implements WordService {
     return false;
   }
 
-  private async loadTextViaFile(
-    format: TextFormat,
-    file: File
-  ): Promise<boolean> {
+  private async loadTextViaFile(format: TextFormat, file: File): Promise<boolean> {
     try {
       let text = await this.getTextViaFile(file);
       this.parseText(format, text);
@@ -108,9 +92,7 @@ export class DefaultWordService implements WordService {
       this.words = ['This', 'list', "doesn't", 'have', 'any', 'words.'];
       this.wordsCopy = [];
     } else if (format === TextFormat.SENTENCES) {
-      this.sentenes = [
-        ['This', 'list', "doesn't", 'have', 'any', 'sentences.'],
-      ];
+      this.sentenes = [['This', 'list', "doesn't", 'have', 'any', 'sentences.']];
       this.sentencesCopy = [];
     }
   }
@@ -128,30 +110,15 @@ export class DefaultWordService implements WordService {
   }
 
   loadLanguage(language: Language): Promise<[void, void]> {
-    let langString =
-      language.charAt(0).toUpperCase() + (language as string).slice(1);
+    let langString = language.charAt(0).toUpperCase() + (language as string).slice(1);
     let promise = Promise.all([
-      this.loadTextViaUrl(
-        TextFormat.WORDS,
-        `assets/languages/${language}/words.txt`
-      ).then((value: boolean) => {
-        this.notifyWordListSubscribers(
-          WordMode.WORDS,
-          langString,
-          this.shouldReverseScroll(language)
-        );
+      this.loadTextViaUrl(TextFormat.WORDS, `assets/languages/${language}/words.txt`).then((value: boolean) => {
+        this.notifyWordListSubscribers(WordMode.WORDS, langString, this.shouldReverseScroll(language));
         this.currentSource = langString;
         if (!value) this.loadDefaultList(TextFormat.WORDS);
       }),
-      this.loadTextViaUrl(
-        TextFormat.SENTENCES,
-        `assets/languages/${language}/sentences.txt`
-      ).then((value: boolean) => {
-        this.notifyWordListSubscribers(
-          WordMode.SENTENCES,
-          langString,
-          this.shouldReverseScroll(language)
-        );
+      this.loadTextViaUrl(TextFormat.SENTENCES, `assets/languages/${language}/sentences.txt`).then((value: boolean) => {
+        this.notifyWordListSubscribers(WordMode.SENTENCES, langString, this.shouldReverseScroll(language));
         this.currentSource = langString;
         if (!value) this.loadDefaultList(TextFormat.WORDS);
       }),
@@ -173,12 +140,7 @@ export class DefaultWordService implements WordService {
       if (this.wordsCopy.length === 0) {
         this.wordsCopy = this.words.slice();
       }
-      res.push(
-        this.wordsCopy.splice(
-          Math.floor(Math.random() * this.wordsCopy.length),
-          1
-        )[0]
-      );
+      res.push(this.wordsCopy.splice(Math.floor(Math.random() * this.wordsCopy.length), 1)[0]);
     }
 
     return res;
@@ -191,18 +153,11 @@ export class DefaultWordService implements WordService {
       this.sentencesCopy = this.sentenes.slice();
     }
 
-    return this.sentencesCopy.splice(
-      Math.floor(Math.random() * this.sentencesCopy.length),
-      1
-    )[0];
+    return this.sentencesCopy.splice(Math.floor(Math.random() * this.sentencesCopy.length), 1)[0];
   }
 
   addWordListListener(
-    listenerFunction: (
-      wordMode: WordMode,
-      wordListName: string,
-      shouldReverseScroll: boolean
-    ) => void
+    listenerFunction: (wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) => void
   ): void {
     this.wordListListeners.push(listenerFunction);
 
@@ -214,29 +169,16 @@ export class DefaultWordService implements WordService {
     }
   }
 
-  addLanguageFetchListener(
-    onLanguageFetch: (language: Language, promise: Promise<void>) => void
-  ): void {
+  addLanguageFetchListener(onLanguageFetch: (language: Language, promise: Promise<void>) => void): void {
     this.languageFetchListeners.push(onLanguageFetch);
   }
 
-  private notifyWordListSubscribers(
-    wordMode: WordMode,
-    wordListName: string,
-    shouldReverseScroll: boolean
-  ) {
-    this.wordListListeners.forEach((listener) =>
-      listener(wordMode, wordListName, shouldReverseScroll)
-    );
+  private notifyWordListSubscribers(wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) {
+    this.wordListListeners.forEach((listener) => listener(wordMode, wordListName, shouldReverseScroll));
   }
 
-  private notifyLanguageFetchSubscribers(
-    language: Language,
-    promise: Promise<any>
-  ) {
-    this.languageFetchListeners.forEach((listener) =>
-      listener(language, promise)
-    );
+  private notifyLanguageFetchSubscribers(language: Language, promise: Promise<any>) {
+    this.languageFetchListeners.forEach((listener) => listener(language, promise));
   }
 
   private shouldReverseScroll(language: Language) {

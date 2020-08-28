@@ -8,9 +8,8 @@ describe('IncorrectWordComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IncorrectWordComponent ]
-    })
-    .compileComponents();
+      declarations: [IncorrectWordComponent],
+    }).compileComponents();
   }));
 
   beforeEach(() => {

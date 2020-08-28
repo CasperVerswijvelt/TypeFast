@@ -1,10 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
 import { timer, Subscription, BehaviorSubject } from 'rxjs';
@@ -41,7 +35,7 @@ export class TyperComponent implements OnInit {
   incorrectWordsOpen = false;
 
   preferences: Map<string, BehaviorSubject<any>>;
-  
+
   private leftOffset: number = 0;
   private rightOffset: number = 0;
   private currentIndex: number;
@@ -66,16 +60,12 @@ export class TyperComponent implements OnInit {
       .pipe(skip(1))
       .subscribe(this.onReverseScrollPreferenceUpdated.bind(this));
 
-    this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION).value
+    this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION).value;
   }
 
   ngOnInit(): void {
-    this.containerElement = document.getElementsByClassName(
-      'word-container'
-    )[0] as HTMLElement;
-    this.inputElement = document.getElementsByClassName(
-      'word-input'
-    )[0] as HTMLInputElement;
+    this.containerElement = document.getElementsByClassName('word-container')[0] as HTMLElement;
+    this.inputElement = document.getElementsByClassName('word-input')[0] as HTMLInputElement;
 
     this.inputElement.onpaste = (e) => e.preventDefault();
 
@@ -144,10 +134,7 @@ export class TyperComponent implements OnInit {
         this.nextWord();
       }
     } else {
-      if (
-        this.words[this.currentIndex].slice(0, this.wordInput.length) !==
-        this.wordInput
-      ) {
+      if (this.words[this.currentIndex].slice(0, this.wordInput.length) !== this.wordInput) {
         this.inputElement.classList.add('input-incorrect');
       } else {
         this.inputElement.classList.remove('input-incorrect');
@@ -164,11 +151,7 @@ export class TyperComponent implements OnInit {
     this.syncOffset();
   }
 
-  onUpdatedWordList(
-    wordMode: WordMode,
-    wordListName: string,
-    shouldReverseScroll: boolean
-  ) {
+  onUpdatedWordList(wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) {
     if (wordMode === this.preferences.get(Preference.DEFAULT_WORD_MODE).value) {
       this.reverseScrollWordList = shouldReverseScroll;
       this.wordListName = wordListName;
@@ -188,11 +171,9 @@ export class TyperComponent implements OnInit {
     this.wordInput = '';
     this.inputElement.value = '';
 
-    this.leftOffset =
-      this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
+    this.leftOffset = this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncCurrentWordElement();
-    this.rightOffset =
-      this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
+    this.rightOffset = this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncOffset();
 
     this.fillWordList();
@@ -205,15 +186,12 @@ export class TyperComponent implements OnInit {
   }
 
   private syncReverseScroll() {
-    this.reverseScroll =
-      this.preferences.get(Preference.REVERSE_SCROLL).value !==
-      this.reverseScrollWordList;
+    this.reverseScroll = this.preferences.get(Preference.REVERSE_SCROLL).value !== this.reverseScrollWordList;
   }
 
   getWords(): string[] {
     let words =
-      this.preferences.get(Preference.DEFAULT_WORD_MODE).value ===
-      WordMode.SENTENCES
+      this.preferences.get(Preference.DEFAULT_WORD_MODE).value === WordMode.SENTENCES
         ? this.wordService.getSentence()
         : this.wordService.getWords();
     return words;
@@ -272,38 +250,24 @@ export class TyperComponent implements OnInit {
   calculateStats() {
     let stats = {} as TestResultsStats;
 
-    let totalCharacterCount =
-      this.testResults.correctCharacterCount +
-      this.testResults.incorrectCharacterCount;
+    let totalCharacterCount = this.testResults.correctCharacterCount + this.testResults.incorrectCharacterCount;
 
-    let totalWordCount =
-      this.testResults.correctWordCount + this.testResults.incorrectWordCount;
+    let totalWordCount = this.testResults.correctWordCount + this.testResults.incorrectWordCount;
 
-    stats.characterAccuracy = totalCharacterCount
-      ? this.testResults.correctCharacterCount / totalCharacterCount
-      : 0;
-    stats.wordAccuracy = totalWordCount
-      ? this.testResults.correctWordCount / totalWordCount
-      : 0;
+    stats.characterAccuracy = totalCharacterCount ? this.testResults.correctCharacterCount / totalCharacterCount : 0;
+    stats.wordAccuracy = totalWordCount ? this.testResults.correctWordCount / totalWordCount : 0;
     stats.cpm = this.testResults.timeElapsed
-      ? (this.testResults.correctCharacterCount /
-          this.testResults.timeElapsed) *
-        60
+      ? (this.testResults.correctCharacterCount / this.testResults.timeElapsed) * 60
       : 0;
     stats.wpm = this.testResults.timeElapsed
-      ? (this.testResults.correctCharacterCount /
-          5 /
-          this.testResults.timeElapsed) *
-        60
+      ? (this.testResults.correctCharacterCount / 5 / this.testResults.timeElapsed) * 60
       : 0;
 
     this.testResults.stats = stats;
   }
 
   syncCurrentWordElement() {
-    this.currentWordElement = this.containerElement.children[
-      this.currentIndex
-    ] as HTMLElement;
+    this.currentWordElement = this.containerElement.children[this.currentIndex] as HTMLElement;
   }
 
   syncOffset() {
@@ -324,11 +288,7 @@ export class TyperComponent implements OnInit {
     this.inputElement.disabled = true;
 
     // Add right/wrong characters for current word
-    this.registerWord(
-      this.wordInput.trim(),
-      this.words[this.currentIndex].slice(0, this.wordInput.length),
-      false
-    );
+    this.registerWord(this.wordInput.trim(), this.words[this.currentIndex].slice(0, this.wordInput.length), false);
   }
 
   private breakPoints = [

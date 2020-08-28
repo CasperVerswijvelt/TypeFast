@@ -25,17 +25,11 @@ export class PreferencesComponent implements OnInit {
   openedPreferencesGroup: string;
   currentlyLoadingLanguage: Language;
 
-  originalOrder = (
-    a: KeyValue<number, string>,
-    b: KeyValue<number, string>
-  ): number => {
+  originalOrder = (a: KeyValue<number, string>, b: KeyValue<number, string>): number => {
     return 0;
   };
 
-  constructor(
-    private preferencesService: PreferencesService,
-    private wordService: WordService
-  ) {
+  constructor(private preferencesService: PreferencesService, private wordService: WordService) {
     this.preferences = preferencesService.getPreferences();
 
     wordService.addLanguageFetchListener(this.onLanguageFetch.bind(this));
@@ -55,38 +49,23 @@ export class PreferencesComponent implements OnInit {
   }
 
   onThemeChanged(event: Event) {
-    this.preferencesService.setPreference(
-      Preference.THEME,
-      (event.target as HTMLInputElement).value
-    );
+    this.preferencesService.setPreference(Preference.THEME, (event.target as HTMLInputElement).value);
   }
 
   onFollowSystemThemeChanged(event: Event) {
-    this.preferencesService.setPreference(
-      Preference.FOLLOW_SYSTEM_THEME,
-      (event.target as HTMLInputElement).checked
-    );
+    this.preferencesService.setPreference(Preference.FOLLOW_SYSTEM_THEME, (event.target as HTMLInputElement).checked);
   }
 
   onLanguageChanged(event: Event) {
-    this.preferencesService.setPreference(
-      Preference.LANGUAGE,
-      (event.target as HTMLInputElement).value
-    );
+    this.preferencesService.setPreference(Preference.LANGUAGE, (event.target as HTMLInputElement).value);
   }
 
   onDefaultWordModeChanged(event: Event) {
-    this.preferencesService.setPreference(
-      Preference.DEFAULT_WORD_MODE,
-      (event.target as HTMLInputElement).value
-    );
+    this.preferencesService.setPreference(Preference.DEFAULT_WORD_MODE, (event.target as HTMLInputElement).value);
   }
 
   onReverseScrollChanged(event: Event) {
-    this.preferencesService.setPreference(
-      Preference.REVERSE_SCROLL,
-      (event.target as HTMLInputElement).checked
-    );
+    this.preferencesService.setPreference(Preference.REVERSE_SCROLL, (event.target as HTMLInputElement).checked);
   }
 
   onClickLoadCustomList() {
@@ -108,11 +87,7 @@ export class PreferencesComponent implements OnInit {
   }
 
   onClickResetPreferences() {
-    if (
-      confirm(
-        "Are you sure you want to reset your preferences? This can't be undone!"
-      ) == true
-    ) {
+    if (confirm("Are you sure you want to reset your preferences? This can't be undone!") == true) {
       this.preferencesService.clearPreferences();
     }
   }
@@ -157,7 +132,6 @@ export class PreferencesComponent implements OnInit {
   }
 
   togglePreferencesGroup(group: string) {
-    this.openedPreferencesGroup =
-      this.openedPreferencesGroup === group ? '' : group;
+    this.openedPreferencesGroup = this.openedPreferencesGroup === group ? '' : group;
   }
 }

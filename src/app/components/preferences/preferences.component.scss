@@ -59,7 +59,6 @@ $preferences-entry-main-height: 37px;
 }
 
 @media (min-width: 800px) {
-
   .preferences-icon {
     width: 25px;
     height: 25px;
@@ -67,7 +66,6 @@ $preferences-entry-main-height: 37px;
 }
 
 .preferences-icon-github {
-
   svg {
     width: 75%;
     height: 75%;
@@ -75,7 +73,6 @@ $preferences-entry-main-height: 37px;
 }
 
 .preferences-icon-discord {
-
   margin-bottom: 2px;
 }
 
@@ -135,7 +132,7 @@ $preferences-entry-main-height: 37px;
   }
 
   .checkmark:after {
-    content: "";
+    content: '';
     position: absolute;
     display: none;
   }
@@ -145,14 +142,14 @@ $preferences-entry-main-height: 37px;
   }
 
   /* Show the loader when loading */
-  input:checked~.checkmark.checkmark-loading {
+  input:checked ~ .checkmark.checkmark-loading {
     .spinner {
       display: block;
     }
   }
 
   /* Show the checkmark when checked */
-  input:checked~.checkmark:not(.checkmark-loading):after {
+  input:checked ~ .checkmark:not(.checkmark-loading):after {
     display: block;
   }
 
@@ -194,7 +191,7 @@ $preferences-entry-main-height: 37px;
     }
 
     .preferences-toggle-switch {
-      margin: 6px $preferences-entry-padding-side
+      margin: 6px $preferences-entry-padding-side;
     }
   }
 }
@@ -205,7 +202,8 @@ $preferences-entry-main-height: 37px;
 
   &.preferences-toggle-entry {
     .preferences-toggle-label {
-      padding: $preferences-entry-padding-vertical 50px $preferences-entry-padding-vertical $preferences-entry-padding-side;
+      padding: $preferences-entry-padding-vertical 50px $preferences-entry-padding-vertical
+        $preferences-entry-padding-side;
     }
 
     .preferences-toggle-switch {
@@ -224,7 +222,6 @@ $preferences-entry-main-height: 37px;
 }
 
 .preferences-show {
-
   .preferences-background,
   .preferences-list {
     opacity: 1;
@@ -237,7 +234,7 @@ $preferences-entry-main-height: 37px;
     padding: $preferences-entry-padding-vertical $preferences-entry-padding-side;
     cursor: pointer;
     display: flex;
-    transition: background-color .2s;
+    transition: background-color 0.2s;
 
     &:hover {
       background-color: rgba(128, 128, 128, 0.062);
@@ -257,7 +254,7 @@ $preferences-entry-main-height: 37px;
     height: auto;
     max-height: 0;
     overflow: hidden;
-    transition: max-height .4s;
+    transition: max-height 0.4s;
     background-color: #00000066;
 
     .preferences-toggle-label {
@@ -278,14 +275,13 @@ $preferences-entry-main-height: 37px;
       transform: translate3d(-50%, -50%, 0) rotate(-90deg);
       fill: white;
       width: 80%;
-      transition: transform .4s;
+      transition: transform 0.4s;
       transform-origin: center;
     }
   }
 
   &.preferences-group-opened {
     .preferences-group-entries {
-
       max-height: 100px;
 
       &.preferences-group-entries-theme {
@@ -302,7 +298,6 @@ $preferences-entry-main-height: 37px;
     }
 
     .preferences-group-title-arrow {
-
       svg {
         transform: translate3d(-50%, -50%, 0) rotate(-180deg);
       }

@@ -6,7 +6,7 @@ export enum Preference {
   FOLLOW_SYSTEM_THEME = 'follow_system_theme',
   DEFAULT_WORD_MODE = 'default_word_mode',
   REVERSE_SCROLL = 'reverse_scroll',
-  DEFAULT_TEST_DURATION = 'default_test_duration'
+  DEFAULT_TEST_DURATION = 'default_test_duration',
 }
 
 export enum Language {
@@ -24,7 +24,7 @@ export enum Language {
   PORTUGUESE = 'portuguese',
   RUSSIAN = 'russian',
   SPANISH = 'spanish',
-  PROGRAMMING = 'programming'
+  PROGRAMMING = 'programming',
 }
 
 export enum Theme {
@@ -33,10 +33,9 @@ export enum Theme {
 }
 
 export enum WordMode {
-  WORDS = "words",
-  SENTENCES = "sententes"
+  WORDS = 'words',
+  SENTENCES = 'sententes',
 }
-
 
 export interface Preferences {
   word_language?: Language;
@@ -46,4 +45,3 @@ export interface Preferences {
   reverse_scroll?: boolean;
   default_test_duration?: number;
 }
-

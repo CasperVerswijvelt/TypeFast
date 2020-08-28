@@ -54,7 +54,7 @@ app-root {
 
 .slider:before {
   position: absolute;
-  content: "";
+  content: '';
   height: 13px;
   width: 13px;
   left: 3px;
@@ -103,7 +103,7 @@ input:checked + .slider:before {
   animation: spinner 1.2s linear infinite;
 }
 .spinner div:after {
-  content: " ";
+  content: ' ';
   display: block;
   position: absolute;
   top: 1px;
@@ -205,7 +205,7 @@ input:checked + .slider:before {
 
 .info-icon {
   background-color: rgba(128, 128, 128, 0.151);
-  mask-image: url("assets/icons/info-circle-solid.svg");
+  mask-image: url('assets/icons/info-circle-solid.svg');
   mask-position: center;
   mask-repeat: no-repeat;
   width: 19px;
@@ -216,7 +216,7 @@ input:checked + .slider:before {
 
 // Flag icons
 .flag-icon:before {
-  content: "\00a0";
+  content: '\00a0';
 }
 
 .flag-icon {
@@ -230,7 +230,7 @@ input:checked + .slider:before {
 }
 
 .flag-icon-dev {
-  background-image: url("assets/icons/curly-brackets.svg");
+  background-image: url('assets/icons/curly-brackets.svg');
 }
 
 .flag-icon-sa {

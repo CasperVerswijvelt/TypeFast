@@ -14,12 +14,7 @@ export class IncorrectWordComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-
-    for (
-      let i = 0;
-      i < Math.min(this.value.length, this.expected.length);
-      i++
-    ) {
+    for (let i = 0; i < Math.min(this.value.length, this.expected.length); i++) {
       let entry = {
         char: this.value[i],
         class: 'character-incorrect',
@@ -31,7 +26,6 @@ export class IncorrectWordComponent implements OnInit {
 
       this.valueLetters.push(entry);
     }
-
 
     if (this.value.length > this.expected.length) {
       // append last letters of value, marked incorrect

@@ -30,7 +30,7 @@ $tab-wrap-border-radius: 12px;
   display: none;
 
   @for $i from 1 through $max-tab-count {
-    &:checked:nth-of-type(#{$i})~.tab__content:nth-of-type(#{$i}) {
+    &:checked:nth-of-type(#{$i}) ~ .tab__content:nth-of-type(#{$i}) {
       opacity: 1;
       position: relative;
       top: 0;
@@ -40,7 +40,7 @@ $tab-wrap-border-radius: 12px;
     }
   }
 
-  &:checked+label {
+  &:checked + label {
     background-color: #0e0e0e;
     cursor: default;
 
@@ -49,7 +49,7 @@ $tab-wrap-border-radius: 12px;
     }
   }
 
-  +label {
+  + label {
     cursor: pointer;
     display: block;
     text-decoration: none;

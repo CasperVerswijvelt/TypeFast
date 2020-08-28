@@ -1,5 +1,5 @@
 export enum TextFormat {
-    WORDS,
-    SENTENCES,
-    BOTH
+  WORDS,
+  SENTENCES,
+  BOTH,
 }

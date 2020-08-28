@@ -15,17 +15,19 @@ import { IncorrectWordComponent } from './components/incorrect-word/incorrect-wo
 import { AboutComponent } from './components/about/about.component';
 
 @NgModule({
-  declarations: [AppComponent, TyperComponent, TimePipe, PreferencesComponent, PopperDirective, IncorrectWordComponent, AboutComponent],
-  imports: [BrowserModule, FormsModule],
-  providers: [
-    { provide: WordService, useClass: DefaultWordService },
-    PreferencesService,
-    ThemeService,
+  declarations: [
+    AppComponent,
+    TyperComponent,
+    TimePipe,
+    PreferencesComponent,
+    PopperDirective,
+    IncorrectWordComponent,
+    AboutComponent,
   ],
+  imports: [BrowserModule, FormsModule],
+  providers: [{ provide: WordService, useClass: DefaultWordService }, PreferencesService, ThemeService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
-  constructor(private themeService : ThemeService) {
-    
-  }
+  constructor(private themeService: ThemeService) {}
 }

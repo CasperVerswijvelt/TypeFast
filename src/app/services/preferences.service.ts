@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WordService } from './word.service';
-import {
-  Preference,
-  Preferences,
-  Language,
-  Theme,
-  WordMode,
-} from '../models/Preference';
+import { Preference, Preferences, Language, Theme, WordMode } from '../models/Preference';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -34,10 +28,7 @@ export class PreferencesService {
     try {
       // Set default preferences
       for (let defaultPreference in this.defaults) {
-        this.preferencesSubjects.set(
-          defaultPreference,
-          new BehaviorSubject(this.defaults[defaultPreference])
-        );
+        this.preferencesSubjects.set(defaultPreference, new BehaviorSubject(this.defaults[defaultPreference]));
       }
 
       let preferences = JSON.parse(localStorage.getItem('preferences'));
@@ -84,9 +75,7 @@ export class PreferencesService {
     if (localStorage.getItem('preferences') !== null) {
       localStorage.removeItem('preferences');
       for (let defaultPreference in this.defaults) {
-        this.preferencesSubjects
-          .get(defaultPreference)
-          .next(this.defaults[defaultPreference]);
+        this.preferencesSubjects.get(defaultPreference).next(this.defaults[defaultPreference]);
       }
     }
   }
