@@ -34,7 +34,7 @@ export enum Theme {
 
 export enum WordMode {
   WORDS = 'words',
-  SENTENCES = 'sententes',
+  SENTENCES = 'sentences',
 }
 
 export interface Preferences {
