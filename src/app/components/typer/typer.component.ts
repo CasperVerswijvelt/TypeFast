@@ -121,7 +121,10 @@ export class TyperComponent implements OnInit {
     }
 
     this.wordInput = this.wordInput.trim();
-    if (word[word.length - 1].match(/\s/).length === 1) {
+
+    const matches = word[word.length - 1].match(/\s/);
+
+    if (matches && matches.length === 1) {
       if (word.length === 1) {
         // Space is the only character typed, reset value to nothing
         this.inputElement.value = '';
