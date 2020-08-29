@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
-import { Preference, Language, Theme, WordMode } from '../../models/Preference';
+import { Preference, Language, Theme, WordMode, TextSize } from '../../models/Preference';
 import { WordService } from '../../services/word.service';
 import { ThemeService } from '../../services/theme.service';
 import { KeyValue } from '@angular/common';
@@ -19,6 +19,7 @@ export class PreferencesComponent implements OnInit {
   Language = Language;
   Theme = Theme;
   WordMode = WordMode;
+  TextSize = TextSize;
 
   preferences: Map<string, BehaviorSubject<any>>;
 
@@ -62,6 +63,10 @@ export class PreferencesComponent implements OnInit {
 
   onDefaultWordModeChanged(event: Event) {
     this.preferencesService.setPreference(Preference.DEFAULT_WORD_MODE, (event.target as HTMLInputElement).value);
+  }
+
+  onTextSizeChanged(event: Event) {
+    this.preferencesService.setPreference(Preference.TEXT_SIZE, (event.target as HTMLInputElement).value);
   }
 
   onReverseScrollChanged(event: Event) {

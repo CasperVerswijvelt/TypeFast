@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { WordService } from './word.service';
-import { Preference, Preferences, Language, Theme, WordMode } from '../models/Preference';
+import { Preference, Preferences, Language, Theme, WordMode, TextSize } from '../models/Preference';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -14,6 +14,7 @@ export class PreferencesService {
     default_word_mode: WordMode.WORDS,
     reverse_scroll: false,
     default_test_duration: 60,
+    text_size: TextSize.MEDIUM,
   };
 
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();

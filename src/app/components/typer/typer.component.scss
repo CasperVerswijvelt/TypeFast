@@ -77,6 +77,18 @@ $word-spacing: 20px;
   }
 }
 
+.text-size--small .type-test {
+  font-size: 0.75em;
+}
+
+.text-size--medium .type-test {
+  font-size: 1em;
+}
+
+.text-size--large .type-test {
+  font-size: 1.25em;
+}
+
 .type-test-reverse-scroll {
   .word-container {
     margin-left: initial;
@@ -344,7 +356,7 @@ $word-spacing: 20px;
   }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 500px) {
   .word-input,
   .word {
     font-size: 2em;

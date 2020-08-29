@@ -7,6 +7,7 @@ export enum Preference {
   DEFAULT_WORD_MODE = 'default_word_mode',
   REVERSE_SCROLL = 'reverse_scroll',
   DEFAULT_TEST_DURATION = 'default_test_duration',
+  TEXT_SIZE = 'text_size',
 }
 
 export enum Language {
@@ -37,6 +38,12 @@ export enum WordMode {
   SENTENCES = 'sentences',
 }
 
+export enum TextSize {
+  SMALL = 'small',
+  MEDIUM = 'medium',
+  LARGE = 'large',
+}
+
 export interface Preferences {
   word_language?: Language;
   theme?: Theme;
@@ -44,4 +51,5 @@ export interface Preferences {
   default_word_mode?: WordMode;
   reverse_scroll?: boolean;
   default_test_duration?: number;
+  text_size?: TextSize;
 }

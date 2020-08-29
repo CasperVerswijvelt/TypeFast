@@ -3,7 +3,7 @@ import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
 import { timer, Subscription, BehaviorSubject } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
-import { Preference, WordMode, Language } from '../../models/Preference';
+import { Preference, WordMode, Language, TextSize } from '../../models/Preference';
 import { skip } from 'rxjs/operators';
 
 @Component({
@@ -25,12 +25,13 @@ export class TyperComponent implements OnInit {
 
   testResults: TestResults;
 
-  testTime;
+  testTime: number;
   testTimeLeft: number;
 
   testStarted: boolean;
   wordListName: string = '';
   reverseScroll = false;
+  textSizeClass = '';
 
   incorrectWordsOpen = false;
 
@@ -59,6 +60,7 @@ export class TyperComponent implements OnInit {
       .get(Preference.REVERSE_SCROLL)
       .pipe(skip(1))
       .subscribe(this.onReverseScrollPreferenceUpdated.bind(this));
+    this.preferences.get(Preference.TEXT_SIZE).pipe(skip(1)).subscribe(this.onTextSizePreferenceUpdated.bind(this));
 
     this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION).value;
   }
@@ -70,6 +72,7 @@ export class TyperComponent implements OnInit {
     this.inputElement.onpaste = (e) => e.preventDefault();
 
     this.updateTimer(0);
+    this.syncTextSizeClass();
 
     this.focusFunctionReady.emit(this.focusInput.bind(this));
     this.focusInput();
@@ -152,6 +155,11 @@ export class TyperComponent implements OnInit {
     this.syncOffset();
   }
 
+  private onTextSizePreferenceUpdated(value: any) {
+    this.syncTextSizeClass();
+    this.setupTest();
+  }
+
   onUpdatedWordList(wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) {
     if (wordMode === this.preferences.get(Preference.DEFAULT_WORD_MODE).value) {
       this.reverseScrollWordList = shouldReverseScroll;
@@ -188,6 +196,21 @@ export class TyperComponent implements OnInit {
 
   private syncReverseScroll() {
     this.reverseScroll = this.preferences.get(Preference.REVERSE_SCROLL).value !== this.reverseScrollWordList;
+  }
+
+  private syncTextSizeClass() {
+    switch (this.preferences.get(Preference.TEXT_SIZE).value) {
+      case TextSize.SMALL:
+        this.textSizeClass = 'text-size--small';
+        break;
+      case TextSize.LARGE:
+        this.textSizeClass = 'text-size--large';
+        break;
+      default:
+      case TextSize.MEDIUM:
+        this.textSizeClass = 'text-size--medium';
+        break;
+    }
   }
 
   getWords(): string[] {
