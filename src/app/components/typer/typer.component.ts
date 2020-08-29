@@ -121,14 +121,12 @@ export class TyperComponent implements OnInit {
     }
 
     this.wordInput = this.wordInput.trim();
-
-    this.syncCurrentWordElement();
-
-    if (word[word.length - 1] == ' ') {
+    if (word[word.length - 1].match(/\s/).length === 1) {
       if (word.length === 1) {
+        // Space is the only character typed, reset value to nothing
         this.inputElement.value = '';
       } else {
-        //Space typed, validate word
+        // Space typed, validate word
         this.registerWord(this.wordInput, this.words[this.currentIndex]);
 
         this.nextWord();
