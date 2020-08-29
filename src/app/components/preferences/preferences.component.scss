@@ -292,7 +292,7 @@ $preferences-entry-main-height: 37px;
       max-height: 100px;
 
       &.preferences-group-entries-theme {
-        max-height: 96px;
+        max-height: 93px;
       }
 
       &.preferences-group-entries-language {
@@ -300,7 +300,11 @@ $preferences-entry-main-height: 37px;
       }
 
       &.preferences-group-entries-word-mode {
-        max-height: 60px;
+        max-height: 62px;
+      }
+
+      &.preferences-group-entries-text-size {
+        max-height: 62px;
       }
     }
 
