@@ -350,13 +350,13 @@ export class TyperComponent implements OnInit {
       console.log('disable transition', disableTransition);
       if (disableTransition) this.inputElement.style.transition = 'none';
 
-      this.inputElement.style.marginLeft = '-' + this.leftCharacterOffset + 'px';
+      this.inputElement.style.paddingLeft = 'calc(50% - ' + this.leftCharacterOffset + 'px)';
       this.inputElement.getClientRects(); // Trigger css reflow
       this.inputElement.style.removeProperty('transition');
     } else {
       leftOffset = 80 + this.leftWordOffset;
       rightOffset = 80 - this.rightWordOffset;
-      this.inputElement.style.removeProperty('margin-left');
+      this.inputElement.style.removeProperty('padding-left');
     }
 
     if (this.reverseScroll) {
