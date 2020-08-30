@@ -35,6 +35,8 @@ export class TyperComponent implements OnInit {
   smoothScroll = true;
   textSizeClass = '';
 
+  characterOffset = 0;
+
   incorrectWordsOpen = false;
 
   preferences: Map<string, BehaviorSubject<any>>;
@@ -56,6 +58,11 @@ export class TyperComponent implements OnInit {
 
     this.preferences = preferencesService.getPreferences();
 
+    this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION).value;
+    this.smoothScroll = this.preferences.get(Preference.SMOOTH_SCROLLING).value;
+  }
+
+  ngOnInit(): void {
     this.preferences
       .get(Preference.DEFAULT_WORD_MODE)
       .pipe(skip(1))
@@ -65,11 +72,11 @@ export class TyperComponent implements OnInit {
       .pipe(skip(1))
       .subscribe(this.onReverseScrollPreferenceUpdated.bind(this));
     this.preferences.get(Preference.TEXT_SIZE).pipe(skip(1)).subscribe(this.onTextSizePreferenceUpdated.bind(this));
+    this.preferences
+      .get(Preference.SMOOTH_SCROLLING)
+      .pipe(skip(1))
+      .subscribe(this.onSmoothScrollingPreferenceUpdated.bind(this));
 
-    this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION).value;
-  }
-
-  ngOnInit(): void {
     this.containerElement = document.getElementsByClassName('word-container')[0] as HTMLElement;
     this.inputElement = document.getElementsByClassName('word-input')[0] as HTMLInputElement;
     this.inputWordCopy = document.getElementsByClassName('word-copy')[0] as HTMLInputElement;
@@ -191,6 +198,13 @@ export class TyperComponent implements OnInit {
   private onTextSizePreferenceUpdated(value: any) {
     this.syncTextSizeClass();
     this.setupTest();
+  }
+
+  private onSmoothScrollingPreferenceUpdated(value: any) {
+    this.smoothScroll = value;
+    if (!this.reverseScroll) {
+      this.setupTest();
+    }
   }
 
   onUpdatedWordList(wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) {
@@ -333,12 +347,14 @@ export class TyperComponent implements OnInit {
     let leftOffset: number;
     let rightOffset: number;
 
-    if (this.smoothScroll) {
+    if (this.smoothScroll && !this.reverseScroll) {
       leftOffset = this.leftWordOffset + this.leftCharacterOffset;
       rightOffset = this.rightWordOffset + this.rightCharacterOffset;
+      this.characterOffset = this.leftCharacterOffset;
     } else {
-      leftOffset = 80 - this.leftWordOffset;
+      leftOffset = 80 + this.leftWordOffset;
       rightOffset = 80 - this.rightWordOffset;
+      this.characterOffset = 0;
     }
 
     if (this.reverseScroll) {

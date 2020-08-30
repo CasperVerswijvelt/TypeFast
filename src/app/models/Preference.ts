@@ -8,6 +8,7 @@ export enum Preference {
   REVERSE_SCROLL = 'reverse_scroll',
   DEFAULT_TEST_DURATION = 'default_test_duration',
   TEXT_SIZE = 'text_size',
+  SMOOTH_SCROLLING = 'smooth_scrolling',
 }
 
 export enum Language {
@@ -52,4 +53,5 @@ export interface Preferences {
   reverse_scroll?: boolean;
   default_test_duration?: number;
   text_size?: TextSize;
+  smooth_scrolling?: boolean;
 }

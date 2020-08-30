@@ -20,6 +20,7 @@ export class PreferencesComponent implements OnInit {
   Theme = Theme;
   WordMode = WordMode;
   TextSize = TextSize;
+  Preference = Preference;
 
   preferences: Map<string, BehaviorSubject<any>>;
 
@@ -71,6 +72,10 @@ export class PreferencesComponent implements OnInit {
 
   onReverseScrollChanged(event: Event) {
     this.preferencesService.setPreference(Preference.REVERSE_SCROLL, (event.target as HTMLInputElement).checked);
+  }
+
+  onSmoothScrollingChanged(event: Event) {
+    this.preferencesService.setPreference(Preference.SMOOTH_SCROLLING, (event.target as HTMLInputElement).checked);
   }
 
   onClickLoadCustomList() {

@@ -83,7 +83,7 @@ $word-spacing: 20px;
   padding: 0 0 0 calc(50% - #{$word-center-offset});
   width: 100%;
   caret-color: white;
-  transition: color 0.2s, margin-left 0.1s ease-in-out;
+  transition: color 0.2s, margin-left 0.1s ease-in-out, padding-left 0.1s ease-in-out;
 
   &.input-incorrect {
     color: rgb(255, 68, 68);

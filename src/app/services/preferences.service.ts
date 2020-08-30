@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { WordService } from './word.service';
 import { Preference, Preferences, Language, Theme, WordMode, TextSize } from '../models/Preference';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +14,7 @@ export class PreferencesService {
     reverse_scroll: false,
     default_test_duration: 60,
     text_size: TextSize.MEDIUM,
+    smooth_scrolling: true,
   };
 
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();

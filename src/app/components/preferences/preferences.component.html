@@ -3,11 +3,11 @@
   <div class="preferences">
     <div class="preferences-list">
       <!-- Theme preferences group -->
-      <div class="preferences-group" [class.preferences-group-opened]="openedPreferencesGroup === 'theme'">
-        <div class="preferences-group-title" (click)="togglePreferencesGroup('theme')">
+      <div class="preferences-group" [class.preferences-group-opened]="openedPreferencesGroup === Preference.THEME">
+        <div class="preferences-group-title" (click)="togglePreferencesGroup(Preference.THEME)">
           <div class="preferences-group-title-key">Theme</div>
           <div class="preferences-group-title-value capitalize">
-            {{ preferences.get('theme').value }}
+            {{ preferences.get(Preference.THEME).value }}
           </div>
           <div class="preferences-group-title-arrow">
             <svg
@@ -36,7 +36,7 @@
             <input
               type="radio"
               name="theme"
-              [checked]="preferences.get('theme').value === them.value"
+              [checked]="preferences.get(Preference.THEME).value === them.value"
               [value]="them.value"
               (change)="onThemeChanged($event)"
             />
@@ -49,7 +49,7 @@
             <label class="preferences-toggle-switch switch">
               <input
                 type="checkbox"
-                [ngModel]="preferences.get('follow_system_theme').value"
+                [ngModel]="preferences.get(Preference.FOLLOW_SYSTEM_THEME).value"
                 (change)="onFollowSystemThemeChanged($event)"
                 id="follow-system"
               />
@@ -60,11 +60,14 @@
       </div>
 
       <!-- Default word mode preferences group -->
-      <div class="preferences-group" [class.preferences-group-opened]="openedPreferencesGroup === 'default_word_mode'">
-        <div class="preferences-group-title" (click)="togglePreferencesGroup('default_word_mode')">
+      <div
+        class="preferences-group"
+        [class.preferences-group-opened]="openedPreferencesGroup === Preference.DEFAULT_WORD_MODE"
+      >
+        <div class="preferences-group-title" (click)="togglePreferencesGroup(Preference.DEFAULT_WORD_MODE)">
           <div class="preferences-group-title-key">Word mode</div>
           <div class="preferences-group-title-value capitalize">
-            {{ preferences.get('default_word_mode').value }}
+            {{ preferences.get(Preference.DEFAULT_WORD_MODE).value }}
           </div>
           <div class="preferences-group-title-arrow">
             <svg
@@ -92,7 +95,7 @@
             <input
               type="radio"
               name="word_mode"
-              [checked]="preferences.get('default_word_mode').value === mode.value"
+              [checked]="preferences.get(Preference.DEFAULT_WORD_MODE).value === mode.value"
               [value]="mode.value"
               (change)="onDefaultWordModeChanged($event)"
             />
@@ -107,7 +110,7 @@
         <div class="preferences-group-title" (click)="togglePreferencesGroup('language')">
           <div class="preferences-group-title-key">Language</div>
           <div class="preferences-group-title-value capitalize">
-            {{ preferences.get('word_language').value }}
+            {{ preferences.get(Preference.LANGUAGE).value }}
           </div>
           <div class="preferences-group-title-arrow">
             <svg
@@ -139,7 +142,7 @@
             <input
               type="radio"
               name="language"
-              [checked]="preferences.get('word_language').value === lang.value"
+              [checked]="preferences.get(Preference.LANGUAGE).value === lang.value"
               [value]="lang.value"
               (change)="onLanguageChanged($event)"
             />
@@ -180,11 +183,25 @@
 
       <!-- Reverse scroll -->
       <div class="preferences-entry preferences-entry-main preferences-toggle-entry">
+        <label class="preferences-toggle-label" for="smooth-scrolling"> Smooth scrolling </label>
+        <label class="preferences-toggle-switch switch">
+          <input
+            type="checkbox"
+            [ngModel]="preferences.get(Preference.SMOOTH_SCROLLING).value"
+            (change)="onSmoothScrollingChanged($event)"
+            id="smooth-scrolling"
+          />
+          <span class="slider round"></span>
+        </label>
+      </div>
+
+      <!-- Reverse scroll -->
+      <div class="preferences-entry preferences-entry-main preferences-toggle-entry">
         <label class="preferences-toggle-label" for="reverse-scroll"> Reverse scroll </label>
         <label class="preferences-toggle-switch switch">
           <input
             type="checkbox"
-            [ngModel]="preferences.get('reverse_scroll').value"
+            [ngModel]="preferences.get(Preference.REVERSE_SCROLL).value"
             (change)="onReverseScrollChanged($event)"
             id="reverse-scroll"
           />
@@ -193,11 +210,11 @@
       </div>
 
       <!-- Text size preferences group -->
-      <div class="preferences-group" [class.preferences-group-opened]="openedPreferencesGroup === 'text_size'">
-        <div class="preferences-group-title" (click)="togglePreferencesGroup('text_size')">
+      <div class="preferences-group" [class.preferences-group-opened]="openedPreferencesGroup === Preference.TEXT_SIZE">
+        <div class="preferences-group-title" (click)="togglePreferencesGroup(Preference.TEXT_SIZE)">
           <div class="preferences-group-title-key">Text size</div>
           <div class="preferences-group-title-value capitalize">
-            {{ preferences.get('text_size').value }}
+            {{ preferences.get(Preference.TEXT_SIZE).value }}
           </div>
           <div class="preferences-group-title-arrow">
             <svg
@@ -225,7 +242,7 @@
             <input
               type="radio"
               name="text_size"
-              [checked]="preferences.get('text_size').value === size.value"
+              [checked]="preferences.get(Preference.TEXT_SIZE).value === size.value"
               [value]="size.value"
               (change)="onTextSizeChanged($event)"
             />
