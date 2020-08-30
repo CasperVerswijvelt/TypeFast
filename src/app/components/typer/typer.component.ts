@@ -351,7 +351,6 @@ export class TyperComponent implements OnInit {
       if (disableTransition) this.inputElement.style.transition = 'none';
 
       this.inputElement.style.marginLeft = '-' + this.leftCharacterOffset + 'px';
-
       this.inputElement.offsetHeight; // Trigger css reflow
       this.inputElement.style.removeProperty('transition');
     } else {
