@@ -123,21 +123,23 @@ export class TyperComponent implements OnInit {
       this.startTest();
     }
 
+    const regex = /\s$/;
+    const matches = regex.test(word);
+
     this.wordInput = this.wordInput.trim();
 
-    const matches = word[word.length - 1].match(/\s/);
-
-    if (matches && matches.length === 1) {
+    if (matches) {
+      // Text input ends with whitespace character
       if (word.length === 1) {
         // Space is the only character typed, reset value to nothing
         this.inputElement.value = '';
       } else {
         // Space typed, validate word
         this.registerWord(this.wordInput, this.words[this.currentIndex]);
-
         this.nextWord();
       }
     } else {
+      // Text input doesnt end with whitespace character, update input color
       if (this.words[this.currentIndex].slice(0, this.wordInput.length) !== this.wordInput) {
         this.inputElement.classList.add('input-incorrect');
       } else {
