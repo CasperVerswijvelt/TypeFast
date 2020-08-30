@@ -22,6 +22,7 @@ export class TyperComponent implements OnInit {
   currentWordElement: HTMLElement;
   containerElement: HTMLElement;
   inputElement: HTMLInputElement;
+  inputWordCopy: HTMLElement;
 
   testResults: TestResults;
 
@@ -31,14 +32,17 @@ export class TyperComponent implements OnInit {
   testStarted: boolean;
   wordListName: string = '';
   reverseScroll = false;
+  smoothScroll = true;
   textSizeClass = '';
 
   incorrectWordsOpen = false;
 
   preferences: Map<string, BehaviorSubject<any>>;
 
-  private leftOffset: number = 0;
-  private rightOffset: number = 0;
+  private leftWordOffset: number = 0;
+  private rightWordOffset: number = 0;
+  private leftCharacterOffset: number = 0;
+  private rightCharacterOffset: number = 0;
   private currentIndex: number;
   private reverseScrollWordList: boolean;
   private secondTimer: Subscription;
@@ -68,6 +72,7 @@ export class TyperComponent implements OnInit {
   ngOnInit(): void {
     this.containerElement = document.getElementsByClassName('word-container')[0] as HTMLElement;
     this.inputElement = document.getElementsByClassName('word-input')[0] as HTMLInputElement;
+    this.inputWordCopy = document.getElementsByClassName('word-copy')[0] as HTMLInputElement;
 
     this.inputElement.onpaste = (e) => e.preventDefault();
 
@@ -85,7 +90,10 @@ export class TyperComponent implements OnInit {
 
     this.wordInput = '';
     this.currentIndex = 0;
-    this.leftOffset = 0;
+    this.leftWordOffset = 0;
+    this.rightWordOffset = 0;
+    this.leftCharacterOffset = 0;
+    this.rightCharacterOffset = 0;
     this.words = [];
     this.cdRef.detectChanges();
     this.fillWordList();
@@ -103,7 +111,7 @@ export class TyperComponent implements OnInit {
 
     this.testStarted = false;
     this.syncCurrentWordElement();
-    this.rightOffset = this.currentWordElement.getBoundingClientRect().width;
+    this.rightWordOffset = this.currentWordElement.getBoundingClientRect().width;
     this.syncOffset();
   }
 
@@ -138,12 +146,35 @@ export class TyperComponent implements OnInit {
         this.registerWord(this.wordInput, this.words[this.currentIndex]);
         this.nextWord();
       }
+      this.leftCharacterOffset = 0;
+      this.syncOffset();
     } else {
       // Text input doesnt end with whitespace character, update input color
-      if (this.words[this.currentIndex].slice(0, this.wordInput.length) !== this.wordInput) {
+      const curentWord = this.words[this.currentIndex] ? this.words[this.currentIndex] : '';
+      const wordInput = this.wordInput ? this.wordInput : '';
+      if (curentWord?.slice(0, wordInput.length) !== wordInput) {
         this.inputElement.classList.add('input-incorrect');
       } else {
         this.inputElement.classList.remove('input-incorrect');
+
+        // Count matching characters
+        let matchingCharacters = 0;
+        let minLength = Math.min(wordInput.length, curentWord.length);
+        for (let i = 0; i < minLength; i++) {
+          if (wordInput[i] === curentWord[i]) {
+            matchingCharacters++;
+          } else {
+            break;
+          }
+        }
+        let charactersWidth = 0;
+
+        const children = this.currentWordElement.children;
+        const childrenToCount = Math.min(matchingCharacters, children.length);
+
+        this.inputWordCopy.innerText = wordInput;
+        this.leftCharacterOffset = this.inputWordCopy.getBoundingClientRect().width;
+        this.syncOffset();
       }
     }
   }
@@ -182,9 +213,9 @@ export class TyperComponent implements OnInit {
     this.wordInput = '';
     this.inputElement.value = '';
 
-    this.leftOffset = this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
+    this.leftWordOffset = this.leftWordOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncCurrentWordElement();
-    this.rightOffset = this.leftOffset + this.currentWordElement.getBoundingClientRect().width;
+    this.rightWordOffset = this.leftWordOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncOffset();
 
     this.fillWordList();
@@ -299,12 +330,23 @@ export class TyperComponent implements OnInit {
   syncOffset() {
     if (!this.containerElement) return;
 
+    let leftOffset: number;
+    let rightOffset: number;
+
+    if (this.smoothScroll) {
+      leftOffset = this.leftWordOffset + this.leftCharacterOffset;
+      rightOffset = this.rightWordOffset + this.rightCharacterOffset;
+    } else {
+      leftOffset = 80 - this.leftWordOffset;
+      rightOffset = 80 - this.rightWordOffset;
+    }
+
     if (this.reverseScroll) {
       this.containerElement.style.marginLeft = null;
-      this.containerElement.style.marginRight = `calc(50% + 80px - ${this.rightOffset}px)`;
+      this.containerElement.style.marginRight = `calc(50% + ${rightOffset}px)`;
     } else {
       this.containerElement.style.marginRight = null;
-      this.containerElement.style.marginLeft = `calc(50% - 80px - ${this.leftOffset}px)`;
+      this.containerElement.style.marginLeft = `calc(50% - ${leftOffset}px)`;
     }
   }
 

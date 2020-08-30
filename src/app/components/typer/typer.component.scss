@@ -24,12 +24,27 @@
   mask: linear-gradient(to right, transparent 0%, black 30%, black 70%, transparent 100%);
 }
 
+.word-copy {
+  font-size: 3em;
+  display: inline-block;
+  height: 0;
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+}
+
 $word-center-offset: 80px;
 
 .word-container {
   display: flex;
   margin-left: calc(50% - #{$word-center-offset});
   transition: margin-left 0.1s ease-in-out;
+}
+
+.type-test-smooth-scroll {
+  .word-container {
+    margin-left: 50%;
+  }
 }
 
 $word-spacing: 20px;
@@ -41,6 +56,12 @@ $word-spacing: 20px;
   user-select: none;
   padding: 0 $word-spacing 0 0;
   flex-shrink: 0;
+  display: flex;
+
+  .character {
+    margin: 0;
+    padding: 0;
+  }
 
   &.word-correct {
     opacity: 0.2;
@@ -62,7 +83,7 @@ $word-spacing: 20px;
   padding: 0 0 0 calc(50% - #{$word-center-offset});
   width: 100%;
   caret-color: white;
-  transition: color 0.2s;
+  transition: color 0.2s, margin-left 0.1s ease-in-out;
 
   &.input-incorrect {
     color: rgb(255, 68, 68);
@@ -74,6 +95,12 @@ $word-spacing: 20px;
 
   &:focus::placeholder {
     color: transparent;
+  }
+}
+
+.type-test-smooth-scroll {
+  .word-input {
+    padding: 0 0 0 50%;
   }
 }
 

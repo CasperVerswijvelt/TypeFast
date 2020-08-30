@@ -2,6 +2,7 @@
   class="type-test-container"
   [class.type-test-started]="testStarted"
   [class.type-test-reverse-scroll]="reverseScroll"
+  [class.type-test-smooth-scroll]="smoothScroll"
   [ngClass]="textSizeClass"
 >
   <div class="type-test">
@@ -10,8 +11,10 @@
         <div class="word" *ngFor="let word of words">{{ word }}</div>
       </div>
     </div>
+    <div class="word-copy"></div>
     <input
       [(ngModel)]="wordInput"
+      [ngStyle]="{ 'margin-left': '-' + this.leftCharacterOffset + 'px' }"
       (input)="wordInputChanged($event.target.value)"
       (keydown.enter)="wordInput = wordInput + ' '; wordInputChanged(wordInput)"
       type="text"
