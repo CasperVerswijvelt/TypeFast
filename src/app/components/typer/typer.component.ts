@@ -347,7 +347,6 @@ export class TyperComponent implements OnInit {
       leftOffset = this.leftWordOffset + this.leftCharacterOffset;
       rightOffset = this.rightWordOffset + this.rightCharacterOffset;
 
-      console.log('disable transition', disableTransition);
       if (disableTransition) this.inputElement.style.transition = 'none';
 
       this.inputElement.style.marginLeft = '-' + this.leftCharacterOffset + 'px';
