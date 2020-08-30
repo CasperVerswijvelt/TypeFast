@@ -35,8 +35,6 @@ export class TyperComponent implements OnInit {
   smoothScroll = true;
   textSizeClass = '';
 
-  characterOffset = 0;
-
   incorrectWordsOpen = false;
 
   preferences: Map<string, BehaviorSubject<any>>;
@@ -145,16 +143,17 @@ export class TyperComponent implements OnInit {
 
     if (matches) {
       // Text input ends with whitespace character
+      this.leftCharacterOffset = 0;
       if (word.length === 1) {
         // Space is the only character typed, reset value to nothing
         this.inputElement.value = '';
+        this.syncOffset();
       } else {
         // Space typed, validate word
         this.registerWord(this.wordInput, this.words[this.currentIndex]);
         this.nextWord();
+        this.syncOffset(true);
       }
-      this.leftCharacterOffset = 0;
-      this.syncOffset();
     } else {
       // Text input doesnt end with whitespace character, update input color
       const curentWord = this.words[this.currentIndex] ? this.words[this.currentIndex] : '';
@@ -202,9 +201,7 @@ export class TyperComponent implements OnInit {
 
   private onSmoothScrollingPreferenceUpdated(value: any) {
     this.smoothScroll = value;
-    if (!this.reverseScroll) {
-      this.setupTest();
-    }
+    this.syncOffset();
   }
 
   onUpdatedWordList(wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) {
@@ -341,7 +338,7 @@ export class TyperComponent implements OnInit {
     this.currentWordElement = this.containerElement.children[this.currentIndex] as HTMLElement;
   }
 
-  syncOffset() {
+  syncOffset(disableTransition = false) {
     if (!this.containerElement) return;
 
     let leftOffset: number;
@@ -350,11 +347,17 @@ export class TyperComponent implements OnInit {
     if (this.smoothScroll && !this.reverseScroll) {
       leftOffset = this.leftWordOffset + this.leftCharacterOffset;
       rightOffset = this.rightWordOffset + this.rightCharacterOffset;
-      this.characterOffset = this.leftCharacterOffset;
+
+      if (disableTransition) this.inputElement.style.transition = 'none';
+
+      this.inputElement.style.marginLeft = '-' + this.leftCharacterOffset + 'px';
+
+      this.inputElement.offsetHeight; // Trigger css reflow
+      this.inputElement.style.removeProperty('transition');
     } else {
       leftOffset = 80 + this.leftWordOffset;
       rightOffset = 80 - this.rightWordOffset;
-      this.characterOffset = 0;
+      this.inputElement.style.removeProperty('margin-left');
     }
 
     if (this.reverseScroll) {
