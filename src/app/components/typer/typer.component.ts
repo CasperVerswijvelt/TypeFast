@@ -152,7 +152,6 @@ export class TyperComponent implements OnInit {
         // Space typed, validate word
         this.registerWord(this.wordInput, this.words[this.currentIndex]);
         this.nextWord();
-        this.syncOffset(true);
       }
     } else {
       // Text input doesnt end with whitespace character, update input color
@@ -227,7 +226,7 @@ export class TyperComponent implements OnInit {
     this.leftWordOffset = this.leftWordOffset + this.currentWordElement.getBoundingClientRect().width;
     this.syncCurrentWordElement();
     this.rightWordOffset = this.leftWordOffset + this.currentWordElement.getBoundingClientRect().width;
-    this.syncOffset();
+    this.syncOffset(true);
 
     this.fillWordList();
   }
