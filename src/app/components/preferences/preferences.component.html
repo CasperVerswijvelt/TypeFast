@@ -110,7 +110,7 @@
         <div class="preferences-group-title" (click)="togglePreferencesGroup('language')">
           <div class="preferences-group-title-key">Language</div>
           <div class="preferences-group-title-value capitalize">
-            {{ preferences.get(Preference.LANGUAGE).value }}
+            {{ getNameForLanguage(preferences.get(Preference.LANGUAGE).value) }}
           </div>
           <div class="preferences-group-title-arrow">
             <svg
@@ -162,7 +162,7 @@
                 <div></div>
               </div>
             </span>
-            {{ lang.value }}
+            {{ getNameForLanguage(lang.value) }}
           </label>
         </div>
       </div>

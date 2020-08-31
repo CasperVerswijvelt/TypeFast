@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 export class PreferencesService {
   private defaults: Preferences = {
     theme: Theme.LIGHT,
-    word_language: Language.ENGLISH,
+    word_language: Language.ENGLISH_AMERICAN,
     follow_system_theme: false,
     default_word_mode: WordMode.WORDS,
     reverse_scroll: false,

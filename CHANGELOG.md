@@ -14,6 +14,7 @@
 ## Improvements
 
 - Remove ugly tab outline on active reset, increase timer and decrease timer buttons (but keep focus outline for accesibility)
+- Split up up the english language into British English and American English
 
 # 1.0.1 - 30-08-2020
 

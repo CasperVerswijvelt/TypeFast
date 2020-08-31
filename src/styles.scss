@@ -247,8 +247,12 @@ input:checked + .slider:before {
   background-image: url(assets/icons/flags/nl.svg);
 }
 
-.flag-icon-gb {
+.flag-icon-en-gb {
   background-image: url(assets/icons/flags/gb.svg);
+}
+
+.flag-icon-en-us {
+  background-image: url(assets/icons/flags/us.svg);
 }
 
 .flag-icon-fr {

@@ -105,8 +105,10 @@ export class PreferencesComponent implements OnInit {
     switch (language) {
       case Language.DUTCH:
         return 'nl';
-      case Language.ENGLISH:
-        return 'gb';
+      case Language.ENGLISH_BRITISH:
+        return 'en-gb';
+      case Language.ENGLISH_AMERICAN:
+        return 'en-us';
       case Language.ITALIAN:
         return 'it';
       case Language.DUTCH:
@@ -137,6 +139,17 @@ export class PreferencesComponent implements OnInit {
         return 'dev';
       default:
         return 'unknown';
+    }
+  }
+
+  getNameForLanguage(language: Language): string {
+    switch (language) {
+      case Language.ENGLISH_BRITISH:
+        return 'english (UK)';
+      case Language.ENGLISH_AMERICAN:
+        return 'english (US)';
+      default:
+        return language as string;
     }
   }
 
