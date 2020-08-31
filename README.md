@@ -2,7 +2,7 @@
 
 TypeFast is a minimalistic typing speed tester that keeps versatility in mind. You can visit a live version of the master branch at [TypeFast.io](https://typefast.io).
 
-## Screenshtos
+## Screenshots
 
 |                                   Light theme                                    |                                  Dark theme                                   |
 | :------------------------------------------------------------------------------: | :---------------------------------------------------------------------------: |
@@ -22,6 +22,7 @@ You can then use `npm start` to start the development server at `http://localhos
 ## Contributing
 
 If you would like to contribute to the project, feel free to fork this project and open a pull request.
+Pleas make sure that your code is properly formatted, this project works with Prettier.
 
 ## Authors
 

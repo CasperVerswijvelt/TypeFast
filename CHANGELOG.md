@@ -6,6 +6,10 @@
 
 - Added a changelog file, check it out [here](https://github.com/CasperVerswijvelt/TypeFast/blob/master/README.md)
 
+## Fixed
+
+- Fixed typo in README.md ('screenshtos')
+
 # 1.0.1 - 30-08-2020
 
 ## New
