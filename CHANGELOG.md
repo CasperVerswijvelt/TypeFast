@@ -1,6 +1,6 @@
 # TypeFast.io - Release notes
 
-# Unreleased
+# 1.0.2 - 31-08-2020
 
 ## New
 
