@@ -280,6 +280,14 @@ $word-spacing: 20px;
   }
 }
 
+.type-test-restart,
+.type-test-timer-increase,
+.type-test-timer-decrease {
+  &:active {
+    outline: none;
+  }
+}
+
 .type-test-results-wpm th {
   position: relative;
 }

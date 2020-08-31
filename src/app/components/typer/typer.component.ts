@@ -437,6 +437,7 @@ export class TyperComponent implements OnInit {
     this.preferencesService.setPreference(Preference.DEFAULT_TEST_DURATION, this.testTime);
 
     this.updateTimer(0);
+    this.focusInput();
   }
 
   onIncreaseClicked() {
@@ -457,6 +458,7 @@ export class TyperComponent implements OnInit {
     this.preferencesService.setPreference(Preference.DEFAULT_TEST_DURATION, this.testTime);
 
     this.updateTimer(0);
+    this.focusInput();
   }
 
   onRestartClicked() {

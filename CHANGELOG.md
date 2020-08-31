@@ -11,6 +11,10 @@
 - Fixed typo in README.md ('screenshtos')
 - Fixed bug where you FireFox users would need to tab twice to select the reset button
 
+## Improvements
+
+- Remove ugly tab outline on active reset, increase timer and decrease timer buttons (but keep focus outline for accesibility)
+
 # 1.0.1 - 30-08-2020
 
 ## New
