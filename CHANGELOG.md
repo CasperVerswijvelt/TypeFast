@@ -9,6 +9,7 @@
 ## Fixed
 
 - Fixed typo in README.md ('screenshtos')
+- Fixed bug where you FireFox users would need to tab twice to select the reset button
 
 # 1.0.1 - 30-08-2020
 
