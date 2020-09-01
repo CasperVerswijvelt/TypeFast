@@ -83,7 +83,6 @@ chronological
 circumference
 clandestine
 clay
-cliché
 coerce
 cognisance
 coherent
@@ -476,7 +475,6 @@ vice
 vicious
 vigilant
 vindicate
-vis-à-vis
 vocation
 volatile
 vow

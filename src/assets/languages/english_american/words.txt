@@ -553,7 +553,6 @@ clay
 clean
 clear
 clearly
-cliché
 client
 climate
 climb
@@ -3348,7 +3347,6 @@ violent
 virtually
 virtue
 virus
-vis-à-vis
 visible
 vision
 visit
