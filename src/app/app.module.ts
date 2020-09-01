@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { AppComponent } from './components/app.component';
 import { WordService } from './services/word.service';
@@ -13,6 +14,7 @@ import { ThemeService } from './services/theme.service';
 import { PopperDirective } from './popper.directive';
 import { IncorrectWordComponent } from './components/incorrect-word/incorrect-word.component';
 import { AboutComponent } from './components/about/about.component';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,7 @@ import { AboutComponent } from './components/about/about.component';
     IncorrectWordComponent,
     AboutComponent,
   ],
-  imports: [BrowserModule, FormsModule],
+  imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient })],
   providers: [{ provide: WordService, useClass: DefaultWordService }, PreferencesService, ThemeService],
   bootstrap: [AppComponent],
 })

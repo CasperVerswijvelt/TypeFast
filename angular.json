@@ -27,10 +27,11 @@
               "src/android-chrome-512x512",
               "src/android-chrome-192x192",
               "src/site.webmanifest",
-              "src/assets"
+              "src/assets",
+              { "glob": "CHANGELOG.md", "input": "./", "output": "./" }
             ],
             "styles": ["src/styles.scss"],
-            "scripts": []
+            "scripts": ["node_modules/marked/lib/marked.js"]
           },
           "configurations": {
             "production": {

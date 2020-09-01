@@ -295,6 +295,35 @@ input:checked + .slider:before {
   background-image: url(assets/icons/flags/es.svg);
 }
 
+// Markdown
+
+markdown {
+  h1,
+  h2,
+  h3,
+  p {
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+  }
+
+  h1 {
+    padding-bottom: 4px;
+    border-bottom: 2px solid #7b7b7b6b;
+  }
+
+  h2 {
+    padding: 6px 0;
+    border-bottom: 1px solid #7b7b7b6b;
+  }
+  h3 {
+    font-style: italic;
+    font-weight: lighter;
+  }
+  a {
+    color: rgb(82, 82, 255);
+  }
+}
+
 // Themes (default is dark)
 
 #body.theme--light {

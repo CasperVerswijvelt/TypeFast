@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "^10.0.14",
     "@angular/router": "^10.0.14",
     "@popperjs/core": "^2.4.4",
+    "ngx-markdown": "^10.1.1",
     "rxjs": "~6.5.4",
     "text-to-svg": "^3.1.5",
     "tslib": "^2.0.0",
