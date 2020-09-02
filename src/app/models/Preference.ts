@@ -1,10 +1,8 @@
-import { TextFormat } from './TextSource';
-
 export enum Preference {
   LANGUAGE = 'word_language',
   THEME = 'theme',
   FOLLOW_SYSTEM_THEME = 'follow_system_theme',
-  DEFAULT_WORD_MODE = 'default_word_mode',
+  WORD_MODE = 'default_word_mode',
   REVERSE_SCROLL = 'reverse_scroll',
   DEFAULT_TEST_DURATION = 'default_test_duration',
   TEXT_SIZE = 'text_size',
@@ -28,6 +26,7 @@ export enum Language {
   RUSSIAN = 'russian',
   SPANISH = 'spanish',
   PROGRAMMING = 'programming',
+  CUSTOM = 'custom',
 }
 
 export enum Theme {

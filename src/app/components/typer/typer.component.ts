@@ -62,7 +62,7 @@ export class TyperComponent implements OnInit {
 
   ngOnInit(): void {
     this.preferences
-      .get(Preference.DEFAULT_WORD_MODE)
+      .get(Preference.WORD_MODE)
       .pipe(skip(1))
       .subscribe(this.onDefaultWordModePreferenceUpdated.bind(this));
     this.preferences
@@ -204,12 +204,10 @@ export class TyperComponent implements OnInit {
   }
 
   onUpdatedWordList(wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) {
-    if (wordMode === this.preferences.get(Preference.DEFAULT_WORD_MODE).value) {
-      this.reverseScrollWordList = shouldReverseScroll;
-      this.wordListName = wordListName;
-      this.syncReverseScroll();
-      this.setupTest();
-    }
+    this.reverseScrollWordList = shouldReverseScroll;
+    this.wordListName = wordListName;
+    this.syncReverseScroll();
+    this.setupTest();
   }
 
   startTest() {
@@ -233,7 +231,7 @@ export class TyperComponent implements OnInit {
 
   private fillWordList() {
     while (this.currentIndex > this.words.length - 20) {
-      this.words = this.words.concat(this.getWords());
+      this.words = this.words.concat(this.wordService.getWords());
     }
   }
 
@@ -254,14 +252,6 @@ export class TyperComponent implements OnInit {
         this.textSizeClass = 'text-size--medium';
         break;
     }
-  }
-
-  getWords(): string[] {
-    let words =
-      this.preferences.get(Preference.DEFAULT_WORD_MODE).value === WordMode.SENTENCES
-        ? this.wordService.getSentence()
-        : this.wordService.getWords();
-    return words;
   }
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {

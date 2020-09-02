@@ -63,7 +63,7 @@ export class PreferencesComponent implements OnInit {
   }
 
   onDefaultWordModeChanged(event: Event) {
-    this.preferencesService.setPreference(Preference.DEFAULT_WORD_MODE, (event.target as HTMLInputElement).value);
+    this.preferencesService.setPreference(Preference.WORD_MODE, (event.target as HTMLInputElement).value);
   }
 
   onTextSizeChanged(event: Event) {
@@ -85,7 +85,7 @@ export class PreferencesComponent implements OnInit {
 
     input.onchange = input.onchange = (e: Event) => {
       var file = (<HTMLInputElement>e.target).files[0];
-      this.wordService.loadFile(file);
+      this.wordService.loadFile(file, this.preferencesService.getPreference(Preference.WORD_MODE));
     };
 
     input.click();

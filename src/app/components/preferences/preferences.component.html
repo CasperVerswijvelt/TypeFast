@@ -60,14 +60,11 @@
       </div>
 
       <!-- Default word mode preferences group -->
-      <div
-        class="preferences-group"
-        [class.preferences-group-opened]="openedPreferencesGroup === Preference.DEFAULT_WORD_MODE"
-      >
-        <div class="preferences-group-title" (click)="togglePreferencesGroup(Preference.DEFAULT_WORD_MODE)">
+      <div class="preferences-group" [class.preferences-group-opened]="openedPreferencesGroup === Preference.WORD_MODE">
+        <div class="preferences-group-title" (click)="togglePreferencesGroup(Preference.WORD_MODE)">
           <div class="preferences-group-title-key">Word mode</div>
           <div class="preferences-group-title-value capitalize">
-            {{ preferences.get(Preference.DEFAULT_WORD_MODE).value }}
+            {{ preferences.get(Preference.WORD_MODE).value }}
           </div>
           <div class="preferences-group-title-arrow">
             <svg
@@ -95,7 +92,7 @@
             <input
               type="radio"
               name="word_mode"
-              [checked]="preferences.get(Preference.DEFAULT_WORD_MODE).value === mode.value"
+              [checked]="preferences.get(Preference.WORD_MODE).value === mode.value"
               [value]="mode.value"
               (change)="onDefaultWordModeChanged($event)"
             />

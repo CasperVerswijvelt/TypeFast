@@ -46,13 +46,8 @@ export class PreferencesService {
   }
 
   getPreference(key: Preference): any {
-    try {
-      let preference = JSON.parse(localStorage.getItem('preferences'))[key];
-      if (typeof preference === 'undefined') throw null;
-      return preference;
-    } catch (e) {
-      return this.defaults[key];
-    }
+    let subject = this.preferencesSubjects.get(key);
+    return subject?.value;
   }
 
   setPreference(key: Preference, value: any) {

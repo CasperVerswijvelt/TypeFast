@@ -2,7 +2,6 @@ import { Injectable, SystemJsNgModuleLoader } from '@angular/core';
 import { WordService } from './word.service';
 import { PreferencesService } from './preferences.service';
 import { Preference, Language, WordMode } from '../models/Preference';
-import { TextFormat } from '../models/TextSource';
 
 @Injectable({
   providedIn: 'root',
@@ -14,8 +13,7 @@ export class DefaultWordService implements WordService {
   private wordsCopy: string[] = [];
   private sentencesCopy: string[][] = [];
 
-  private wordListLoaded = false;
-  private sentenceListLoaded = false;
+  private lastLoadedListMode: WordMode = undefined;
   private currentSource: string;
   private wordListListeners: ((wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) => void)[] = [];
   private languageFetchListeners: ((language: Language, promise: Promise<void>) => void)[] = [];
@@ -23,10 +21,10 @@ export class DefaultWordService implements WordService {
   private DEFAULT_WORD_AMOUNT = 100;
 
   constructor(private preferencesService: PreferencesService) {
-    let tes = preferencesService
-      .getPreferences()
-      .get(Preference.LANGUAGE)
-      .subscribe(this.onLanguagePreferenceUpdated.bind(this));
+    let preferences = this.preferencesService.getPreferences();
+
+    preferences.get(Preference.LANGUAGE).subscribe(this.onLanguagePreferenceUpdated.bind(this));
+    preferences.get(Preference.WORD_MODE).subscribe(this.onWordModePreferenceUpdated.bind(this));
   }
 
   private getTextViaFile(file: File): Promise<string> {
@@ -47,13 +45,12 @@ export class DefaultWordService implements WordService {
     });
   }
 
-  private parseText(format: TextFormat, text: string) {
-    if (format === TextFormat.WORDS || format === TextFormat.BOTH) {
+  private parseText(wordMode: WordMode, text: string) {
+    if (wordMode === WordMode.WORDS) {
       this.words = text.split(/\s+/);
       this.wordsCopy = [];
-      this.wordListLoaded = true;
     }
-    if (format === TextFormat.SENTENCES || format === TextFormat.BOTH) {
+    if (wordMode === WordMode.SENTENCES) {
       let tempSentences = [];
       let lines = text.match(/[^\r\n]+/g);
       lines.forEach((line) => {
@@ -61,70 +58,71 @@ export class DefaultWordService implements WordService {
       });
       this.sentenes = tempSentences;
       this.sentencesCopy = [];
-      this.sentenceListLoaded = true;
     }
   }
 
-  private async loadTextViaUrl(format: TextFormat, url: string): Promise<boolean> {
+  private loadTextViaUrl(format: WordMode, url: string): Promise<void> {
     try {
-      let text = await this.getTextViaUrl(url);
-      this.parseText(format, text);
-      return true;
+      return this.getTextViaUrl(url).then((text) => {
+        this.parseText(format, text);
+      });
     } catch (e) {
-      this.loadDefaultList(format);
+      return Promise.reject(`Couldn't load text via url, err: ${e}`);
     }
-    return false;
   }
 
-  private async loadTextViaFile(format: TextFormat, file: File): Promise<boolean> {
+  private loadTextViaFile(format: WordMode, file: File): Promise<void> {
     try {
-      let text = await this.getTextViaFile(file);
-      this.parseText(format, text);
-      return true;
+      return this.getTextViaFile(file).then((text) => {
+        this.parseText(format, text);
+      });
     } catch (e) {
-      this.loadDefaultList(format);
-      return false;
+      return Promise.reject(`Couldn't load text via file, err: ${e}`);
     }
   }
 
-  private loadDefaultList(format: TextFormat) {
-    if (format === TextFormat.WORDS) {
+  private loadDefaultList(format: WordMode) {
+    if (format === WordMode.WORDS) {
       this.words = ['This', 'list', "doesn't", 'have', 'any', 'words.'];
       this.wordsCopy = [];
-    } else if (format === TextFormat.SENTENCES) {
+    } else if (format === WordMode.SENTENCES) {
       this.sentenes = [['This', 'list', "doesn't", 'have', 'any', 'sentences.']];
       this.sentencesCopy = [];
     }
   }
 
   private onLanguagePreferenceUpdated(value: any) {
-    this.loadLanguage(value);
+    this.loadLanguage(
+      value,
+      this.preferencesService.getPreferences().get(Preference.WORD_MODE).value === WordMode.WORDS
+        ? WordMode.WORDS
+        : WordMode.SENTENCES
+    );
   }
 
-  loadFile(file: File): Promise<void> {
-    return this.loadTextViaFile(TextFormat.BOTH, file).then(() => {
+  private onWordModePreferenceUpdated(value: any) {}
+
+  loadFile(file: File, wordMode: WordMode): Promise<void> {
+    return this.loadTextViaFile(wordMode, file).then(() => {
       this.currentSource = file.name;
       this.notifyWordListSubscribers(WordMode.WORDS, file.name, false);
       this.notifyWordListSubscribers(WordMode.SENTENCES, file.name, false);
     });
   }
 
-  loadLanguage(language: Language): Promise<[void, void]> {
+  loadLanguage(language: Language, wordMode: WordMode): Promise<void> {
+    console.log('loadLanguage', language, wordMode);
     let langString = language.charAt(0).toUpperCase() + (language as string).slice(1);
-    let promise = Promise.all([
-      this.loadTextViaUrl(TextFormat.WORDS, `assets/languages/${language}/words.txt`).then((value: boolean) => {
-        this.notifyWordListSubscribers(WordMode.WORDS, langString, this.shouldReverseScroll(language));
-        this.currentSource = langString;
-        if (!value) this.loadDefaultList(TextFormat.WORDS);
-      }),
-      this.loadTextViaUrl(TextFormat.SENTENCES, `assets/languages/${language}/sentences.txt`).then((value: boolean) => {
-        this.notifyWordListSubscribers(WordMode.SENTENCES, langString, this.shouldReverseScroll(language));
-        this.currentSource = langString;
-        if (!value) this.loadDefaultList(TextFormat.WORDS);
-      }),
-    ]);
 
-    setTimeout(() => {});
+    let promise = this.loadTextViaUrl(wordMode, `assets/languages/${language}/words.txt`)
+      .then(() => {
+        this.lastLoadedListMode = wordMode;
+        this.currentSource = langString;
+        this.notifyWordListSubscribers(wordMode, langString, this.shouldReverseScroll(language));
+      })
+      .catch((e) => {
+        this.loadDefaultList(WordMode.WORDS);
+      });
 
     this.notifyLanguageFetchSubscribers(language, promise);
 
@@ -132,6 +130,16 @@ export class DefaultWordService implements WordService {
   }
 
   getWords(wordCount?: number): string[] {
+    if (this.lastLoadedListMode === WordMode.WORDS) {
+      return this.getRandomWords(wordCount);
+    } else if (this.lastLoadedListMode === WordMode.SENTENCES) {
+      return this.getSentence();
+    } else {
+      return 'No word list has been loaded yet.'.split(' ');
+    }
+  }
+
+  private getRandomWords(wordCount?: number): string[] {
     let res: string[] = [];
 
     wordCount = wordCount !== undefined ? wordCount : this.DEFAULT_WORD_AMOUNT;
@@ -146,7 +154,7 @@ export class DefaultWordService implements WordService {
     return res;
   }
 
-  getSentence(): string[] {
+  private getSentence(): string[] {
     let res: string[] = [];
 
     if (this.sentencesCopy.length === 0) {
@@ -161,11 +169,8 @@ export class DefaultWordService implements WordService {
   ): void {
     this.wordListListeners.push(listenerFunction);
 
-    if (this.wordListLoaded) {
-      listenerFunction(WordMode.WORDS, this.currentSource, false);
-    }
-    if (this.sentenceListLoaded) {
-      listenerFunction(WordMode.SENTENCES, this.currentSource, false);
+    if (this.lastLoadedListMode) {
+      listenerFunction(this.lastLoadedListMode, this.currentSource, false);
     }
   }
 
