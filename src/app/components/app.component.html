@@ -4,4 +4,7 @@
   (preferencesToggled)="onPreferencesToggled($event)"
   (aboutClicked)="preferencesAboutClicked()"
 ></app-preferences>
-<app-about [class.about-show]="showAbout" (onAboutClosed)="closeAbout()"></app-about>
+<app-about
+  [class.about-show]="showAbout"
+  (onAboutClosed)="closeAbout()"
+></app-about>

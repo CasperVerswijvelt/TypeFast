@@ -12,7 +12,9 @@ export class PopperDirective {
   constructor(private readonly el: ElementRef) {}
 
   ngOnInit() {
-    let tooltipEl = this.el.nativeElement.getElementsByClassName('tooltip')[0] as HTMLElement;
+    let tooltipEl = this.el.nativeElement.getElementsByClassName(
+      'tooltip'
+    )[0] as HTMLElement;
 
     if (this.text) {
       tooltipEl = document.createElement('div');

@@ -1,8 +1,13 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
-import { Preference, Language, Theme, WordMode, TextSize } from '../../models/Preference';
+import {
+  Preference,
+  Language,
+  Theme,
+  WordMode,
+  TextSize,
+} from '../../models/Preference';
 import { WordService } from '../../services/word.service';
-import { ThemeService } from '../../services/theme.service';
 import { KeyValue } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 
@@ -27,11 +32,17 @@ export class PreferencesComponent implements OnInit {
   openedPreferencesGroup: string;
   currentlyLoadingLanguage: Language;
 
-  originalOrder = (a: KeyValue<number, string>, b: KeyValue<number, string>): number => {
+  originalOrder = (
+    a: KeyValue<number, string>,
+    b: KeyValue<number, string>
+  ): number => {
     return 0;
   };
 
-  constructor(private preferencesService: PreferencesService, private wordService: WordService) {
+  constructor(
+    private preferencesService: PreferencesService,
+    private wordService: WordService
+  ) {
     this.preferences = preferencesService.getPreferences();
 
     wordService.addLanguageFetchListener(this.onLanguageFetch.bind(this));
@@ -51,41 +62,71 @@ export class PreferencesComponent implements OnInit {
   }
 
   onThemeChanged(event: Event) {
-    this.preferencesService.setPreference(Preference.THEME, (event.target as HTMLInputElement).value);
+    this.preferencesService.setPreference(
+      Preference.THEME,
+      (event.target as HTMLInputElement).value
+    );
   }
 
   onFollowSystemThemeChanged(event: Event) {
-    this.preferencesService.setPreference(Preference.FOLLOW_SYSTEM_THEME, (event.target as HTMLInputElement).checked);
+    this.preferencesService.setPreference(
+      Preference.FOLLOW_SYSTEM_THEME,
+      (event.target as HTMLInputElement).checked
+    );
   }
 
   onLanguageChanged(event: Event) {
-    this.preferencesService.setPreference(Preference.LANGUAGE, (event.target as HTMLInputElement).value);
+    this.preferencesService.setPreference(
+      Preference.LANGUAGE,
+      (event.target as HTMLInputElement).value
+    );
   }
 
   onDefaultWordModeChanged(event: Event) {
-    this.preferencesService.setPreference(Preference.WORD_MODE, (event.target as HTMLInputElement).value);
+    this.preferencesService.setPreference(
+      Preference.WORD_MODE,
+      (event.target as HTMLInputElement).value
+    );
   }
 
   onTextSizeChanged(event: Event) {
-    this.preferencesService.setPreference(Preference.TEXT_SIZE, (event.target as HTMLInputElement).value);
+    this.preferencesService.setPreference(
+      Preference.TEXT_SIZE,
+      (event.target as HTMLInputElement).value
+    );
   }
 
   onReverseScrollChanged(event: Event) {
-    this.preferencesService.setPreference(Preference.REVERSE_SCROLL, (event.target as HTMLInputElement).checked);
+    this.preferencesService.setPreference(
+      Preference.REVERSE_SCROLL,
+      (event.target as HTMLInputElement).checked
+    );
   }
 
   onSmoothScrollingChanged(event: Event) {
-    this.preferencesService.setPreference(Preference.SMOOTH_SCROLLING, (event.target as HTMLInputElement).checked);
+    this.preferencesService.setPreference(
+      Preference.SMOOTH_SCROLLING,
+      (event.target as HTMLInputElement).checked
+    );
   }
 
   onClickLoadCustomList() {
-    var input: HTMLInputElement = document.createElement('input');
+    const input: HTMLInputElement = document.createElement('input');
     input.setAttribute('accept', '.txt');
     input.type = 'file';
 
     input.onchange = input.onchange = (e: Event) => {
-      var file = (<HTMLInputElement>e.target).files[0];
-      this.wordService.loadFile(file, this.preferencesService.getPreference(Preference.WORD_MODE));
+      const file = (<HTMLInputElement>e.target).files[0];
+      this.preferencesService.setPreference(
+        Preference.LANGUAGE,
+        Language.CUSTOM
+      );
+      this.wordService.loadFile(file).then(() => {
+        this.preferencesService.setPreference(
+          Preference.LANGUAGE,
+          Language.CUSTOM
+        );
+      });
     };
 
     input.click();
@@ -96,7 +137,11 @@ export class PreferencesComponent implements OnInit {
   }
 
   onClickResetPreferences() {
-    if (confirm("Are you sure you want to reset your preferences? This can't be undone!") == true) {
+    if (
+      confirm(
+        "Are you sure you want to reset your preferences? This can't be undone!"
+      ) == true
+    ) {
       this.preferencesService.clearPreferences();
     }
   }
@@ -154,6 +199,7 @@ export class PreferencesComponent implements OnInit {
   }
 
   togglePreferencesGroup(group: string) {
-    this.openedPreferencesGroup = this.openedPreferencesGroup === group ? '' : group;
+    this.openedPreferencesGroup =
+      this.openedPreferencesGroup === group ? '' : group;
   }
 }

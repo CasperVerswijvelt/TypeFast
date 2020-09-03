@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Preference, Preferences, Language, Theme, WordMode, TextSize } from '../models/Preference';
+import {
+  Preference,
+  Preferences,
+  Language,
+  Theme,
+  WordMode,
+  TextSize,
+} from '../models/Preference';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
@@ -17,6 +24,17 @@ export class PreferencesService {
     smooth_scrolling: true,
   };
 
+  private preferenceTypes: any = {
+    theme: Theme,
+    word_language: Language,
+    follow_system_theme: 'boolean',
+    default_word_mode: WordMode,
+    reverse_scroll: 'boolean',
+    default_test_duration: 'number',
+    text_size: TextSize,
+    smooth_scrolling: 'boolean',
+  };
+
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();
 
   constructor() {
@@ -29,16 +47,41 @@ export class PreferencesService {
     try {
       // Set default preferences
       for (let defaultPreference in this.defaults) {
-        this.preferencesSubjects.set(defaultPreference, new BehaviorSubject(this.defaults[defaultPreference]));
+        this.preferencesSubjects.set(
+          defaultPreference,
+          new BehaviorSubject(this.defaults[defaultPreference])
+        );
       }
 
       let preferences = JSON.parse(localStorage.getItem('preferences'));
       if (typeof preferences === 'undefined') throw null;
 
       for (let preference in preferences) {
-        this.preferencesSubjects.get(preference).next(preferences[preference]);
+        const preferenceKey = preference;
+        const preferenceValue = preferences[preference];
+
+        if (
+          this.validatePreferenceType(preferenceKey, preferenceValue) &&
+          !this.isTemporaryPreference(preferenceKey, preferenceValue)
+        )
+          this.preferencesSubjects.get(preference)?.next(preferenceValue);
       }
     } catch (e) {}
+  }
+
+  private validatePreferenceType(key: string, value: any) {
+    const type = this.preferenceTypes[key];
+
+    return (
+      typeof type === 'undefined' ||
+      (typeof type === 'string'
+        ? typeof value === type
+        : Object.values(type).includes(value))
+    );
+  }
+
+  private isTemporaryPreference(key: string, value: any) {
+    return key === Preference.LANGUAGE && value == Language.CUSTOM;
   }
 
   getPreferences(): Map<string, BehaviorSubject<any>> {
@@ -51,19 +94,24 @@ export class PreferencesService {
   }
 
   setPreference(key: Preference, value: any) {
-    // Retrieve preferences object
-    let pref: Preferences;
+    if (!this.validatePreferenceType(key, value)) return;
 
-    try {
-      pref = JSON.parse(localStorage.getItem('preferences'));
-      if (pref == null || typeof pref === 'undefined') throw null;
-    } catch (e) {
-      pref = {};
+    if (!this.isTemporaryPreference(key, value)) {
+      // Retrieve preferences object
+      let pref: Preferences;
+
+      try {
+        pref = JSON.parse(localStorage.getItem('preferences'));
+        if (pref == null || typeof pref === 'undefined') throw null;
+      } catch (e) {
+        pref = {};
+      }
+
+      pref[key as string] = value;
+
+      localStorage.setItem('preferences', JSON.stringify(pref));
     }
 
-    pref[key as string] = value;
-
-    localStorage.setItem('preferences', JSON.stringify(pref));
     this.preferencesSubjects.get(key).next(value);
   }
 
@@ -71,7 +119,9 @@ export class PreferencesService {
     if (localStorage.getItem('preferences') !== null) {
       localStorage.removeItem('preferences');
       for (let defaultPreference in this.defaults) {
-        this.preferencesSubjects.get(defaultPreference).next(this.defaults[defaultPreference]);
+        this.preferencesSubjects
+          .get(defaultPreference)
+          .next(this.defaults[defaultPreference]);
       }
     }
   }
@@ -83,7 +133,12 @@ export class PreferencesService {
         let newObj: Preferences = JSON.parse(event.newValue);
 
         Object.keys(this.defaults).forEach((key) => {
-          if (oldObj[key] !== newObj[key]) {
+          const newVal = newObj[key];
+          if (
+            oldObj[key] !== newVal &&
+            this.validatePreferenceType(key, newVal) &&
+            !this.isTemporaryPreference(key, newVal)
+          ) {
             this.preferencesSubjects.get(key).next(newObj[key]);
           }
         });

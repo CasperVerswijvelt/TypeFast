@@ -5,13 +5,12 @@ import { MarkdownModule } from 'ngx-markdown';
 
 import { AppComponent } from './components/app.component';
 import { WordService } from './services/word.service';
-import { DefaultWordService } from './services/default-word.service';
 import { TyperComponent } from './components/typer/typer.component';
 import { TimePipe } from './pipes/time.pipe';
 import { PreferencesService } from './services/preferences.service';
 import { PreferencesComponent } from './components/preferences/preferences.component';
 import { ThemeService } from './services/theme.service';
-import { PopperDirective } from './popper.directive';
+import { PopperDirective } from './directives/popper.directive';
 import { IncorrectWordComponent } from './components/incorrect-word/incorrect-word.component';
 import { AboutComponent } from './components/about/about.component';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
@@ -26,8 +25,13 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     IncorrectWordComponent,
     AboutComponent,
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient })],
-  providers: [{ provide: WordService, useClass: DefaultWordService }, PreferencesService, ThemeService],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    MarkdownModule.forRoot({ loader: HttpClient }),
+  ],
+  providers: [WordService, PreferencesService, ThemeService],
   bootstrap: [AppComponent],
 })
 export class AppModule {

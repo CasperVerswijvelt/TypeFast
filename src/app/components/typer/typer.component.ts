@@ -1,9 +1,20 @@
-import { Component, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
 import { timer, Subscription, BehaviorSubject } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
-import { Preference, WordMode, Language, TextSize } from '../../models/Preference';
+import {
+  Preference,
+  WordMode,
+  Language,
+  TextSize,
+} from '../../models/Preference';
 import { skip } from 'rxjs/operators';
 
 @Component({
@@ -56,28 +67,35 @@ export class TyperComponent implements OnInit {
 
     this.preferences = preferencesService.getPreferences();
 
-    this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION).value;
+    this.testTime = this.preferences.get(
+      Preference.DEFAULT_TEST_DURATION
+    ).value;
     this.smoothScroll = this.preferences.get(Preference.SMOOTH_SCROLLING).value;
   }
 
   ngOnInit(): void {
     this.preferences
-      .get(Preference.WORD_MODE)
-      .pipe(skip(1))
-      .subscribe(this.onDefaultWordModePreferenceUpdated.bind(this));
-    this.preferences
       .get(Preference.REVERSE_SCROLL)
       .pipe(skip(1))
       .subscribe(this.onReverseScrollPreferenceUpdated.bind(this));
-    this.preferences.get(Preference.TEXT_SIZE).pipe(skip(1)).subscribe(this.onTextSizePreferenceUpdated.bind(this));
+    this.preferences
+      .get(Preference.TEXT_SIZE)
+      .pipe(skip(1))
+      .subscribe(this.onTextSizePreferenceUpdated.bind(this));
     this.preferences
       .get(Preference.SMOOTH_SCROLLING)
       .pipe(skip(1))
       .subscribe(this.onSmoothScrollingPreferenceUpdated.bind(this));
 
-    this.containerElement = document.getElementsByClassName('word-container')[0] as HTMLElement;
-    this.inputElement = document.getElementsByClassName('word-input')[0] as HTMLInputElement;
-    this.inputWordCopy = document.getElementsByClassName('word-copy')[0] as HTMLInputElement;
+    this.containerElement = document.getElementsByClassName(
+      'word-container'
+    )[0] as HTMLElement;
+    this.inputElement = document.getElementsByClassName(
+      'word-input'
+    )[0] as HTMLInputElement;
+    this.inputWordCopy = document.getElementsByClassName(
+      'word-copy'
+    )[0] as HTMLInputElement;
 
     this.inputElement.onpaste = (e) => e.preventDefault();
 
@@ -155,7 +173,9 @@ export class TyperComponent implements OnInit {
       }
     } else {
       // Text input doesnt end with whitespace character, update input color
-      const curentWord = this.words[this.currentIndex] ? this.words[this.currentIndex] : '';
+      const curentWord = this.words[this.currentIndex]
+        ? this.words[this.currentIndex]
+        : '';
       const wordInput = this.wordInput ? this.wordInput : '';
       if (curentWord?.slice(0, wordInput.length) !== wordInput) {
         this.inputElement.classList.add('input-incorrect');
@@ -203,7 +223,11 @@ export class TyperComponent implements OnInit {
     this.syncOffset();
   }
 
-  onUpdatedWordList(wordMode: WordMode, wordListName: string, shouldReverseScroll: boolean) {
+  onUpdatedWordList(
+    wordMode: WordMode,
+    wordListName: string,
+    shouldReverseScroll: boolean
+  ) {
     this.reverseScrollWordList = shouldReverseScroll;
     this.wordListName = wordListName;
     this.syncReverseScroll();
@@ -221,9 +245,13 @@ export class TyperComponent implements OnInit {
     this.wordInput = '';
     this.inputElement.value = '';
 
-    this.leftWordOffset = this.leftWordOffset + this.currentWordElement.getBoundingClientRect().width;
+    this.leftWordOffset =
+      this.leftWordOffset +
+      this.currentWordElement.getBoundingClientRect().width;
     this.syncCurrentWordElement();
-    this.rightWordOffset = this.leftWordOffset + this.currentWordElement.getBoundingClientRect().width;
+    this.rightWordOffset =
+      this.leftWordOffset +
+      this.currentWordElement.getBoundingClientRect().width;
     this.syncOffset(true);
 
     this.fillWordList();
@@ -236,7 +264,9 @@ export class TyperComponent implements OnInit {
   }
 
   private syncReverseScroll() {
-    this.reverseScroll = this.preferences.get(Preference.REVERSE_SCROLL).value !== this.reverseScrollWordList;
+    this.reverseScroll =
+      this.preferences.get(Preference.REVERSE_SCROLL).value !==
+      this.reverseScrollWordList;
   }
 
   private syncTextSizeClass() {
@@ -307,24 +337,38 @@ export class TyperComponent implements OnInit {
   calculateStats() {
     let stats = {} as TestResultsStats;
 
-    let totalCharacterCount = this.testResults.correctCharacterCount + this.testResults.incorrectCharacterCount;
+    let totalCharacterCount =
+      this.testResults.correctCharacterCount +
+      this.testResults.incorrectCharacterCount;
 
-    let totalWordCount = this.testResults.correctWordCount + this.testResults.incorrectWordCount;
+    let totalWordCount =
+      this.testResults.correctWordCount + this.testResults.incorrectWordCount;
 
-    stats.characterAccuracy = totalCharacterCount ? this.testResults.correctCharacterCount / totalCharacterCount : 0;
-    stats.wordAccuracy = totalWordCount ? this.testResults.correctWordCount / totalWordCount : 0;
+    stats.characterAccuracy = totalCharacterCount
+      ? this.testResults.correctCharacterCount / totalCharacterCount
+      : 0;
+    stats.wordAccuracy = totalWordCount
+      ? this.testResults.correctWordCount / totalWordCount
+      : 0;
     stats.cpm = this.testResults.timeElapsed
-      ? (this.testResults.correctCharacterCount / this.testResults.timeElapsed) * 60
+      ? (this.testResults.correctCharacterCount /
+          this.testResults.timeElapsed) *
+        60
       : 0;
     stats.wpm = this.testResults.timeElapsed
-      ? (this.testResults.correctCharacterCount / 5 / this.testResults.timeElapsed) * 60
+      ? (this.testResults.correctCharacterCount /
+          5 /
+          this.testResults.timeElapsed) *
+        60
       : 0;
 
     this.testResults.stats = stats;
   }
 
   syncCurrentWordElement() {
-    this.currentWordElement = this.containerElement.children[this.currentIndex] as HTMLElement;
+    this.currentWordElement = this.containerElement.children[
+      this.currentIndex
+    ] as HTMLElement;
   }
 
   syncOffset(disableTransition = false) {
@@ -339,7 +383,8 @@ export class TyperComponent implements OnInit {
 
       if (disableTransition) this.inputElement.style.transition = 'none';
 
-      this.inputElement.style.paddingLeft = 'calc(50% - ' + this.leftCharacterOffset + 'px)';
+      this.inputElement.style.paddingLeft =
+        'calc(50% - ' + this.leftCharacterOffset + 'px)';
       this.inputElement.getClientRects(); // Trigger css reflow
       this.inputElement.style.removeProperty('transition');
     } else {
@@ -363,7 +408,11 @@ export class TyperComponent implements OnInit {
     this.inputElement.disabled = true;
 
     // Add right/wrong characters for current word
-    this.registerWord(this.wordInput.trim(), this.words[this.currentIndex].slice(0, this.wordInput.length), false);
+    this.registerWord(
+      this.wordInput.trim(),
+      this.words[this.currentIndex].slice(0, this.wordInput.length),
+      false
+    );
   }
 
   private breakPoints = [
@@ -424,7 +473,10 @@ export class TyperComponent implements OnInit {
 
     this.testTime -= decrease;
 
-    this.preferencesService.setPreference(Preference.DEFAULT_TEST_DURATION, this.testTime);
+    this.preferencesService.setPreference(
+      Preference.DEFAULT_TEST_DURATION,
+      this.testTime
+    );
 
     this.updateTimer(0);
     this.focusInput();
@@ -445,7 +497,10 @@ export class TyperComponent implements OnInit {
 
     this.testTime += increase;
 
-    this.preferencesService.setPreference(Preference.DEFAULT_TEST_DURATION, this.testTime);
+    this.preferencesService.setPreference(
+      Preference.DEFAULT_TEST_DURATION,
+      this.testTime
+    );
 
     this.updateTimer(0);
     this.focusInput();
