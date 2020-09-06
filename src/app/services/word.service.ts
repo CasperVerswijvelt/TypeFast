@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PreferencesService } from './preferences.service';
 import { Preference, Language, WordMode } from '../models/Preference';
 import { skip } from 'rxjs/operators';
+import { LanguageService } from './language.service';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +23,7 @@ export class WordService {
   private currentSource: string;
   private wordListListeners: ((
     wordMode: WordMode,
+
     wordListName: string,
     shouldReverseScroll: boolean
   ) => void)[] = [];
@@ -31,6 +33,9 @@ export class WordService {
   ) => void)[] = [];
 
   private DEFAULT_WORD_AMOUNT = 100;
+
+  private LANGUAGE_PREFERENCE_CHANGED =
+    'Language preference changed during loading, cancelling.';
 
   constructor(private preferencesService: PreferencesService) {
     let preferences = this.preferencesService.getPreferences();
@@ -121,20 +126,23 @@ export class WordService {
   }
 
   loadLanguage(language: Language, wordMode: WordMode): Promise<void> {
-    console.log('loadLanguage', language, wordMode);
-    const langString =
-      language.charAt(0).toUpperCase() + (language as string).slice(1);
-
-    const textPromise =
+    const langString = this.getLanguageString(language);
+    const getTextPromise =
       language === Language.CUSTOM
         ? Promise.resolve(this.cachedFileText)
         : this.getTextViaUrl(`assets/languages/${language}/${wordMode}.txt`);
 
-    const promise = textPromise
-      .then((text) => {
-        this.parseText(wordMode, text);
-      })
-      .then(() => {
+    const promise = getTextPromise
+      .then((text: string) => {
+        // Only parse text if this language is still the preferred language, otherwise reject
+        if (
+          this.preferencesService.getPreference(Preference.LANGUAGE) ===
+          language
+        ) {
+          this.parseText(wordMode, text);
+        } else {
+          return Promise.reject(this.LANGUAGE_PREFERENCE_CHANGED);
+        }
         this.lastLoadedListMode = wordMode;
         this.currentSource = langString;
         this.notifyWordListSubscribers(
@@ -144,7 +152,8 @@ export class WordService {
         );
       })
       .catch((e) => {
-        this.loadDefaultList(WordMode.WORDS);
+        if (e !== this.LANGUAGE_PREFERENCE_CHANGED)
+          this.loadDefaultList(WordMode.WORDS);
       });
 
     this.notifyLanguageFetchSubscribers(language, promise);
@@ -193,6 +202,13 @@ export class WordService {
       Math.floor(Math.random() * this.sentencesCopy.length),
       1
     )[0];
+  }
+
+  getLanguageString(language: Language) {
+    let langString = LanguageService.getLanguageString(language);
+    if (language === Language.CUSTOM && this.cachedFileName)
+      langString += `: ${this.cachedFileName}`;
+    return langString;
   }
 
   addWordListListener(

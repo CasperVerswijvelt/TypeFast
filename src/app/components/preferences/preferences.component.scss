@@ -248,6 +248,9 @@ $preferences-entry-main-height: 37px;
     }
 
     .preferences-group-title-value {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
       padding-left: $preferences-entry-padding-side;
     }
 

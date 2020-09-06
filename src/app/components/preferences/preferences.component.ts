@@ -10,6 +10,7 @@ import {
 import { WordService } from '../../services/word.service';
 import { KeyValue } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
+import { LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-preferences',
@@ -52,7 +53,13 @@ export class PreferencesComponent implements OnInit {
 
   private onLanguageFetch(language: Language, promise: Promise<any>) {
     this.currentlyLoadingLanguage = language;
-    promise.then(() => (this.currentlyLoadingLanguage = undefined));
+    promise.then(() => {
+      if (
+        this.preferencesService.getPreference(Preference.LANGUAGE) === language
+      ) {
+        this.currentlyLoadingLanguage = undefined;
+      }
+    });
   }
 
   onPreferencesIconClicked() {
@@ -76,10 +83,15 @@ export class PreferencesComponent implements OnInit {
   }
 
   onLanguageChanged(event: Event) {
-    this.preferencesService.setPreference(
-      Preference.LANGUAGE,
-      (event.target as HTMLInputElement).value
-    );
+    const language = (event.target as HTMLInputElement).value;
+    const setPreference = () =>
+      this.preferencesService.setPreference(Preference.LANGUAGE, language);
+    if (language === Language.CUSTOM) {
+      this.currentlyLoadingLanguage = Language.CUSTOM;
+      this.loadCustomList().then(setPreference);
+    } else {
+      setPreference();
+    }
   }
 
   onDefaultWordModeChanged(event: Event) {
@@ -110,28 +122,6 @@ export class PreferencesComponent implements OnInit {
     );
   }
 
-  onClickLoadCustomList() {
-    const input: HTMLInputElement = document.createElement('input');
-    input.setAttribute('accept', '.txt');
-    input.type = 'file';
-
-    input.onchange = input.onchange = (e: Event) => {
-      const file = (<HTMLInputElement>e.target).files[0];
-      this.preferencesService.setPreference(
-        Preference.LANGUAGE,
-        Language.CUSTOM
-      );
-      this.wordService.loadFile(file).then(() => {
-        this.preferencesService.setPreference(
-          Preference.LANGUAGE,
-          Language.CUSTOM
-        );
-      });
-    };
-
-    input.click();
-  }
-
   onClickAbout() {
     this.aboutClicked.emit();
   }
@@ -146,56 +136,29 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
+  loadCustomList() {
+    return new Promise((resolve, reject) => {
+      const input: HTMLInputElement = document.createElement('input');
+      input.setAttribute('accept', '.txt');
+      input.type = 'file';
+
+      input.onchange = input.onchange = (e: Event) => {
+        const file = (<HTMLInputElement>e.target).files[0];
+        this.wordService.loadFile(file).then(() => {
+          resolve();
+        });
+      };
+
+      input.click();
+    });
+  }
+
   getISOForLangauge(language: Language): string {
-    switch (language) {
-      case Language.DUTCH:
-        return 'nl';
-      case Language.ENGLISH_BRITISH:
-        return 'en-gb';
-      case Language.ENGLISH_AMERICAN:
-        return 'en-us';
-      case Language.ITALIAN:
-        return 'it';
-      case Language.DUTCH:
-        return 'be';
-      case Language.HINDI:
-        return 'in';
-      case Language.HUNGARIAN:
-        return 'hu';
-      case Language.JAPANESE:
-        return 'jp';
-      case Language.KOREAN:
-        return 'kr';
-      case Language.CHINESE:
-        return 'cn';
-      case Language.RUSSIAN:
-        return 'ru';
-      case Language.SPANISH:
-        return 'es';
-      case Language.PORTUGUESE:
-        return 'pt';
-      case Language.FRENCH:
-        return 'fr';
-      case Language.GERMAN:
-        return 'de';
-      case Language.ARABIC:
-        return 'sa';
-      case Language.PROGRAMMING:
-        return 'dev';
-      default:
-        return 'unknown';
-    }
+    return LanguageService.getLanguageISO(language);
   }
 
   getNameForLanguage(language: Language): string {
-    switch (language) {
-      case Language.ENGLISH_BRITISH:
-        return 'english (UK)';
-      case Language.ENGLISH_AMERICAN:
-        return 'english (US)';
-      default:
-        return language as string;
-    }
+    return this.wordService.getLanguageString(language);
   }
 
   togglePreferencesGroup(group: string) {

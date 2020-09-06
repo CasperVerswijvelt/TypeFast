@@ -8,6 +8,7 @@ import { WordService } from './services/word.service';
 import { TyperComponent } from './components/typer/typer.component';
 import { TimePipe } from './pipes/time.pipe';
 import { PreferencesService } from './services/preferences.service';
+import { LanguageService } from './services/language.service';
 import { PreferencesComponent } from './components/preferences/preferences.component';
 import { ThemeService } from './services/theme.service';
 import { PopperDirective } from './directives/popper.directive';
@@ -31,7 +32,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     HttpClientModule,
     MarkdownModule.forRoot({ loader: HttpClient }),
   ],
-  providers: [WordService, PreferencesService, ThemeService],
+  providers: [WordService, PreferencesService, ThemeService, LanguageService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
