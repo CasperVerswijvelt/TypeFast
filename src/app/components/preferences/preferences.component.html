@@ -42,24 +42,17 @@
           </div>
         </div>
         <div class="preferences-group-entries preferences-group-entries-theme">
-          <label
+          <div
             class="preferences-entry preferences-select-option"
             *ngFor="let them of Theme | keyvalue"
+            [class.selected]="
+              preferences.get(Preference.THEME).value === them.value
+            "
+            (click)="onThemeChanged(them.value)"
           >
-            <div
-              class="theme-icon"
-              [ngClass]="'theme-icon-' + them.value"
-            ></div>
-            <input
-              type="radio"
-              name="theme"
-              [checked]="preferences.get(Preference.THEME).value === them.value"
-              [value]="them.value"
-              (change)="onThemeChanged($event)"
-            />
+            <div class="label">{{ them.value }}</div>
             <span class="checkmark"></span>
-            {{ them.value }}
-          </label>
+          </div>
 
           <div class="preferences-entry preferences-toggle-entry">
             <label class="preferences-toggle-label" for="follow-system">
@@ -119,22 +112,19 @@
         <div
           class="preferences-group-entries preferences-group-entries-word-mode"
         >
-          <label
+          <div
             class="preferences-entry preferences-select-option"
             *ngFor="let mode of WordMode | keyvalue"
+            [class.selected]="
+              preferences.get(Preference.WORD_MODE).value === mode.value
+            "
+            (click)="onDefaultWordModeChanged(mode.value)"
           >
-            <input
-              type="radio"
-              name="word_mode"
-              [checked]="
-                preferences.get(Preference.WORD_MODE).value === mode.value
-              "
-              [value]="mode.value"
-              (change)="onDefaultWordModeChanged($event)"
-            />
             <span class="checkmark"></span>
-            {{ mode.value }}
-          </label>
+            <div class="label">
+              {{ mode.value }}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -175,23 +165,18 @@
         <div
           class="preferences-group-entries preferences-group-entries-language"
         >
-          <label
+          <div
             class="preferences-entry preferences-select-option"
             *ngFor="let lang of Language | keyvalue: originalOrder"
+            [class.selected]="
+              preferences.get(Preference.LANGUAGE).value === lang.value
+            "
+            (click)="onLanguageChanged(lang.value)"
           >
             <div
               class="flag-icon"
               [ngClass]="'flag-icon-' + getISOForLangauge(lang.value)"
             ></div>
-            <input
-              type="radio"
-              name="language"
-              [checked]="
-                preferences.get(Preference.LANGUAGE).value === lang.value
-              "
-              [value]="lang.value"
-              (change)="onLanguageChanged($event)"
-            />
             <span
               class="checkmark"
               [class.checkmark-loading]="
@@ -213,45 +198,11 @@
                 <div></div>
               </div>
             </span>
-            {{ getNameForLanguage(lang.value) }}
-          </label>
+            <div class="label">
+              {{ getNameForLanguage(lang.value) }}
+            </div>
+          </div>
         </div>
-      </div>
-
-      <!-- Reverse scroll -->
-      <div
-        class="preferences-entry preferences-entry-main preferences-toggle-entry"
-      >
-        <label class="preferences-toggle-label" for="smooth-scrolling">
-          Smooth scrolling
-        </label>
-        <label class="preferences-toggle-switch switch">
-          <input
-            type="checkbox"
-            [ngModel]="preferences.get(Preference.SMOOTH_SCROLLING).value"
-            (change)="onSmoothScrollingChanged($event)"
-            id="smooth-scrolling"
-          />
-          <span class="slider round"></span>
-        </label>
-      </div>
-
-      <!-- Reverse scroll -->
-      <div
-        class="preferences-entry preferences-entry-main preferences-toggle-entry"
-      >
-        <label class="preferences-toggle-label" for="reverse-scroll">
-          Reverse scroll
-        </label>
-        <label class="preferences-toggle-switch switch">
-          <input
-            type="checkbox"
-            [ngModel]="preferences.get(Preference.REVERSE_SCROLL).value"
-            (change)="onReverseScrollChanged($event)"
-            id="reverse-scroll"
-          />
-          <span class="slider round"></span>
-        </label>
       </div>
 
       <!-- Text size preferences group -->
@@ -296,19 +247,90 @@
           <label
             class="preferences-entry preferences-select-option"
             *ngFor="let size of TextSize | keyvalue"
+            [class.selected]="
+              preferences.get(Preference.TEXT_SIZE).value === size.value
+            "
+            (click)="onTextSizeChanged(size.value)"
           >
-            <input
-              type="radio"
-              name="text_size"
-              [checked]="
-                preferences.get(Preference.TEXT_SIZE).value === size.value
-              "
-              [value]="size.value"
-              (change)="onTextSizeChanged($event)"
-            />
             <span class="checkmark"></span>
-            {{ size.value }}
+            <div class="label">
+              {{ size.value }}
+            </div>
           </label>
+        </div>
+      </div>
+
+      <!-- Scrolling preferences group -->
+      <div
+        class="preferences-group"
+        [class.preferences-group-opened]="
+          openedPreferencesGroup === 'scrolling'
+        "
+      >
+        <div
+          class="preferences-group-title"
+          (click)="togglePreferencesGroup('scrolling')"
+        >
+          <div class="preferences-group-title-key">Scrolling options</div>
+          <div class="preferences-group-title-arrow">
+            <svg
+              version="1.1"
+              id="Layer_1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              x="0px"
+              y="0px"
+              viewBox="0 0 330.002 330.002"
+              style="enable-background: new 0 0 330.002 330.002"
+              xml:space="preserve"
+            >
+              <path
+                id="XMLID_105_"
+                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
+	c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
+	C331.972,223.623,330.628,214.221,324.001,209.25z"
+              />
+            </svg>
+          </div>
+        </div>
+        <div
+          class="preferences-group-entries preferences-group-entries-scrolling"
+        >
+          <!-- Reverse scroll -->
+          <div
+            class="preferences-entry preferences-entry-main preferences-toggle-entry"
+          >
+            <label class="preferences-toggle-label" for="smooth-scrolling">
+              Smooth scrolling
+            </label>
+            <label class="preferences-toggle-switch switch">
+              <input
+                type="checkbox"
+                [ngModel]="preferences.get(Preference.SMOOTH_SCROLLING).value"
+                (change)="onSmoothScrollingChanged($event)"
+                id="smooth-scrolling"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
+
+          <!-- Reverse scroll -->
+          <div
+            class="preferences-entry preferences-entry-main preferences-toggle-entry"
+          >
+            <label class="preferences-toggle-label" for="reverse-scroll">
+              Reverse scroll
+            </label>
+            <label class="preferences-toggle-switch switch">
+              <input
+                type="checkbox"
+                [ngModel]="preferences.get(Preference.REVERSE_SCROLL).value"
+                (change)="onReverseScrollChanged($event)"
+                id="reverse-scroll"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
         </div>
       </div>
 

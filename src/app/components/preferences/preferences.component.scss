@@ -144,19 +144,27 @@ $preferences-entry-main-height: 37px;
     display: none;
   }
 
+  .label {
+    display: inline;
+  }
+
   .spinner {
     display: none;
   }
 
+  .flag-icon {
+    margin-right: 5px;
+  }
+
   /* Show the loader when loading */
-  input:checked ~ .checkmark.checkmark-loading {
+  &.selected .checkmark.checkmark-loading {
     .spinner {
       display: block;
     }
   }
 
   /* Show the checkmark when checked */
-  input:checked ~ .checkmark:not(.checkmark-loading):after {
+  &.selected .checkmark:not(.checkmark-loading):after {
     display: block;
   }
 
@@ -169,10 +177,6 @@ $preferences-entry-main-height: 37px;
     border: solid white;
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
-  }
-
-  .flag-icon {
-    margin-right: 5px;
   }
 }
 
@@ -252,6 +256,7 @@ $preferences-entry-main-height: 37px;
       text-overflow: ellipsis;
       overflow: hidden;
       padding-left: $preferences-entry-padding-side;
+      opacity: 0.7;
     }
 
     .preferences-group-title-key {
@@ -304,6 +309,10 @@ $preferences-entry-main-height: 37px;
 
       &.preferences-group-entries-word-mode {
         max-height: 62px;
+      }
+
+      &.preferences-group-entries-scrolling {
+        max-height: 74px;
       }
 
       &.preferences-group-entries-text-size {

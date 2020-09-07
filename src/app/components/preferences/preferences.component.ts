@@ -68,11 +68,9 @@ export class PreferencesComponent implements OnInit {
     this.openedPreferencesGroup = '';
   }
 
-  onThemeChanged(event: Event) {
-    this.preferencesService.setPreference(
-      Preference.THEME,
-      (event.target as HTMLInputElement).value
-    );
+  onThemeChanged(theme: Theme) {
+    this.preferencesService.setPreference(Preference.THEME, theme);
+    console.log(theme);
   }
 
   onFollowSystemThemeChanged(event: Event) {
@@ -82,9 +80,7 @@ export class PreferencesComponent implements OnInit {
     );
   }
 
-  onLanguageChanged(event: Event) {
-    const language = (event.target as HTMLInputElement).value;
-
+  onLanguageChanged(language: Language) {
     const setPreference = () =>
       this.preferencesService.setPreference(Preference.LANGUAGE, language);
     const setCustomLanguageLoading = (file: File) => {
@@ -103,18 +99,12 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  onDefaultWordModeChanged(event: Event) {
-    this.preferencesService.setPreference(
-      Preference.WORD_MODE,
-      (event.target as HTMLInputElement).value
-    );
+  onDefaultWordModeChanged(wordMode: WordMode) {
+    this.preferencesService.setPreference(Preference.WORD_MODE, wordMode);
   }
 
-  onTextSizeChanged(event: Event) {
-    this.preferencesService.setPreference(
-      Preference.TEXT_SIZE,
-      (event.target as HTMLInputElement).value
-    );
+  onTextSizeChanged(textSize: TextSize) {
+    this.preferencesService.setPreference(Preference.TEXT_SIZE, textSize);
   }
 
   onReverseScrollChanged(event: Event) {
