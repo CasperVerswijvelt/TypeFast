@@ -84,11 +84,20 @@ export class PreferencesComponent implements OnInit {
 
   onLanguageChanged(event: Event) {
     const language = (event.target as HTMLInputElement).value;
+
     const setPreference = () =>
       this.preferencesService.setPreference(Preference.LANGUAGE, language);
-    if (language === Language.CUSTOM) {
+    const setCustomLanguageLoading = (file: File) => {
       this.currentlyLoadingLanguage = Language.CUSTOM;
-      this.loadCustomList().then(setPreference);
+      return file;
+    };
+    const loadFile = (file: File) => this.wordService.loadFile(file);
+
+    if (language === Language.CUSTOM) {
+      this.selectFile()
+        .then(setCustomLanguageLoading)
+        .then(loadFile)
+        .then(setPreference);
     } else {
       setPreference();
     }
@@ -136,17 +145,14 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  loadCustomList() {
+  selectFile() {
     return new Promise((resolve, reject) => {
       const input: HTMLInputElement = document.createElement('input');
       input.setAttribute('accept', '.txt');
       input.type = 'file';
 
-      input.onchange = input.onchange = (e: Event) => {
-        const file = (<HTMLInputElement>e.target).files[0];
-        this.wordService.loadFile(file).then(() => {
-          resolve();
-        });
+      input.onchange = (e: Event) => {
+        resolve((<HTMLInputElement>e.target).files[0]);
       };
 
       input.click();
