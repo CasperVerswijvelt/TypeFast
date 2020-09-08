@@ -27,11 +27,9 @@ export class AppComponent {
 
   preferencesAboutClicked() {
     this.showAbout = true;
-    console.log(this.showAbout);
   }
 
   closeAbout() {
     this.showAbout = false;
-    console.log(this.showAbout);
   }
 }
