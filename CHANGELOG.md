@@ -10,6 +10,10 @@
 
 - Removed words with accented characters from English language
 
+### Improvements
+
+- Improved preferences menu and loading of languages
+
 ## 1.0.2 - 31-08-2020
 
 ### New
