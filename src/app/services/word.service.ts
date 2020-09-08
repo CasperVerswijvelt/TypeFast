@@ -29,6 +29,7 @@ export class WordService {
   ) => void)[] = [];
   private languageFetchListeners: ((
     language: Language,
+    wordMode: WordMode,
     promise: Promise<void>
   ) => void)[] = [];
 
@@ -53,52 +54,6 @@ export class WordService {
       this.preferencesService.getPreference(Preference.LANGUAGE),
       this.preferencesService.getPreference(Preference.WORD_MODE)
     );
-  }
-
-  private getTextViaFile(file: File): Promise<string> {
-    return new Promise((resolve, reject) => {
-      if (file.type !== 'text/plain') reject('File is not a text file');
-      let fr = new FileReader();
-      fr.onload = () => {
-        resolve(fr.result as string);
-      };
-      fr.readAsText(file);
-    });
-  }
-
-  private getTextViaUrl(url: string): Promise<string> {
-    return fetch(url).then((response) => {
-      if (response.status !== 200)
-        return Promise.reject("Text file couldn't be fetched");
-      return response.text();
-    });
-  }
-
-  private parseText(wordMode: WordMode, text: string) {
-    if (wordMode === WordMode.WORDS) {
-      this.words = text.split(/\s+/);
-      this.wordsCopy = [];
-    } else if (wordMode === WordMode.SENTENCES) {
-      let tempSentences = [];
-      let lines = text.match(/[^\r\n]+/g);
-      lines.forEach((line) => {
-        tempSentences.push(line.split(/\s+/));
-      });
-      this.sentenes = tempSentences;
-      this.sentencesCopy = [];
-    }
-  }
-
-  private loadDefaultList(format: WordMode) {
-    if (format === WordMode.WORDS) {
-      this.words = ['This', 'list', "doesn't", 'have', 'any', 'words.'];
-      this.wordsCopy = [];
-    } else if (format === WordMode.SENTENCES) {
-      this.sentenes = [
-        ['This', 'list', "doesn't", 'have', 'any', 'sentences.'],
-      ];
-      this.sentencesCopy = [];
-    }
   }
 
   private onLanguagePreferenceUpdated(value: any) {
@@ -156,7 +111,7 @@ export class WordService {
           this.loadDefaultList(WordMode.WORDS);
       });
 
-    this.notifyLanguageFetchSubscribers(language, promise);
+    this.notifyLanguageFetchSubscribers(language, wordMode, promise);
 
     return promise;
   }
@@ -168,6 +123,87 @@ export class WordService {
       return this.getSentence();
     } else {
       return 'No word list has been loaded yet.'.split(' ');
+    }
+  }
+
+  getCachedFileName() {
+    return this.cachedFileName;
+  }
+
+  getLanguageString(language: Language) {
+    let langString = LanguageService.getLanguageString(language);
+    if (language === Language.CUSTOM && this.cachedFileName)
+      langString = `'${this.cachedFileName}'`;
+    return langString;
+  }
+
+  addWordListListener(
+    listenerFunction: (
+      wordMode: WordMode,
+      wordListName: string,
+      shouldReverseScroll: boolean
+    ) => void
+  ): void {
+    this.wordListListeners.push(listenerFunction);
+
+    if (this.lastLoadedListMode) {
+      listenerFunction(this.lastLoadedListMode, this.currentSource, false);
+    }
+  }
+
+  addLanguageFetchListener(
+    onLanguageFetch: (
+      language: Language,
+      wordMode: WordMode,
+      promise: Promise<void>
+    ) => void
+  ): void {
+    this.languageFetchListeners.push(onLanguageFetch);
+  }
+
+  private getTextViaFile(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      if (file.type !== 'text/plain') reject('File is not a text file');
+      let fr = new FileReader();
+      fr.onload = () => {
+        resolve(fr.result as string);
+      };
+      fr.readAsText(file);
+    });
+  }
+
+  private getTextViaUrl(url: string): Promise<string> {
+    return fetch(url).then((response) => {
+      if (response.status !== 200)
+        return Promise.reject("Text file couldn't be fetched");
+      return response.text();
+    });
+  }
+
+  private parseText(wordMode: WordMode, text: string) {
+    if (wordMode === WordMode.WORDS) {
+      this.words = text.split(/\s+/);
+      this.wordsCopy = [];
+    } else if (wordMode === WordMode.SENTENCES) {
+      let tempSentences = [];
+      let lines = text.match(/[^\r\n]+/g);
+      lines.forEach((line) => {
+        tempSentences.push(line.split(/\s+/));
+      });
+      this.sentenes = tempSentences;
+      this.sentencesCopy = [];
+    }
+  }
+
+  private loadDefaultList(format: WordMode) {
+    if (format === WordMode.WORDS) {
+      this.words = ['This', 'list', "doesn't", 'have', 'any', 'words.'];
+      this.wordsCopy = [];
+    } else if (format === WordMode.SENTENCES) {
+      this.sentenes = [
+        ['This', 'list', "doesn't", 'have', 'any', 'sentences.'],
+      ];
+      this.sentencesCopy = [];
     }
   }
 
@@ -204,33 +240,6 @@ export class WordService {
     )[0];
   }
 
-  getLanguageString(language: Language) {
-    let langString = LanguageService.getLanguageString(language);
-    if (language === Language.CUSTOM && this.cachedFileName)
-      langString += `: ${this.cachedFileName}`;
-    return langString;
-  }
-
-  addWordListListener(
-    listenerFunction: (
-      wordMode: WordMode,
-      wordListName: string,
-      shouldReverseScroll: boolean
-    ) => void
-  ): void {
-    this.wordListListeners.push(listenerFunction);
-
-    if (this.lastLoadedListMode) {
-      listenerFunction(this.lastLoadedListMode, this.currentSource, false);
-    }
-  }
-
-  addLanguageFetchListener(
-    onLanguageFetch: (language: Language, promise: Promise<void>) => void
-  ): void {
-    this.languageFetchListeners.push(onLanguageFetch);
-  }
-
   private notifyWordListSubscribers(
     wordMode: WordMode,
     wordListName: string,
@@ -243,10 +252,11 @@ export class WordService {
 
   private notifyLanguageFetchSubscribers(
     language: Language,
+    wordMode: WordMode,
     promise: Promise<any>
   ) {
     this.languageFetchListeners.forEach((listener) =>
-      listener(language, promise)
+      listener(language, wordMode, promise)
     );
   }
 

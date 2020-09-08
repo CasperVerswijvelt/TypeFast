@@ -10,6 +10,7 @@ export enum Preference {
 }
 
 export enum Language {
+  CUSTOM = 'custom',
   ARABIC = 'arabic',
   CHINESE = 'chinese',
   DUTCH = 'dutch',
@@ -26,7 +27,6 @@ export enum Language {
   RUSSIAN = 'russian',
   SPANISH = 'spanish',
   PROGRAMMING = 'programming',
-  CUSTOM = 'custom',
 }
 
 export enum Theme {

@@ -32,6 +32,7 @@ export class PreferencesComponent implements OnInit {
 
   openedPreferencesGroup: string;
   currentlyLoadingLanguage: Language;
+  currentlyLoadingWordMode: WordMode;
 
   originalOrder = (
     a: KeyValue<number, string>,
@@ -51,13 +52,19 @@ export class PreferencesComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  private onLanguageFetch(language: Language, promise: Promise<any>) {
+  private onLanguageFetch(
+    language: Language,
+    wordMode: WordMode,
+    promise: Promise<any>
+  ) {
     this.currentlyLoadingLanguage = language;
+    this.currentlyLoadingWordMode = wordMode;
     promise.then(() => {
       if (
         this.preferencesService.getPreference(Preference.LANGUAGE) === language
       ) {
         this.currentlyLoadingLanguage = undefined;
+        this.currentlyLoadingWordMode = undefined;
       }
     });
   }
@@ -69,8 +76,11 @@ export class PreferencesComponent implements OnInit {
   }
 
   onThemeChanged(theme: Theme) {
-    this.preferencesService.setPreference(Preference.THEME, theme);
-    console.log(theme);
+    const themeChanged =
+      theme !== this.preferencesService.getPreference(Preference.THEME);
+
+    if (themeChanged)
+      this.preferencesService.setPreference(Preference.THEME, theme);
   }
 
   onFollowSystemThemeChanged(event: Event) {
@@ -89,22 +99,43 @@ export class PreferencesComponent implements OnInit {
     };
     const loadFile = (file: File) => this.wordService.loadFile(file);
 
-    if (language === Language.CUSTOM) {
-      this.selectFile()
-        .then(setCustomLanguageLoading)
-        .then(loadFile)
-        .then(setPreference);
+    const oldLanguage = this.preferencesService.getPreference(
+      Preference.LANGUAGE
+    );
+    const languageChanged = oldLanguage !== language;
+
+    if (languageChanged) {
+      if (language === Language.CUSTOM && !this.hasCachedFile()) {
+        this.selectFile()
+          .then(setCustomLanguageLoading)
+          .then(loadFile)
+          .then(setPreference);
+      } else {
+        setPreference();
+      }
     } else {
-      setPreference();
+      // Language reselected
+      if (language === Language.CUSTOM) {
+        this.selectFile()
+          .then(setCustomLanguageLoading)
+          .then(loadFile)
+          .then(setPreference);
+      }
     }
   }
 
   onDefaultWordModeChanged(wordMode: WordMode) {
-    this.preferencesService.setPreference(Preference.WORD_MODE, wordMode);
+    const wordModeChanged =
+      wordMode !== this.preferencesService.getPreference(Preference.WORD_MODE);
+    if (wordModeChanged)
+      this.preferencesService.setPreference(Preference.WORD_MODE, wordMode);
   }
 
   onTextSizeChanged(textSize: TextSize) {
-    this.preferencesService.setPreference(Preference.TEXT_SIZE, textSize);
+    const textSizeChanged =
+      textSize !== this.preferencesService.getPreference(Preference.TEXT_SIZE);
+    if (textSizeChanged)
+      this.preferencesService.setPreference(Preference.TEXT_SIZE, textSize);
   }
 
   onReverseScrollChanged(event: Event) {
@@ -160,5 +191,13 @@ export class PreferencesComponent implements OnInit {
   togglePreferencesGroup(group: string) {
     this.openedPreferencesGroup =
       this.openedPreferencesGroup === group ? '' : group;
+  }
+
+  getCachedFileName() {
+    return this.wordService.getCachedFileName()?.trim();
+  }
+
+  hasCachedFile() {
+    return this.wordService.getCachedFileName()?.trim().length;
   }
 }

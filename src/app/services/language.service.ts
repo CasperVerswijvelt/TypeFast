@@ -43,6 +43,8 @@ export class LanguageService {
         return 'sa';
       case Language.PROGRAMMING:
         return 'dev';
+      case Language.CUSTOM:
+        return 'custom';
       default:
         return 'unknown';
     }

@@ -43,7 +43,7 @@
         </div>
         <div class="preferences-group-entries preferences-group-entries-theme">
           <div
-            class="preferences-entry preferences-select-option"
+            class="preferences-entry preferences-select-option capitalize"
             *ngFor="let them of Theme | keyvalue"
             [class.selected]="
               preferences.get(Preference.THEME).value === them.value
@@ -113,14 +113,34 @@
           class="preferences-group-entries preferences-group-entries-word-mode"
         >
           <div
-            class="preferences-entry preferences-select-option"
+            class="preferences-entry preferences-select-option capitalize"
             *ngFor="let mode of WordMode | keyvalue"
             [class.selected]="
               preferences.get(Preference.WORD_MODE).value === mode.value
             "
             (click)="onDefaultWordModeChanged(mode.value)"
           >
-            <span class="checkmark"></span>
+            <span
+              class="checkmark"
+              [class.checkmark-loading]="
+                currentlyLoadingWordMode === mode.value
+              "
+            >
+              <div class="spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            </span>
             <div class="label">
               {{ mode.value }}
             </div>
@@ -138,7 +158,7 @@
           (click)="togglePreferencesGroup('language')"
         >
           <div class="preferences-group-title-key">Language</div>
-          <div class="preferences-group-title-value capitalize">
+          <div class="preferences-group-title-value">
             {{ getNameForLanguage(preferences.get(Preference.LANGUAGE).value) }}
           </div>
           <div class="preferences-group-title-arrow">
@@ -198,8 +218,16 @@
                 <div></div>
               </div>
             </span>
-            <div class="label">
-              {{ getNameForLanguage(lang.value) }}
+            <div
+              class="label"
+              [class.underline]="lang.value === Language.CUSTOM"
+            >
+              <!--
+              -->{{
+                lang.value === Language.CUSTOM
+                  ? getCachedFileName() || getNameForLanguage(lang.value)
+                  : getNameForLanguage(lang.value)
+              }}
             </div>
           </div>
         </div>
