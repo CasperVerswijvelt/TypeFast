@@ -12,6 +12,7 @@
       </div>
     </div>
     <div class="word-copy"></div>
+    <input type="text" class="word-input-dummy" tabindex="-1" />
     <input
       [(ngModel)]="wordInput"
       (input)="wordInputChanged($event.target.value)"
@@ -23,7 +24,7 @@
       autocomplete="off"
       autocapitalize="off"
       class="word-input"
-      tabindex="3"
+      tabindex="0"
     />
   </div>
 
@@ -56,7 +57,7 @@
       <button
         class="type-test-timer-increase"
         (click)="onIncreaseClicked()"
-        tabindex="2"
+        tabindex="1"
         title="Increase test duration"
       >
         <svg

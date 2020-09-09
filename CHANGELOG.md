@@ -1,5 +1,11 @@
 # TypeFast.io - Release notes
 
+## Unreleased
+
+### Improvements
+
+- Disable backspace going to previous page on firefox when pressing after test finish
+
 ## 1.0.3 - 09-09-2020
 
 ### New

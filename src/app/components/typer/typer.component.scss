@@ -2,8 +2,8 @@
   &.type-test-started {
     .type-test-timer-increase,
     .type-test-timer-decrease {
-      pointer-events: none;
       opacity: 0;
+      visibility: hidden;
     }
   }
 
@@ -102,6 +102,13 @@ $word-spacing: 20px;
   &:focus::placeholder {
     color: transparent;
   }
+}
+
+.word-input-dummy {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .type-test-smooth-scroll {
@@ -224,7 +231,7 @@ $word-spacing: 20px;
 
   .type-test-timer-increase,
   .type-test-timer-decrease {
-    transition: opacity 0.5s;
+    transition: visibility 0.2s, opacity 0.5s;
     cursor: pointer;
     padding: 8px;
     opacity: 0.35;
@@ -312,12 +319,12 @@ $word-spacing: 20px;
   left: 0;
 
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.2s;
+  visibility: hidden;
+  transition: visibility 0.2s, opacity 0.2s;
 
   &.type-test-incorrect-words-modal-show {
     opacity: 1;
-    pointer-events: initial;
+    visibility: visible;
   }
 
   .type-test-incorrect-words-modal-background {

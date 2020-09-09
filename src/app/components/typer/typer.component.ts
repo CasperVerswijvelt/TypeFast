@@ -34,6 +34,7 @@ export class TyperComponent implements OnInit {
   containerElement: HTMLElement;
   inputElement: HTMLInputElement;
   inputWordCopy: HTMLElement;
+  dummyInputElement: HTMLElement;
 
   testResults: TestResults;
 
@@ -92,6 +93,9 @@ export class TyperComponent implements OnInit {
     )[0] as HTMLElement;
     this.inputElement = document.getElementsByClassName(
       'word-input'
+    )[0] as HTMLInputElement;
+    this.dummyInputElement = document.getElementsByClassName(
+      'word-input-dummy'
     )[0] as HTMLInputElement;
     this.inputWordCopy = document.getElementsByClassName(
       'word-copy'
@@ -406,6 +410,7 @@ export class TyperComponent implements OnInit {
     this.secondTimer.unsubscribe();
     this.secondTimer = undefined;
     this.inputElement.disabled = true;
+    this.dummyInputElement.focus();
 
     // Add right/wrong characters for current word
     this.registerWord(
