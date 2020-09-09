@@ -1,10 +1,11 @@
 # TypeFast.io - Release notes
 
-## Unreleased
+## 1.0.3 - 09-09-2020
 
 ### New
 
 - Add changelog tab in info popup
+- Added link to google feedback form in info window
 
 ### Fixed
 
