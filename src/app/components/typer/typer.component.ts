@@ -47,6 +47,8 @@ export class TyperComponent implements OnInit {
   smoothScroll = true;
   textSizeClass = '';
 
+  Preference = Preference;
+
   incorrectWordsOpen = false;
 
   preferences: Map<string, BehaviorSubject<any>>;

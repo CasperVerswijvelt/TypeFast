@@ -3,6 +3,9 @@
   [class.type-test-started]="testStarted"
   [class.type-test-reverse-scroll]="reverseScroll"
   [class.type-test-smooth-scroll]="smoothScroll && !reverseScroll"
+  [class.type-test-no-animation]="
+    !preferences.get(Preference.SCROLLING_ANIMATION).value
+  "
   [ngClass]="textSizeClass"
 >
   <div class="type-test">

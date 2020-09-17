@@ -138,6 +138,13 @@ $word-spacing: 20px;
   }
 }
 
+.type-test-no-animation {
+  .word-container,
+  .word-input {
+    transition: none;
+  }
+}
+
 .type-test-results {
   background-color: rgba(255, 255, 255, 0.05);
   color: rgba(255, 255, 255, 0.555);

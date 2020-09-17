@@ -152,6 +152,13 @@ export class PreferencesComponent implements OnInit {
     );
   }
 
+  onScrollingAnimationChanged(event: Event) {
+    this.preferencesService.setPreference(
+      Preference.SCROLLING_ANIMATION,
+      (event.target as HTMLInputElement).checked
+    );
+  }
+
   onClickAbout() {
     this.aboutClicked.emit();
   }

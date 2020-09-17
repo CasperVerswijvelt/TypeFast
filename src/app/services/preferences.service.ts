@@ -22,6 +22,7 @@ export class PreferencesService {
     default_test_duration: 60,
     text_size: TextSize.MEDIUM,
     smooth_scrolling: true,
+    scrolling_animation: true,
   };
 
   private preferenceTypes: any = {
@@ -33,6 +34,7 @@ export class PreferencesService {
     default_test_duration: 'number',
     text_size: TextSize,
     smooth_scrolling: 'boolean',
+    scrolling_animation: 'boolean',
   };
 
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();

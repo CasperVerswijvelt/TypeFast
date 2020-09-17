@@ -7,6 +7,7 @@ export enum Preference {
   DEFAULT_TEST_DURATION = 'default_test_duration',
   TEXT_SIZE = 'text_size',
   SMOOTH_SCROLLING = 'smooth_scrolling',
+  SCROLLING_ANIMATION = 'scrolling_animation',
 }
 
 export enum Language {
@@ -54,4 +55,5 @@ export interface Preferences {
   default_test_duration?: number;
   text_size?: TextSize;
   smooth_scrolling?: boolean;
+  scrolling_animation?: boolean;
 }

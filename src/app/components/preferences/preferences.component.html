@@ -359,6 +359,26 @@
               <span class="slider round"></span>
             </label>
           </div>
+
+          <!-- Scrolling animation -->
+          <div
+            class="preferences-entry preferences-entry-main preferences-toggle-entry"
+          >
+            <label class="preferences-toggle-label" for="scrolling-animation">
+              Scrolling animation
+            </label>
+            <label class="preferences-toggle-switch switch">
+              <input
+                type="checkbox"
+                [ngModel]="
+                  preferences.get(Preference.SCROLLING_ANIMATION).value
+                "
+                (change)="onScrollingAnimationChanged($event)"
+                id="scrolling-animation"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
         </div>
       </div>
 
