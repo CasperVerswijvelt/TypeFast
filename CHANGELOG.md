@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### New
+
+- Add option to disable animations during text scrolling
+
 ### Improvements
 
 - Disable backspace going to previous page on firefox when pressing after test finish
