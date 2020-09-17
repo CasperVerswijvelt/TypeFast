@@ -116,6 +116,9 @@ $preferences-entry-main-height: 37px;
   padding: 6px 51px 6px 16px;
   cursor: pointer;
   user-select: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 
   &:nth-child(even) {
     background-color: rgba(128, 128, 128, 0.04);
