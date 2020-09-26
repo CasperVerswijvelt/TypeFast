@@ -89,25 +89,28 @@ export class LanguageService {
     if (actual.length !== expected.length) return false;
     if (language === Language.CUSTOM) return false;
 
-    let substitutedExpected = expected;
-
-    switch (language) {
-      case Language.FRENCH:
-        substitutedExpected = this.getSubstitute(expected, this.french);
-    }
-
-    return actual === substitutedExpected;
+    return actual === this.getSubstitute(expected, language);
   }
 
-  private static getSubstitute(
-    char: string,
-    substituteMap: Record<string, string>
-  ) {
-    const substitute = substituteMap[char];
+  private static getSubstitute(char: string, language: Language) {
+    let substituteMap: Record<string, string>;
 
-    console.log(substitute, substituteMap, char);
+    let isUpper = char === char.toUpperCase();
 
-    if (substitute) return substitute;
+    switch (language) {
+      case Language.RUSSIAN:
+        substituteMap = this.russian;
+        break;
+      case Language.ARABIC:
+        substituteMap = this.russian;
+        break;
+    }
+
+    if (substituteMap) {
+      const substitute = substituteMap[char.toLowerCase()];
+
+      if (substitute) return isUpper ? substitute.toUpperCase() : substitute;
+    }
 
     return char;
   }

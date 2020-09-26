@@ -5,6 +5,7 @@
 ### New
 
 - Add option to disable animations during text scrolling
+- Added sentences for French language, thanks [RyFax](https://github.com/RyFax)!
 
 ### Improvements
 
