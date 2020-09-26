@@ -7,21 +7,18 @@ import { Language } from '../models/Preference';
 export class LanguageService {
   constructor() {}
 
-  private static french: Record<string, string> = {
-    â: 'a',
-    à: 'a',
-    á: 'a',
-    é: 'e',
-    è: 'e',
-    ë: 'e',
-    ê: 'e',
-    ì: 'i',
-    î: 'i',
-    ï: 'i',
-    ù: 'u',
-    û: 'u',
-    ü: 'u',
-    ç: 'c',
+  private static russian: Record<string, string> = {
+    ё: 'e',
+  };
+
+  private static arabic: Record<string, string> = {
+    أ: 'ا',
+    إ: 'ا',
+    آ: 'ا',
+    ة: 'ه',
+    ؤ: 'ء',
+    ئ: 'ء',
+    ى: 'ي',
   };
 
   static getLanguageISO(language: Language): string {
@@ -102,7 +99,7 @@ export class LanguageService {
         substituteMap = this.russian;
         break;
       case Language.ARABIC:
-        substituteMap = this.russian;
+        substituteMap = this.arabic;
         break;
     }
 
