@@ -207,6 +207,10 @@ $preferences-entry-main-height: 37px;
       margin: 6px $preferences-entry-padding-side;
     }
   }
+
+  &.preferences-entry-ignore-accented-characters {
+    border-top: solid #85858544 1px;
+  }
 }
 
 .preferences-entry-main {
@@ -220,7 +224,7 @@ $preferences-entry-main-height: 37px;
     }
 
     .preferences-toggle-switch {
-      margin: 8px $preferences-entry-padding-side 8px 8px;
+      margin: 9px $preferences-entry-padding-side 9px 8px;
     }
   }
 }
@@ -308,7 +312,7 @@ $preferences-entry-main-height: 37px;
       }
 
       &.preferences-group-entries-language {
-        max-height: 535px;
+        max-height: 595px;
       }
 
       &.preferences-group-entries-word-mode {

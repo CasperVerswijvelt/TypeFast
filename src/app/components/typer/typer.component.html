@@ -180,7 +180,7 @@
     <tr>
       <th>Word mode</th>
       <td class="capitalize">
-        <span>{{ preferences.get('default_word_mode').value }}</span>
+        <span>{{ preferences.get(Preference.WORD_MODE).value }}</span>
         <div popper class="info-icon-tooltip-container">
           <div class="info-icon"></div>
           <div class="tooltip">
@@ -190,6 +190,21 @@
               <li>Word mode: random words</li>
               <li>Sentence mode: actual sentences</li>
             </ul>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr *ngIf="preferences.get(Preference.IGNORE_ACCENTED_CHARACTERS).value">
+      <th>Ignore accents</th>
+      <td class="capitalize">
+        <span>Yes</span>
+        <div popper class="info-icon-tooltip-container">
+          <div class="info-icon"></div>
+          <div class="tooltip">
+            Typing an unaccented character when an accented character is
+            expected will be counted as correct. This is language sensitive. For
+            example, in French, the letter 'á' can be typed as 'a' and still be
+            counted as correct when this setting is enabled.
           </div>
         </div>
       </td>
@@ -257,6 +272,8 @@
         <app-incorrect-word
           [expected]="word.expected"
           [value]="word.value"
+          [language]="language"
+          [ignoreAccentedCharacters]="ignoreAccentedCharacters"
         ></app-incorrect-word>
       </div>
     </div>

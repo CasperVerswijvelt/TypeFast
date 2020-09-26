@@ -6,10 +6,15 @@
 
 - Add option to disable animations during text scrolling
 - Added sentences for French language, thanks [RyFax](https://github.com/RyFax)!
+- Added Romanian language, currently only words
+- Added option to ignore accented characters: this is language sensitive. For example, in French, the letter 'á' can be typed as 'a' and still be counted as correct when this setting is enabled.
+
+  Currently this settings supports Russian (ë), French (â,à,á,é,è,ë,ê,ì,î,ï,ù,û,ü,ç), Arabic(أ,إ,آ,ة,ؤ,ئ,ى) and Romanian (â,ă,î,ș,ț)
 
 ### Improvements
 
 - Disable backspace going to previous page on firefox when pressing after test finish
+- Added placeholder sentence for the 'Programming' language
 
 ## 1.0.3 - 09-09-2020
 

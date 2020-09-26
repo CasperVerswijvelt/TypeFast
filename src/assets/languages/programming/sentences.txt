@@ -1,0 +1,1 @@
+throw new Error("Programming doesn't have any sentences, maybe code snippets could come here?")

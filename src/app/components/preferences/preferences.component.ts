@@ -159,6 +159,13 @@ export class PreferencesComponent implements OnInit {
     );
   }
 
+  onIgnoreAccentedCharactersChanged(event: Event) {
+    this.preferencesService.setPreference(
+      Preference.IGNORE_ACCENTED_CHARACTERS,
+      (event.target as HTMLInputElement).checked
+    );
+  }
+
   onClickAbout() {
     this.aboutClicked.emit();
   }

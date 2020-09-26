@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Language } from 'src/app/models/Preference';
+import { LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-incorrect-word',
@@ -8,6 +10,8 @@ import { Component, OnInit, Input } from '@angular/core';
 export class IncorrectWordComponent implements OnInit {
   @Input() value: string;
   @Input() expected: string;
+  @Input() language: Language;
+  @Input() ignoreAccentedCharacters: boolean;
 
   valueLetters = [];
 
@@ -24,7 +28,14 @@ export class IncorrectWordComponent implements OnInit {
         class: 'character-incorrect',
       };
 
-      if (this.value[i] === this.expected[i]) {
+      if (
+        LanguageService.compare(
+          this.value[i],
+          this.expected[i],
+          this.language,
+          this.ignoreAccentedCharacters
+        )
+      ) {
         entry.class = 'character-correct';
       }
 

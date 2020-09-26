@@ -230,6 +230,29 @@
               }}
             </div>
           </div>
+
+          <!-- Ignore accented characters -->
+          <div
+            class="preferences-entry preferences-entry-main preferences-toggle-entry preferences-entry-ignore-accented-characters"
+          >
+            <label
+              class="preferences-toggle-label"
+              for="ignore-accented-characters"
+            >
+              Ignore accents
+            </label>
+            <label class="preferences-toggle-switch switch">
+              <input
+                type="checkbox"
+                [ngModel]="
+                  preferences.get(Preference.IGNORE_ACCENTED_CHARACTERS).value
+                "
+                (change)="onIgnoreAccentedCharactersChanged($event)"
+                id="ignore-accented-characters"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
         </div>
       </div>
 

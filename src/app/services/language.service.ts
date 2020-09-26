@@ -7,18 +7,42 @@ import { Language } from '../models/Preference';
 export class LanguageService {
   constructor() {}
 
-  private static russian: Record<string, string> = {
-    ё: 'e',
-  };
-
-  private static arabic: Record<string, string> = {
-    أ: 'ا',
-    إ: 'ا',
-    آ: 'ا',
-    ة: 'ه',
-    ؤ: 'ء',
-    ئ: 'ء',
-    ى: 'ي',
+  private static substituteMaps: Record<string, Record<string, string>> = {
+    [Language.RUSSIAN]: {
+      ё: 'е',
+    },
+    [Language.ARABIC]: {
+      أ: 'ا',
+      إ: 'ا',
+      آ: 'ا',
+      ة: 'ه',
+      ؤ: 'ء',
+      ئ: 'ء',
+      ى: 'ي',
+    },
+    [Language.FRENCH]: {
+      â: 'a',
+      à: 'a',
+      á: 'a',
+      é: 'e',
+      è: 'e',
+      ë: 'e',
+      ê: 'e',
+      ì: 'i',
+      î: 'i',
+      ï: 'i',
+      ù: 'u',
+      û: 'u',
+      ü: 'u',
+      ç: 'c',
+    },
+    [Language.ROMANIAN]: {
+      â: 'a',
+      ă: 'a',
+      î: 'i',
+      ș: 's',
+      ț: 't',
+    },
   };
 
   static getLanguageISO(language: Language): string {
@@ -43,6 +67,8 @@ export class LanguageService {
         return 'kr';
       case Language.CHINESE:
         return 'cn';
+      case Language.ROMANIAN:
+        return 'ro';
       case Language.RUSSIAN:
         return 'ru';
       case Language.SPANISH:
@@ -81,12 +107,13 @@ export class LanguageService {
     language: Language = Language.CUSTOM,
     ignoreAccents: boolean = false
   ): boolean {
-    if (!ignoreAccents) return actual === expected;
     if (!actual || !expected) return false;
     if (actual.length !== expected.length) return false;
-    if (language === Language.CUSTOM) return false;
+    if (!ignoreAccents) return actual === expected;
 
-    return actual === this.getSubstitute(expected, language);
+    return (
+      actual === expected || actual === this.getSubstitute(expected, language)
+    );
   }
 
   private static getSubstitute(char: string, language: Language) {
@@ -94,14 +121,7 @@ export class LanguageService {
 
     let isUpper = char === char.toUpperCase();
 
-    switch (language) {
-      case Language.RUSSIAN:
-        substituteMap = this.russian;
-        break;
-      case Language.ARABIC:
-        substituteMap = this.arabic;
-        break;
-    }
+    substituteMap = this.substituteMaps[language];
 
     if (substituteMap) {
       const substitute = substituteMap[char.toLowerCase()];

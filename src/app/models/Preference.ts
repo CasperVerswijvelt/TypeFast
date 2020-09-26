@@ -8,6 +8,7 @@ export enum Preference {
   TEXT_SIZE = 'text_size',
   SMOOTH_SCROLLING = 'smooth_scrolling',
   SCROLLING_ANIMATION = 'scrolling_animation',
+  IGNORE_ACCENTED_CHARACTERS = 'ignore_accented_characters',
 }
 
 export enum Language {
@@ -25,6 +26,7 @@ export enum Language {
   JAPANESE = 'japanese',
   KOREAN = 'korean',
   PORTUGUESE = 'portuguese',
+  ROMANIAN = 'romanian',
   RUSSIAN = 'russian',
   SPANISH = 'spanish',
   PROGRAMMING = 'programming',
@@ -47,13 +49,14 @@ export enum TextSize {
 }
 
 export interface Preferences {
-  word_language?: Language;
-  theme?: Theme;
-  follow_system_theme?: boolean;
-  default_word_mode?: WordMode;
-  reverse_scroll?: boolean;
-  default_test_duration?: number;
-  text_size?: TextSize;
-  smooth_scrolling?: boolean;
-  scrolling_animation?: boolean;
+  [Preference.LANGUAGE]?: Language;
+  [Preference.THEME]?: Theme;
+  [Preference.FOLLOW_SYSTEM_THEME]?: boolean;
+  [Preference.WORD_MODE]?: WordMode;
+  [Preference.REVERSE_SCROLL]?: boolean;
+  [Preference.DEFAULT_TEST_DURATION]?: number;
+  [Preference.TEXT_SIZE]?: TextSize;
+  [Preference.SMOOTH_SCROLLING]?: boolean;
+  [Preference.SCROLLING_ANIMATION]?: boolean;
+  [Preference.IGNORE_ACCENTED_CHARACTERS]?: boolean;
 }

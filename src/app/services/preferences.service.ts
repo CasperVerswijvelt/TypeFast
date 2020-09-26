@@ -14,27 +14,29 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class PreferencesService {
   private defaults: Preferences = {
-    theme: Theme.LIGHT,
-    word_language: Language.ENGLISH_AMERICAN,
-    follow_system_theme: false,
-    default_word_mode: WordMode.WORDS,
-    reverse_scroll: false,
-    default_test_duration: 60,
-    text_size: TextSize.MEDIUM,
-    smooth_scrolling: true,
-    scrolling_animation: true,
+    [Preference.THEME]: Theme.LIGHT,
+    [Preference.LANGUAGE]: Language.ENGLISH_AMERICAN,
+    [Preference.FOLLOW_SYSTEM_THEME]: false,
+    [Preference.WORD_MODE]: WordMode.WORDS,
+    [Preference.REVERSE_SCROLL]: false,
+    [Preference.DEFAULT_TEST_DURATION]: 60,
+    [Preference.TEXT_SIZE]: TextSize.MEDIUM,
+    [Preference.SMOOTH_SCROLLING]: true,
+    [Preference.SCROLLING_ANIMATION]: true,
+    [Preference.IGNORE_ACCENTED_CHARACTERS]: false,
   };
 
   private preferenceTypes: any = {
-    theme: Theme,
-    word_language: Language,
-    follow_system_theme: 'boolean',
-    default_word_mode: WordMode,
-    reverse_scroll: 'boolean',
-    default_test_duration: 'number',
-    text_size: TextSize,
-    smooth_scrolling: 'boolean',
-    scrolling_animation: 'boolean',
+    [Preference.THEME]: Theme,
+    [Preference.LANGUAGE]: Language,
+    [Preference.FOLLOW_SYSTEM_THEME]: 'boolean',
+    [Preference.WORD_MODE]: WordMode,
+    [Preference.REVERSE_SCROLL]: 'boolean',
+    [Preference.DEFAULT_TEST_DURATION]: 'number',
+    [Preference.TEXT_SIZE]: TextSize,
+    [Preference.SMOOTH_SCROLLING]: 'boolean',
+    [Preference.SCROLLING_ANIMATION]: 'boolean',
+    [Preference.IGNORE_ACCENTED_CHARACTERS]: 'boolean',
   };
 
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();

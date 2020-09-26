@@ -44,8 +44,10 @@ export class TyperComponent implements OnInit {
 
   testStarted: boolean;
   wordListName: string = '';
+  language: Language;
   reverseScroll = false;
   smoothScroll = true;
+  ignoreAccentedCharacters: boolean;
   textSizeClass = '';
 
   Preference = Preference;
@@ -75,6 +77,9 @@ export class TyperComponent implements OnInit {
       Preference.DEFAULT_TEST_DURATION
     ).value;
     this.smoothScroll = this.preferences.get(Preference.SMOOTH_SCROLLING).value;
+    this.ignoreAccentedCharacters = this.preferences.get(
+      Preference.IGNORE_ACCENTED_CHARACTERS
+    ).value;
   }
 
   ngOnInit(): void {
@@ -90,6 +95,10 @@ export class TyperComponent implements OnInit {
       .get(Preference.SMOOTH_SCROLLING)
       .pipe(skip(1))
       .subscribe(this.onSmoothScrollingPreferenceUpdated.bind(this));
+    this.preferences
+      .get(Preference.IGNORE_ACCENTED_CHARACTERS)
+      .pipe(skip(1))
+      .subscribe(this.onIgnoreAccentedCharactersPreferenceUpdated.bind(this));
 
     this.containerElement = document.getElementsByClassName(
       'word-container'
@@ -211,8 +220,10 @@ export class TyperComponent implements OnInit {
     return LanguageService.compare(
       actual,
       expected,
-      this.preferencesService.getPreference(Preference.LANGUAGE),
-      true
+      this.language,
+      this.preferencesService.getPreference(
+        Preference.IGNORE_ACCENTED_CHARACTERS
+      )
     );
   }
 
@@ -231,6 +242,11 @@ export class TyperComponent implements OnInit {
     this.syncOffset();
   }
 
+  private onIgnoreAccentedCharactersPreferenceUpdated(value: any) {
+    this.ignoreAccentedCharacters = value;
+    this.setupTest();
+  }
+
   onUpdatedWordList(
     language: Language,
     wordMode: WordMode,
@@ -239,6 +255,7 @@ export class TyperComponent implements OnInit {
   ) {
     this.reverseScrollWordList = shouldReverseScroll;
     this.wordListName = wordListName;
+    this.language = language;
     this.syncReverseScroll();
     this.setupTest();
   }
@@ -246,7 +263,7 @@ export class TyperComponent implements OnInit {
   startTest() {
     this.secondTimer = timer(0, 1000).subscribe(this.onSecond.bind(this));
     this.testStarted = true;
-    this.testResults.timeElapsed = this.testTime;
+    this.testResults.timeElapsed = 0;
   }
 
   nextWord() {
