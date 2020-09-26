@@ -19,11 +19,12 @@ export class WordService {
   private wordsCopy: string[] = [];
   private sentencesCopy: string[][] = [];
 
+  private lastLoadedListLanguage: Language = undefined;
   private lastLoadedListMode: WordMode = undefined;
   private currentSource: string;
   private wordListListeners: ((
+    language: Language,
     wordMode: WordMode,
-
     wordListName: string,
     shouldReverseScroll: boolean
   ) => void)[] = [];
@@ -98,9 +99,11 @@ export class WordService {
         } else {
           return Promise.reject(this.LANGUAGE_PREFERENCE_CHANGED);
         }
+        this.lastLoadedListLanguage = language;
         this.lastLoadedListMode = wordMode;
         this.currentSource = langString;
         this.notifyWordListSubscribers(
+          language,
           wordMode,
           langString,
           this.shouldReverseScroll(language)
@@ -139,6 +142,7 @@ export class WordService {
 
   addWordListListener(
     listenerFunction: (
+      language: Language,
       wordMode: WordMode,
       wordListName: string,
       shouldReverseScroll: boolean
@@ -147,7 +151,12 @@ export class WordService {
     this.wordListListeners.push(listenerFunction);
 
     if (this.lastLoadedListMode) {
-      listenerFunction(this.lastLoadedListMode, this.currentSource, false);
+      listenerFunction(
+        this.lastLoadedListLanguage,
+        this.lastLoadedListMode,
+        this.currentSource,
+        false
+      );
     }
   }
 
@@ -241,12 +250,13 @@ export class WordService {
   }
 
   private notifyWordListSubscribers(
+    language: Language,
     wordMode: WordMode,
     wordListName: string,
     shouldReverseScroll: boolean
   ) {
     this.wordListListeners.forEach((listener) =>
-      listener(wordMode, wordListName, shouldReverseScroll)
+      listener(language, wordMode, wordListName, shouldReverseScroll)
     );
   }
 

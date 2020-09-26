@@ -16,6 +16,7 @@ import {
   TextSize,
 } from '../../models/Preference';
 import { skip } from 'rxjs/operators';
+import { LanguageService } from 'src/app/services/language.service';
 
 @Component({
   selector: 'app-typer',
@@ -160,12 +161,12 @@ export class TyperComponent implements OnInit {
       this.startTest();
     }
 
-    const regex = /\s$/;
-    const matches = regex.test(word);
+    const regexEndWhitespace = /\s$/;
+    const matchesEndWhitespace = regexEndWhitespace.test(word);
 
     this.wordInput = this.wordInput.trim();
 
-    if (matches) {
+    if (matchesEndWhitespace) {
       // Text input ends with whitespace character
       this.leftCharacterOffset = 0;
       if (word.length === 1) {
@@ -178,40 +179,41 @@ export class TyperComponent implements OnInit {
         this.nextWord();
       }
     } else {
-      // Text input doesnt end with whitespace character, update input color
+      // Text input doesn't end with whitespace character, update input color
       const curentWord = this.words[this.currentIndex]
         ? this.words[this.currentIndex]
         : '';
       const wordInput = this.wordInput ? this.wordInput : '';
-      if (curentWord?.slice(0, wordInput.length) !== wordInput) {
-        this.inputElement.classList.add('input-incorrect');
-      } else {
+      if (this.compare(wordInput, curentWord?.slice(0, wordInput.length))) {
         this.inputElement.classList.remove('input-incorrect');
 
         // Count matching characters
         let matchingCharacters = 0;
         let minLength = Math.min(wordInput.length, curentWord.length);
         for (let i = 0; i < minLength; i++) {
-          if (wordInput[i] === curentWord[i]) {
+          if (this.compare(wordInput[i], curentWord[i])) {
             matchingCharacters++;
           } else {
             break;
           }
         }
-        let charactersWidth = 0;
-
-        const children = this.currentWordElement.children;
-        const childrenToCount = Math.min(matchingCharacters, children.length);
 
         this.inputWordCopy.innerText = wordInput;
         this.leftCharacterOffset = this.inputWordCopy.getBoundingClientRect().width;
         this.syncOffset();
+      } else {
+        this.inputElement.classList.add('input-incorrect');
       }
     }
   }
 
-  private onDefaultWordModePreferenceUpdated(value: any) {
-    this.setupTest();
+  private compare(actual: string, expected: string): boolean {
+    return LanguageService.compare(
+      actual,
+      expected,
+      this.preferencesService.getPreference(Preference.LANGUAGE),
+      true
+    );
   }
 
   private onReverseScrollPreferenceUpdated(value: any) {
@@ -230,6 +232,7 @@ export class TyperComponent implements OnInit {
   }
 
   onUpdatedWordList(
+    language: Language,
     wordMode: WordMode,
     wordListName: string,
     shouldReverseScroll: boolean
@@ -292,7 +295,7 @@ export class TyperComponent implements OnInit {
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {
     if (wordCompleted) {
-      if (value === expected) {
+      if (this.compare(value, expected)) {
         this.currentWordElement.classList.add('word-correct');
         this.testResults.correctWordCount++;
       } else {

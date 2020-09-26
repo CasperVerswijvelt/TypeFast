@@ -20,7 +20,6 @@ $preferences-entry-main-height: 37px;
   top: $preferences-offset;
   display: flex;
   max-height: calc(100% - 32px);
-  pointer-events: initial;
 }
 
 .preferences-icon {
@@ -36,6 +35,7 @@ $preferences-entry-main-height: 37px;
   cursor: pointer;
   position: relative;
   margin-bottom: 5px;
+  pointer-events: initial;
 
   svg {
     fill: rgb(105, 105, 105);
