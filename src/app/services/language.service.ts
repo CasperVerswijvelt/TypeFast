@@ -152,7 +152,8 @@ export class LanguageService {
     language: Language = Language.CUSTOM,
     ignoreAccents: boolean = false
   ): boolean {
-    if (!actual || !expected) return false;
+    if (typeof actual !== 'string' || typeof expected !== 'string')
+      return false;
     if (actual.length !== expected.length) return false;
 
     const length = actual.length;
