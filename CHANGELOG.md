@@ -16,6 +16,10 @@
 - Disable backspace going to previous page on firefox when pressing after test finish
 - Added placeholder sentence for the 'Programming' language
 
+### Fixed
+
+- Changed 'heer' to 'here' in American English, thanks [fishstik](https://github.com/fishstik)!
+
 ## 1.0.3 - 09-09-2020
 
 ### New
