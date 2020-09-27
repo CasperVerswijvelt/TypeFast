@@ -43,7 +43,7 @@ export class TyperComponent implements OnInit {
   testTimeLeft: number;
 
   testStarted: boolean;
-  wordListName: string = '';
+  wordListName: string = 'Loading ...';
   language: Language;
   reverseScroll = false;
   smoothScroll = true;
@@ -80,6 +80,7 @@ export class TyperComponent implements OnInit {
     this.ignoreAccentedCharacters = this.preferences.get(
       Preference.IGNORE_ACCENTED_CHARACTERS
     ).value;
+    this.wordMode = this.preferences.get(Preference.WORD_MODE).value;
   }
 
   ngOnInit(): void {
@@ -255,6 +256,7 @@ export class TyperComponent implements OnInit {
   ) {
     this.reverseScrollWordList = shouldReverseScroll;
     this.wordListName = wordListName;
+    this.wordMode = wordMode;
     this.language = language;
     this.syncReverseScroll();
     this.setupTest();
