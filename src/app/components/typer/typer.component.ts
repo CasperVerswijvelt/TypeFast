@@ -277,7 +277,7 @@ export class TyperComponent implements OnInit {
       this.ignoreResultsString += 'casing';
     }
 
-    if (this.ignoreResultsString.length) {
+    if (this.ignoreResultsString?.length) {
       this.ignoreResultsString =
         this.ignoreResultsString.charAt(0).toUpperCase() +
         this.ignoreResultsString.slice(1);
@@ -349,8 +349,9 @@ export class TyperComponent implements OnInit {
   }
 
   registerWord(value: string, expected: string, wordCompleted: boolean = true) {
+    const wordIsCorrect = this.compare(value, expected);
     if (wordCompleted) {
-      if (this.compare(value, expected)) {
+      if (wordIsCorrect) {
         this.currentWordElement.classList.add('word-correct');
         this.testResults.correctWordCount++;
       } else {
@@ -363,8 +364,8 @@ export class TyperComponent implements OnInit {
       }
     }
 
-    // Only add correct character for end space if word was completed
-    let correctCharacters = wordCompleted ? 1 : 0;
+    // Only add correct character for end space if word was completed and completely correct
+    let correctCharacters = wordCompleted && wordIsCorrect ? 1 : 0;
     let incorrectCharacters = 0;
 
     let length = Math.min(value.length, expected.length);

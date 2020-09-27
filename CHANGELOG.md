@@ -24,6 +24,7 @@
 
 - Disable backspace going to previous page on firefox when pressing after test finish
 - Added placeholder sentence for the 'Programming' language
+- No longer count an inbetween space character as a correct character if the word before was not correct
 
 ### Fixed
 
