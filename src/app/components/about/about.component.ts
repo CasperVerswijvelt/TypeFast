@@ -8,11 +8,11 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 export class AboutComponent implements OnInit {
   @Output() onAboutClosed = new EventEmitter<void>();
 
-  constructor() {}
+  ngOnInit(): void {
+    // Empty
+  }
 
-  ngOnInit(): void {}
-
-  closeAbout() {
+  closeAbout(): void {
     this.onAboutClosed.emit();
   }
 }

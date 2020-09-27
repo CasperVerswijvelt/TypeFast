@@ -11,7 +11,7 @@ export class PopperDirective {
 
   constructor(private readonly el: ElementRef) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     let tooltipEl = this.el.nativeElement.getElementsByClassName(
       'tooltip'
     )[0] as HTMLElement;

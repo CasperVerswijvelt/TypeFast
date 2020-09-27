@@ -16,11 +16,9 @@ export class IncorrectWordComponent implements OnInit {
 
   valueLetters = [];
 
-  constructor() {}
-
   ngOnInit(): void {
-    let value = this.ignoreCasing ? this.value.toLowerCase() : this.value;
-    let expected = this.ignoreCasing
+    const value = this.ignoreCasing ? this.value.toLowerCase() : this.value;
+    const expected = this.ignoreCasing
       ? this.expected.toLowerCase()
       : this.expected;
     for (
@@ -28,7 +26,7 @@ export class IncorrectWordComponent implements OnInit {
       i < Math.min(this.value.length, this.expected.length);
       i++
     ) {
-      let entry = {
+      const entry = {
         char: value[i],
         class: 'character-incorrect',
       };

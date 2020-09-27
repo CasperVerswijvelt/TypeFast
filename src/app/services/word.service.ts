@@ -40,7 +40,7 @@ export class WordService {
     'Language preference changed during loading, cancelling.';
 
   constructor(private preferencesService: PreferencesService) {
-    let preferences = this.preferencesService.getPreferences();
+    const preferences = this.preferencesService.getPreferences();
 
     preferences
       .get(Preference.LANGUAGE)
@@ -57,7 +57,7 @@ export class WordService {
     );
   }
 
-  private onLanguagePreferenceUpdated(value: any) {
+  private onLanguagePreferenceUpdated(value: any): void {
     this.loadLanguage(
       value,
       this.preferencesService.getPreference(Preference.WORD_MODE) ===
@@ -67,7 +67,7 @@ export class WordService {
     );
   }
 
-  private onWordModePreferenceUpdated(value: any) {
+  private onWordModePreferenceUpdated(value: any): void {
     this.loadLanguage(
       this.preferencesService.getPreference(Preference.LANGUAGE),
       value
@@ -129,11 +129,11 @@ export class WordService {
     }
   }
 
-  getCachedFileName() {
+  getCachedFileName(): string {
     return this.cachedFileName;
   }
 
-  getLanguageString(language: Language) {
+  getLanguageString(language: Language): string {
     let langString = LanguageService.getLanguageString(language);
     if (language === Language.CUSTOM && this.cachedFileName)
       langString = `'${this.cachedFileName}'`;
@@ -173,7 +173,7 @@ export class WordService {
   private getTextViaFile(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
       if (file.type !== 'text/plain') reject('File is not a text file');
-      let fr = new FileReader();
+      const fr = new FileReader();
       fr.onload = () => {
         resolve(fr.result as string);
       };
@@ -194,8 +194,8 @@ export class WordService {
       this.words = text.split(/\s+/);
       this.wordsCopy = [];
     } else if (wordMode === WordMode.SENTENCES) {
-      let tempSentences = [];
-      let lines = text.match(/[^\r\n]+/g);
+      const tempSentences = [];
+      const lines = text.match(/[^\r\n]+/g);
       lines.forEach((line) => {
         tempSentences.push(line.split(/\s+/));
       });
@@ -217,7 +217,7 @@ export class WordService {
   }
 
   private getRandomWords(wordCount?: number): string[] {
-    let res: string[] = [];
+    const res: string[] = [];
 
     wordCount = wordCount !== undefined ? wordCount : this.DEFAULT_WORD_AMOUNT;
 
@@ -237,8 +237,6 @@ export class WordService {
   }
 
   private getSentence(): string[] {
-    let res: string[] = [];
-
     if (this.sentencesCopy.length === 0) {
       this.sentencesCopy = this.sentenes.slice();
     }

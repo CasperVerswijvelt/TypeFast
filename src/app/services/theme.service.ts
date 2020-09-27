@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { PreferencesService } from './preferences.service';
 import { Preference, Theme } from '../models/Preference';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -10,9 +10,9 @@ export class ThemeService {
   private preferences: Map<string, BehaviorSubject<any>>;
 
   constructor(private preferencesService: PreferencesService) {
-    let mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
 
-    this.preferences = preferencesService.getPreferences();
+    this.preferences = this.preferencesService.getPreferences();
 
     this.preferences
       .get(Preference.THEME)
@@ -72,7 +72,7 @@ export class ThemeService {
     );
   }
 
-  setTheme(theme: Theme) {
+  setTheme(theme: Theme): void {
     document.body.className = `theme--${theme as string}`;
   }
 }

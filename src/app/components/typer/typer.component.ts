@@ -43,7 +43,7 @@ export class TyperComponent implements OnInit {
   testTimeLeft: number;
 
   testStarted: boolean;
-  wordListName: string = 'Loading ...';
+  wordListName = 'Loading ...';
   language: Language;
   reverseScroll = false;
   smoothScroll = true;
@@ -58,10 +58,10 @@ export class TyperComponent implements OnInit {
 
   preferences: Map<string, BehaviorSubject<any>>;
 
-  private leftWordOffset: number = 0;
-  private rightWordOffset: number = 0;
-  private leftCharacterOffset: number = 0;
-  private rightCharacterOffset: number = 0;
+  private leftWordOffset = 0;
+  private rightWordOffset = 0;
+  private leftCharacterOffset = 0;
+  private rightCharacterOffset = 0;
   private currentIndex: number;
   private reverseScrollWordList: boolean;
   private secondTimer: Subscription;
@@ -132,7 +132,7 @@ export class TyperComponent implements OnInit {
     this.focusInput();
   }
 
-  setupTest() {
+  setupTest(): void {
     this.updateTimer(0);
     this.secondTimer?.unsubscribe();
     this.secondTimer = undefined;
@@ -164,12 +164,12 @@ export class TyperComponent implements OnInit {
     this.syncOffset();
   }
 
-  focusInput() {
+  focusInput(): void {
     this.inputElement.focus();
     this.inputElement.select();
   }
 
-  wordInputChanged(word: string) {
+  wordInputChanged(word: string): void {
     if (!this.words) {
       this.inputElement.value = '';
       return;
@@ -206,17 +206,6 @@ export class TyperComponent implements OnInit {
       if (this.compare(wordInput, curentWord?.slice(0, wordInput.length))) {
         this.inputElement.classList.remove('input-incorrect');
 
-        // Count matching characters
-        let matchingCharacters = 0;
-        let minLength = Math.min(wordInput.length, curentWord.length);
-        for (let i = 0; i < minLength; i++) {
-          if (this.compare(wordInput[i], curentWord[i])) {
-            matchingCharacters++;
-          } else {
-            break;
-          }
-        }
-
         this.inputWordCopy.innerText = wordInput;
         this.leftCharacterOffset = this.inputWordCopy.getBoundingClientRect().width;
         this.syncOffset();
@@ -235,12 +224,12 @@ export class TyperComponent implements OnInit {
     );
   }
 
-  private onReverseScrollPreferenceUpdated(value: any) {
+  private onReverseScrollPreferenceUpdated(_value: any) {
     this.syncReverseScroll();
     this.syncOffset();
   }
 
-  private onTextSizePreferenceUpdated(value: any) {
+  private onTextSizePreferenceUpdated(_value: any) {
     this.syncTextSizeClass();
     this.setupTest();
   }
@@ -289,7 +278,7 @@ export class TyperComponent implements OnInit {
     wordMode: WordMode,
     wordListName: string,
     shouldReverseScroll: boolean
-  ) {
+  ): void {
     this.reverseScrollWordList = shouldReverseScroll;
     this.wordListName = wordListName;
     this.wordMode = wordMode;
@@ -298,13 +287,13 @@ export class TyperComponent implements OnInit {
     this.setupTest();
   }
 
-  startTest() {
+  startTest(): void {
     this.secondTimer = timer(0, 1000).subscribe(this.onSecond.bind(this));
     this.testStarted = true;
     this.testResults.timeElapsed = 0;
   }
 
-  nextWord() {
+  nextWord(): void {
     this.currentIndex++;
     this.wordInput = '';
     this.inputElement.value = '';
@@ -348,7 +337,7 @@ export class TyperComponent implements OnInit {
     }
   }
 
-  registerWord(value: string, expected: string, wordCompleted: boolean = true) {
+  registerWord(value: string, expected: string, wordCompleted = true): void {
     const wordIsCorrect = this.compare(value, expected);
     if (wordCompleted) {
       if (wordIsCorrect) {
@@ -368,7 +357,7 @@ export class TyperComponent implements OnInit {
     let correctCharacters = wordCompleted && wordIsCorrect ? 1 : 0;
     let incorrectCharacters = 0;
 
-    let length = Math.min(value.length, expected.length);
+    const length = Math.min(value.length, expected.length);
 
     incorrectCharacters += Math.abs(value.length - expected.length);
 
@@ -384,7 +373,7 @@ export class TyperComponent implements OnInit {
     this.testResults.incorrectCharacterCount += incorrectCharacters;
   }
 
-  onSecond(seconds: number) {
+  onSecond(seconds: number): void {
     this.updateTimer(seconds);
 
     if (seconds === this.testTime) {
@@ -395,18 +384,18 @@ export class TyperComponent implements OnInit {
     this.calculateStats();
   }
 
-  updateTimer(seconds: number) {
+  updateTimer(seconds: number): void {
     this.testTimeLeft = this.testTime - seconds;
   }
 
-  calculateStats() {
-    let stats = {} as TestResultsStats;
+  calculateStats(): void {
+    const stats = {} as TestResultsStats;
 
-    let totalCharacterCount =
+    const totalCharacterCount =
       this.testResults.correctCharacterCount +
       this.testResults.incorrectCharacterCount;
 
-    let totalWordCount =
+    const totalWordCount =
       this.testResults.correctWordCount + this.testResults.incorrectWordCount;
 
     stats.characterAccuracy = totalCharacterCount
@@ -430,13 +419,13 @@ export class TyperComponent implements OnInit {
     this.testResults.stats = stats;
   }
 
-  syncCurrentWordElement() {
+  syncCurrentWordElement(): void {
     this.currentWordElement = this.containerElement.children[
       this.currentIndex
     ] as HTMLElement;
   }
 
-  syncOffset(disableTransition = false) {
+  syncOffset(disableTransition = false): void {
     if (!this.containerElement) return;
 
     let leftOffset: number;
@@ -467,7 +456,7 @@ export class TyperComponent implements OnInit {
     }
   }
 
-  onTimeRunsOut() {
+  onTimeRunsOut(): void {
     this.secondTimer.unsubscribe();
     this.secondTimer = undefined;
     this.inputElement.disabled = true;
@@ -524,7 +513,7 @@ export class TyperComponent implements OnInit {
     },
   ];
 
-  onDecreaseClicked() {
+  onDecreaseClicked(): void {
     if (this.testStarted) return;
 
     let decrease = 0;
@@ -548,7 +537,7 @@ export class TyperComponent implements OnInit {
     this.focusInput();
   }
 
-  onIncreaseClicked() {
+  onIncreaseClicked(): void {
     if (this.testStarted) return;
 
     let increase = 0;
@@ -572,12 +561,12 @@ export class TyperComponent implements OnInit {
     this.focusInput();
   }
 
-  onRestartClicked() {
+  onRestartClicked(): void {
     this.setupTest();
     this.focusInput();
   }
 
-  onIncorrectWordCountClicked() {
+  onIncorrectWordCountClicked(): void {
     this.incorrectWordsOpen = true;
   }
 }

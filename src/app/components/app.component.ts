@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { WordService } from '../services/word.service';
 
 @Component({
   selector: 'app-root',
@@ -13,23 +12,23 @@ export class AppComponent {
 
   private typeTestFocusFunction: () => void;
 
-  onPreferencesToggled(show: boolean) {
+  onPreferencesToggled(show: boolean): void {
     if (show === false && this.typeTestFocusFunction) {
       this.typeTestFocusFunction();
     }
   }
 
-  onFocusFunctionReady(focusFunction: () => void) {
+  onFocusFunctionReady(focusFunction: () => void): void {
     if (focusFunction) {
       this.typeTestFocusFunction = focusFunction;
     }
   }
 
-  preferencesAboutClicked() {
+  preferencesAboutClicked(): void {
     this.showAbout = true;
   }
 
-  closeAbout() {
+  closeAbout(): void {
     this.showAbout = false;
   }
 }

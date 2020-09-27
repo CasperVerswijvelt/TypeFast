@@ -27,7 +27,7 @@ export class PreferencesService {
     [Preference.IGNORE_CASING]: false,
   };
 
-  private preferenceTypes: any = {
+  private preferenceTypes: Record<string, unknown> = {
     [Preference.THEME]: Theme,
     [Preference.LANGUAGE]: Language,
     [Preference.FOLLOW_SYSTEM_THEME]: 'boolean',
@@ -52,17 +52,17 @@ export class PreferencesService {
   private retrievePreferences() {
     try {
       // Set default preferences
-      for (let defaultPreference in this.defaults) {
+      for (const defaultPreference in this.defaults) {
         this.preferencesSubjects.set(
           defaultPreference,
           new BehaviorSubject(this.defaults[defaultPreference])
         );
       }
 
-      let preferences = JSON.parse(localStorage.getItem('preferences'));
+      const preferences = JSON.parse(localStorage.getItem('preferences'));
       if (typeof preferences === 'undefined') throw null;
 
-      for (let preference in preferences) {
+      for (const preference in preferences) {
         const preferenceKey = preference;
         const preferenceValue = preferences[preference];
 
@@ -72,10 +72,12 @@ export class PreferencesService {
         )
           this.preferencesSubjects.get(preference)?.next(preferenceValue);
       }
-    } catch (e) {}
+    } catch (e) {
+      // Empty
+    }
   }
 
-  private validatePreferenceType(key: string, value: any) {
+  private validatePreferenceType(key: string, value: unknown) {
     const type = this.preferenceTypes[key];
 
     return (
@@ -86,7 +88,7 @@ export class PreferencesService {
     );
   }
 
-  private isTemporaryPreference(key: string, value: any) {
+  private isTemporaryPreference(key: string, value: unknown) {
     return key === Preference.LANGUAGE && value == Language.CUSTOM;
   }
 
@@ -95,11 +97,11 @@ export class PreferencesService {
   }
 
   getPreference(key: Preference): any {
-    let subject = this.preferencesSubjects.get(key);
+    const subject = this.preferencesSubjects.get(key);
     return subject?.value;
   }
 
-  setPreference(key: Preference, value: any) {
+  setPreference(key: Preference, value: unknown): void {
     if (!this.validatePreferenceType(key, value)) return;
 
     if (!this.isTemporaryPreference(key, value)) {
@@ -121,10 +123,10 @@ export class PreferencesService {
     this.preferencesSubjects.get(key).next(value);
   }
 
-  clearPreferences() {
+  clearPreferences(): void {
     if (localStorage.getItem('preferences') !== null) {
       localStorage.removeItem('preferences');
-      for (let defaultPreference in this.defaults) {
+      for (const defaultPreference in this.defaults) {
         this.preferencesSubjects
           .get(defaultPreference)
           .next(this.defaults[defaultPreference]);
@@ -135,8 +137,8 @@ export class PreferencesService {
   private onStorage(event: StorageEvent) {
     if (event.key == 'preferences') {
       try {
-        let oldObj: Preferences = JSON.parse(event.oldValue);
-        let newObj: Preferences = JSON.parse(event.newValue);
+        const oldObj: Preferences = JSON.parse(event.oldValue);
+        const newObj: Preferences = JSON.parse(event.newValue);
 
         Object.keys(this.defaults).forEach((key) => {
           const newVal = newObj[key];
@@ -148,7 +150,9 @@ export class PreferencesService {
             this.preferencesSubjects.get(key).next(newObj[key]);
           }
         });
-      } catch (e) {}
+      } catch (e) {
+        // Empty
+      }
     }
   }
 }

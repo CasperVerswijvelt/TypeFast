@@ -5,9 +5,10 @@ import { Language } from '../models/Preference';
   providedIn: 'root',
 })
 export class LanguageService {
-  constructor() {}
-
-  private static substituteMaps: Record<string, Record<string, string>> = {
+  private static readonly substituteMaps: Record<
+    string,
+    Record<string, string>
+  > = {
     [Language.RUSSIAN]: {
       ё: 'е',
     },
@@ -69,8 +70,6 @@ export class LanguageService {
         return 'en-us';
       case Language.ITALIAN:
         return 'it';
-      case Language.DUTCH:
-        return 'be';
       case Language.HINDI:
         return 'in';
       case Language.HUNGARIAN:
@@ -119,7 +118,7 @@ export class LanguageService {
     actual: string,
     expected: string,
     language: Language = Language.CUSTOM,
-    ignoreAccents: boolean = false
+    ignoreAccents = false
   ): boolean {
     if (!actual || !expected) return false;
     if (actual.length !== expected.length) return false;
@@ -131,11 +130,8 @@ export class LanguageService {
   }
 
   private static getSubstitute(char: string, language: Language) {
-    let substituteMap: Record<string, string>;
-
-    let isUpper = char === char.toUpperCase();
-
-    substituteMap = this.substituteMaps[language];
+    const isUpper = char === char.toUpperCase();
+    const substituteMap: Record<string, string> = this.substituteMaps[language];
 
     if (substituteMap) {
       const substitute = substituteMap[char.toLowerCase()];
@@ -150,7 +146,7 @@ export class LanguageService {
     actual: string,
     expected: string,
     language: Language = Language.CUSTOM,
-    ignoreAccents: boolean = false
+    ignoreAccents = false
   ): boolean {
     if (typeof actual !== 'string' || typeof expected !== 'string')
       return false;

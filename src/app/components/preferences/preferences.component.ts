@@ -8,7 +8,6 @@ import {
   TextSize,
 } from '../../models/Preference';
 import { WordService } from '../../services/word.service';
-import { KeyValue } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';
 import { LanguageService } from 'src/app/services/language.service';
 
@@ -34,10 +33,7 @@ export class PreferencesComponent implements OnInit {
   currentlyLoadingLanguage: Language;
   currentlyLoadingWordMode: WordMode;
 
-  originalOrder = (
-    a: KeyValue<number, string>,
-    b: KeyValue<number, string>
-  ): number => {
+  originalOrder = (): number => {
     return 0;
   };
 
@@ -50,7 +46,9 @@ export class PreferencesComponent implements OnInit {
     wordService.addLanguageFetchListener(this.onLanguageFetch.bind(this));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    // Empty
+  }
 
   private onLanguageFetch(
     language: Language,
@@ -69,13 +67,13 @@ export class PreferencesComponent implements OnInit {
     });
   }
 
-  onPreferencesIconClicked() {
+  onPreferencesIconClicked(): void {
     this.showPreferences = !this.showPreferences;
     this.preferencesToggled.emit(this.showPreferences);
     this.openedPreferencesGroup = '';
   }
 
-  onThemeChanged(theme: Theme) {
+  onThemeChanged(theme: Theme): void {
     const themeChanged =
       theme !== this.preferencesService.getPreference(Preference.THEME);
 
@@ -83,14 +81,14 @@ export class PreferencesComponent implements OnInit {
       this.preferencesService.setPreference(Preference.THEME, theme);
   }
 
-  onFollowSystemThemeChanged(event: Event) {
+  onFollowSystemThemeChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.FOLLOW_SYSTEM_THEME,
       (event.target as HTMLInputElement).checked
     );
   }
 
-  onLanguageChanged(language: Language) {
+  onLanguageChanged(language: Language): void {
     const setPreference = () =>
       this.preferencesService.setPreference(Preference.LANGUAGE, language);
     const setCustomLanguageLoading = (file: File) => {
@@ -124,60 +122,60 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  onDefaultWordModeChanged(wordMode: WordMode) {
+  onDefaultWordModeChanged(wordMode: WordMode): void {
     const wordModeChanged =
       wordMode !== this.preferencesService.getPreference(Preference.WORD_MODE);
     if (wordModeChanged)
       this.preferencesService.setPreference(Preference.WORD_MODE, wordMode);
   }
 
-  onTextSizeChanged(textSize: TextSize) {
+  onTextSizeChanged(textSize: TextSize): void {
     const textSizeChanged =
       textSize !== this.preferencesService.getPreference(Preference.TEXT_SIZE);
     if (textSizeChanged)
       this.preferencesService.setPreference(Preference.TEXT_SIZE, textSize);
   }
 
-  onReverseScrollChanged(event: Event) {
+  onReverseScrollChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.REVERSE_SCROLL,
       (event.target as HTMLInputElement).checked
     );
   }
 
-  onSmoothScrollingChanged(event: Event) {
+  onSmoothScrollingChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.SMOOTH_SCROLLING,
       (event.target as HTMLInputElement).checked
     );
   }
 
-  onScrollingAnimationChanged(event: Event) {
+  onScrollingAnimationChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.SCROLLING_ANIMATION,
       (event.target as HTMLInputElement).checked
     );
   }
 
-  onIgnoreAccentedCharactersChanged(event: Event) {
+  onIgnoreAccentedCharactersChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.IGNORE_DIACRITICS,
       (event.target as HTMLInputElement).checked
     );
   }
 
-  onIgnoreCasingChanged(event: Event) {
+  onIgnoreCasingChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.IGNORE_CASING,
       (event.target as HTMLInputElement).checked
     );
   }
 
-  onClickAbout() {
+  onClickAbout(): void {
     this.aboutClicked.emit();
   }
 
-  onClickResetPreferences() {
+  onClickResetPreferences(): void {
     if (
       confirm(
         "Are you sure you want to reset your preferences? This can't be undone!"
@@ -187,8 +185,8 @@ export class PreferencesComponent implements OnInit {
     }
   }
 
-  selectFile() {
-    return new Promise((resolve, reject) => {
+  selectFile(): Promise<File> {
+    return new Promise((resolve, _reject) => {
       const input: HTMLInputElement = document.createElement('input');
       input.setAttribute('accept', '.txt');
       input.type = 'file';
@@ -209,16 +207,16 @@ export class PreferencesComponent implements OnInit {
     return this.wordService.getLanguageString(language);
   }
 
-  togglePreferencesGroup(group: string) {
+  togglePreferencesGroup(group: string): void {
     this.openedPreferencesGroup =
       this.openedPreferencesGroup === group ? '' : group;
   }
 
-  getCachedFileName() {
+  getCachedFileName(): string {
     return this.wordService.getCachedFileName()?.trim();
   }
 
-  hasCachedFile() {
-    return this.wordService.getCachedFileName()?.trim().length;
+  hasCachedFile(): boolean {
+    return !!this.wordService.getCachedFileName()?.trim().length;
   }
 }
