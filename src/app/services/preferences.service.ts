@@ -23,7 +23,8 @@ export class PreferencesService {
     [Preference.TEXT_SIZE]: TextSize.MEDIUM,
     [Preference.SMOOTH_SCROLLING]: true,
     [Preference.SCROLLING_ANIMATION]: true,
-    [Preference.IGNORE_ACCENTED_CHARACTERS]: false,
+    [Preference.IGNORE_DIACRITICS]: false,
+    [Preference.IGNORE_CASING]: false,
   };
 
   private preferenceTypes: any = {
@@ -36,7 +37,8 @@ export class PreferencesService {
     [Preference.TEXT_SIZE]: TextSize,
     [Preference.SMOOTH_SCROLLING]: 'boolean',
     [Preference.SCROLLING_ANIMATION]: 'boolean',
-    [Preference.IGNORE_ACCENTED_CHARACTERS]: 'boolean',
+    [Preference.IGNORE_DIACRITICS]: 'boolean',
+    [Preference.IGNORE_CASING]: 'boolean',
   };
 
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();

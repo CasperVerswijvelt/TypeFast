@@ -8,7 +8,8 @@ export enum Preference {
   TEXT_SIZE = 'text_size',
   SMOOTH_SCROLLING = 'smooth_scrolling',
   SCROLLING_ANIMATION = 'scrolling_animation',
-  IGNORE_ACCENTED_CHARACTERS = 'ignore_accented_characters',
+  IGNORE_DIACRITICS = 'ignore_diacritics',
+  IGNORE_CASING = 'ignore_casing',
 }
 
 export enum Language {
@@ -58,5 +59,6 @@ export interface Preferences {
   [Preference.TEXT_SIZE]?: TextSize;
   [Preference.SMOOTH_SCROLLING]?: boolean;
   [Preference.SCROLLING_ANIMATION]?: boolean;
-  [Preference.IGNORE_ACCENTED_CHARACTERS]?: boolean;
+  [Preference.IGNORE_DIACRITICS]?: boolean;
+  [Preference.IGNORE_CASING]?: boolean;
 }

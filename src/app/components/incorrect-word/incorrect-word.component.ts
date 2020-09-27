@@ -12,26 +12,31 @@ export class IncorrectWordComponent implements OnInit {
   @Input() expected: string;
   @Input() language: Language;
   @Input() ignoreAccentedCharacters: boolean;
+  @Input() ignoreCasing: boolean;
 
   valueLetters = [];
 
   constructor() {}
 
   ngOnInit(): void {
+    let value = this.ignoreCasing ? this.value.toLowerCase() : this.value;
+    let expected = this.ignoreCasing
+      ? this.expected.toLowerCase()
+      : this.expected;
     for (
       let i = 0;
       i < Math.min(this.value.length, this.expected.length);
       i++
     ) {
       let entry = {
-        char: this.value[i],
+        char: value[i],
         class: 'character-incorrect',
       };
 
       if (
         LanguageService.compare(
-          this.value[i],
-          this.expected[i],
+          value[i],
+          expected[i],
           this.language,
           this.ignoreAccentedCharacters
         )

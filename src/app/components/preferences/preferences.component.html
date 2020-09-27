@@ -231,7 +231,7 @@
             </div>
           </div>
 
-          <!-- Ignore accented characters -->
+          <!-- Ignore diacritics / accented characters -->
           <div
             class="preferences-entry preferences-entry-main preferences-toggle-entry preferences-entry-ignore-accented-characters"
           >
@@ -244,11 +244,27 @@
             <label class="preferences-toggle-switch switch">
               <input
                 type="checkbox"
-                [ngModel]="
-                  preferences.get(Preference.IGNORE_ACCENTED_CHARACTERS).value
-                "
+                [ngModel]="preferences.get(Preference.IGNORE_DIACRITICS).value"
                 (change)="onIgnoreAccentedCharactersChanged($event)"
                 id="ignore-accented-characters"
+              />
+              <span class="slider round"></span>
+            </label>
+          </div>
+
+          <!-- Ignore casing -->
+          <div
+            class="preferences-entry preferences-entry-main preferences-toggle-entry preferences-entry-ignore-diacritics"
+          >
+            <label class="preferences-toggle-label" for="ignore-casing">
+              Ignore casing
+            </label>
+            <label class="preferences-toggle-switch switch">
+              <input
+                type="checkbox"
+                [ngModel]="preferences.get(Preference.IGNORE_CASING).value"
+                (change)="onIgnoreCasingChanged($event)"
+                id="ignore-casing"
               />
               <span class="slider round"></span>
             </label>

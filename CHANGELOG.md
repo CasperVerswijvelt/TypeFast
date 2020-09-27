@@ -7,7 +7,7 @@
 - Add option to disable animations during text scrolling
 - Added sentences for French language, thanks [RyFax](https://github.com/RyFax)!
 - Added Romanian language, currently only words
-- Added option to ignore accented characters: this is language sensitive. For example, in French, the letter 'á' can be typed as 'a' and still be counted as correct when this setting is enabled.
+- Added option to ignore accented characters in word validation: this is language sensitive. For example, in French, the letter 'á' can be typed as 'a' and still be counted as correct when this setting is enabled.
 
   Currently this settings supports:
 
@@ -17,6 +17,8 @@
   - Romanian (â,ă,î,ș,ț)
   - Dutch (é,è,ë,ê,ü,ç)
   - German (ä,ö,ü,ß (typed as 's'))
+
+- Added option to ignore casing in word validation
 
 ### Improvements
 

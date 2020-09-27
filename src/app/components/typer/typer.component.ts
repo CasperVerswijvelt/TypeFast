@@ -48,7 +48,9 @@ export class TyperComponent implements OnInit {
   reverseScroll = false;
   smoothScroll = true;
   ignoreAccentedCharacters: boolean;
+  ignoreCasing: boolean;
   textSizeClass = '';
+  ignoreResultsString = '';
 
   Preference = Preference;
 
@@ -78,9 +80,12 @@ export class TyperComponent implements OnInit {
     ).value;
     this.smoothScroll = this.preferences.get(Preference.SMOOTH_SCROLLING).value;
     this.ignoreAccentedCharacters = this.preferences.get(
-      Preference.IGNORE_ACCENTED_CHARACTERS
+      Preference.IGNORE_DIACRITICS
     ).value;
+    this.ignoreCasing = this.preferences.get(Preference.IGNORE_CASING).value;
     this.wordMode = this.preferences.get(Preference.WORD_MODE).value;
+
+    this.updateIgnoreResultString();
   }
 
   ngOnInit(): void {
@@ -97,9 +102,13 @@ export class TyperComponent implements OnInit {
       .pipe(skip(1))
       .subscribe(this.onSmoothScrollingPreferenceUpdated.bind(this));
     this.preferences
-      .get(Preference.IGNORE_ACCENTED_CHARACTERS)
+      .get(Preference.IGNORE_DIACRITICS)
       .pipe(skip(1))
       .subscribe(this.onIgnoreAccentedCharactersPreferenceUpdated.bind(this));
+    this.preferences
+      .get(Preference.IGNORE_CASING)
+      .pipe(skip(1))
+      .subscribe(this.onIgnoreCasingPreferenceUpdated.bind(this));
 
     this.containerElement = document.getElementsByClassName(
       'word-container'
@@ -219,12 +228,10 @@ export class TyperComponent implements OnInit {
 
   private compare(actual: string, expected: string): boolean {
     return LanguageService.compare(
-      actual,
-      expected,
+      this.ignoreCasing ? actual.toLowerCase() : actual,
+      this.ignoreCasing ? expected.toLowerCase() : expected,
       this.language,
-      this.preferencesService.getPreference(
-        Preference.IGNORE_ACCENTED_CHARACTERS
-      )
+      this.preferencesService.getPreference(Preference.IGNORE_DIACRITICS)
     );
   }
 
@@ -246,6 +253,35 @@ export class TyperComponent implements OnInit {
   private onIgnoreAccentedCharactersPreferenceUpdated(value: any) {
     this.ignoreAccentedCharacters = value;
     this.setupTest();
+    this.updateIgnoreResultString();
+  }
+
+  private onIgnoreCasingPreferenceUpdated(value: any) {
+    this.ignoreCasing = value;
+    this.setupTest();
+    this.updateIgnoreResultString();
+  }
+
+  private updateIgnoreResultString() {
+    this.ignoreResultsString = '';
+
+    if (this.ignoreAccentedCharacters) {
+      this.ignoreResultsString += 'accents';
+
+      if (this.ignoreCasing) {
+        this.ignoreResultsString += ', ';
+      }
+    }
+
+    if (this.ignoreCasing) {
+      this.ignoreResultsString += 'casing';
+    }
+
+    if (this.ignoreResultsString.length) {
+      this.ignoreResultsString =
+        this.ignoreResultsString.charAt(0).toUpperCase() +
+        this.ignoreResultsString.slice(1);
+    }
   }
 
   onUpdatedWordList(
