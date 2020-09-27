@@ -1463,7 +1463,6 @@ heaven
 heavily
 heavy
 heel
-heer
 height
 helicopter
 hell
@@ -1471,6 +1470,7 @@ hello
 help
 helpful
 her
+here
 hereditary
 heritage
 hero
