@@ -16,6 +16,7 @@
   - Arabic (أ,إ,آ,ة,ؤ,ئ,ى)
   - Romanian (â,ă,î,ș,ț)
   - Dutch (é,è,ë,ê,ü,ç)
+  - German (ä,ö,ü,ß (typed as 's'))
 
 ### Improvements
 

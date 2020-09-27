@@ -51,6 +51,12 @@ export class LanguageService {
       ü: 'u',
       ç: 'c',
     },
+    [Language.GERMAN]: {
+      ä: 'q',
+      ö: 'o',
+      ü: 'u',
+      ß: 's',
+    },
   };
 
   static getLanguageISO(language: Language): string {
