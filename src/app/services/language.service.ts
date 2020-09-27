@@ -43,6 +43,14 @@ export class LanguageService {
       ș: 's',
       ț: 't',
     },
+    [Language.DUTCH]: {
+      é: 'e',
+      è: 'e',
+      ë: 'e',
+      ê: 'e',
+      ü: 'u',
+      ç: 'c',
+    },
   };
 
   static getLanguageISO(language: Language): string {

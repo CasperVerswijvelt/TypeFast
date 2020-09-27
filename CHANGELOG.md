@@ -9,7 +9,13 @@
 - Added Romanian language, currently only words
 - Added option to ignore accented characters: this is language sensitive. For example, in French, the letter 'á' can be typed as 'a' and still be counted as correct when this setting is enabled.
 
-  Currently this settings supports Russian (ë), French (â,à,á,é,è,ë,ê,ì,î,ï,ù,û,ü,ç), Arabic(أ,إ,آ,ة,ؤ,ئ,ى) and Romanian (â,ă,î,ș,ț)
+  Currently this settings supports:
+
+  - Russian (ë)
+  - French (â,à,á,é,è,ë,ê,ì,î,ï,ù,û,ü,ç)
+  - Arabic (أ,إ,آ,ة,ؤ,ئ,ى)
+  - Romanian (â,ă,î,ș,ț)
+  - Dutch (é,è,ë,ê,ü,ç)
 
 ### Improvements
 
