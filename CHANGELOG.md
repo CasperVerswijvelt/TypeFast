@@ -1,5 +1,11 @@
 # TypeFast.io - Release notes
 
+## Unreleased
+
+### Improvements
+
+- Remove incorrect words with special characters from all languages
+
 ## 1.0.4 - 27-09-2020
 
 ### New

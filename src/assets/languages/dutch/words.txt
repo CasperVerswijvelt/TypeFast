@@ -292,7 +292,6 @@ analist
 analyse
 analyseren
 ander
-andere)
 anderhalf
 anders
 andersom
@@ -1079,7 +1078,6 @@ dossier
 douche
 doven
 downloaden
-dr.
 draad
 draaien
 dragen
@@ -2478,7 +2476,6 @@ merken
 merkwaardig
 mes
 met
-met)
 metaal
 metalen
 meteen
@@ -2927,7 +2924,6 @@ opkijken
 opknappen
 opkomen
 opkomst
-opleggen,
 opleiden
 opleiding
 opletten
@@ -3662,7 +3658,6 @@ somber
 sommige
 soms
 song
-soort)
 soortgelijk
 sorry
 sowieso

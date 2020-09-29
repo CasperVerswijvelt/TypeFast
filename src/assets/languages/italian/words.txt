@@ -1605,7 +1605,6 @@ scrivere
 scuola
 scusa
 scusare
-(sé)
 se
 secco
 secolo
@@ -4762,7 +4761,6 @@ tela
 telecamera
 telefilm
 telefonino
-(TG)
 telescopio
 televisore
 tempesta
