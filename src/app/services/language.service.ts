@@ -21,6 +21,18 @@ export class LanguageService {
       ئ: 'ء',
       ى: 'ي',
     },
+    [Language.CATALAN]: {
+      à: 'a',
+      é: 'e',
+      è: 'e',
+      í: 'i',
+      ï: 'i',
+      ò: 'o',
+      ó: 'o',
+      ú: 'u',
+      ü: 'u',
+      ç: 'c',
+    },
     [Language.FRENCH]: {
       â: 'a',
       à: 'a',
@@ -64,6 +76,8 @@ export class LanguageService {
     switch (language) {
       case Language.DUTCH:
         return 'nl';
+      case Language.CATALAN:
+        return 'cat';
       case Language.ENGLISH_BRITISH:
         return 'en-gb';
       case Language.ENGLISH_AMERICAN:

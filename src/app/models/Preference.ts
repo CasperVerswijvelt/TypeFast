@@ -16,6 +16,7 @@ export enum Language {
   CUSTOM = 'custom',
   ARABIC = 'arabic',
   CHINESE = 'chinese',
+  CATALAN = 'catalan',
   DUTCH = 'dutch',
   ENGLISH_AMERICAN = 'english_american',
   ENGLISH_BRITISH = 'english_british',
