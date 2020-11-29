@@ -58,6 +58,14 @@ export class LanguageService {
       ü: 'u',
       ß: 's',
     },
+    [Language.SPANISH]: {
+      á: 'a',
+      é: 'e',
+      í: 'i',
+      ó: 'o',
+      ú: 'u',
+      ü: 'u',
+    },
   };
 
   static getLanguageISO(language: Language): string {
