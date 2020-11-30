@@ -77,7 +77,7 @@ export class LanguageService {
       case Language.DUTCH:
         return 'nl';
       case Language.CATALAN:
-        return 'cat';
+        return 'ca';
       case Language.ENGLISH_BRITISH:
         return 'en-gb';
       case Language.ENGLISH_AMERICAN:
