@@ -94,7 +94,7 @@ $preferences-entry-main-height: 37px;
   color: white;
   width: 240px;
   opacity: 0;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, visibility 0.3s;
   overflow-x: hidden;
   display: flex;
   flex-direction: column;
