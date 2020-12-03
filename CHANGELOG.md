@@ -9,6 +9,7 @@
 ### Improvements
 
 - Remove incorrect words with special characters from all languages
+- Update dependencies
 
 ### Fixed
 
