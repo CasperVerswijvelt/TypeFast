@@ -68,6 +68,8 @@ export class LanguageService {
     },
   };
 
+  // Use ISO 639-1 standard for language codes,
+  //  see https://www.andiamo.co.uk/resources/iso-language-codes/
   static getLanguageISO(language: Language): string {
     switch (language) {
       case Language.DUTCH:
