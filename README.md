@@ -29,7 +29,7 @@ Pleas make sure that:
 
 ## Authors
 
-- **Casper Verswijevlt** - _Everything_ -
+- **Casper Verswijvelt** - _Everything_ -
   [CasperVerswijvelt](https://github.com/CasperVerswijvelt)
 
 See also the list of

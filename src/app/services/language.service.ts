@@ -53,7 +53,7 @@ export class LanguageService {
       ç: 'c',
     },
     [Language.GERMAN]: {
-      ä: 'q',
+      ä: 'a',
       ö: 'o',
       ü: 'u',
       ß: 's',
