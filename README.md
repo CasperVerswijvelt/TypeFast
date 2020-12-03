@@ -33,7 +33,7 @@ Pleas make sure that:
   [CasperVerswijvelt](https://github.com/CasperVerswijvelt)
 
 See also the list of
-[contributors](https://github.com/PurpleBooth/a-good-readme-template/contributors)
+[contributors](https://github.com/CasperVerswijvelt/TypeFast/contributors)
 who participated in this project.
 
 ## License
