@@ -2,9 +2,19 @@
 
 ## Unreleased
 
+### New
+
+- Added sentences and 'ignore accents' characters for Spanish language, thanks [guillemglez](https://github.com/guillemglez)!
+
 ### Improvements
 
 - Remove incorrect words with special characters from all languages
+
+### Fixed
+
+- Fix error in German 'ignore accents' mode
+- Fix small transition issue when closing preferences pane
+- Fix small typo in README
 
 ## 1.0.4 - 27-09-2020
 
