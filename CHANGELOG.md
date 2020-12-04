@@ -1,10 +1,11 @@
 # TypeFast.io - Release notes
 
-## Unreleased
+## 1.0.5 - 2020-12-4
 
 ### New
 
 - Added sentences and 'ignore accents' characters for Spanish language, thanks [guillemglez](https://github.com/guillemglez)!
+- Added Catalan language, thanks [guillemglez](https://github.com/guillemglez)!
 
 ### Improvements
 
@@ -17,7 +18,7 @@
 - Fix small transition issue when closing preferences pane
 - Fix small typo in README
 
-## 1.0.4 - 27-09-2020
+## 1.0.4 - 2020-09-27
 
 ### New
 
@@ -47,7 +48,7 @@
 
 - Changed 'heer' to 'here' in American English, thanks [fishstik](https://github.com/fishstik)!
 
-## 1.0.3 - 09-09-2020
+## 1.0.3 - 2020-09-09
 
 ### New
 
@@ -62,7 +63,7 @@
 
 - Improved preferences menu and loading of languages
 
-## 1.0.2 - 31-08-2020
+## 1.0.2 - 2020-08-31
 
 ### New
 
@@ -78,7 +79,7 @@
 - Remove ugly tab outline on active reset, increase timer and decrease timer buttons (but keep focus outline for accesibility)
 - Split up up the english language into British English and American English
 
-## 1.0.1 - 30-08-2020
+## 1.0.1 - 2020-08-30
 
 ### New
 
@@ -92,7 +93,7 @@
 - Fixed height of uncollapsed preference groups not being exactly perfect
 - Fix typo 'sententes' in Word mode preference
 
-## 1.0.0 - 29-08-2020
+## 1.0.0 - 2020-08-09
 
 ### Notes
 
