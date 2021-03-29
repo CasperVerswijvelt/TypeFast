@@ -6,6 +6,7 @@
 
 - Set default theme to dark
 - Update Angular
+- Update dependencies
 
 ## 1.0.5 - 2020-12-04
 
