@@ -4,7 +4,8 @@
 
 ### Improvements
 
-= Set default theme to dark
+- Set default theme to dark
+- Update Angular
 
 ## 1.0.5 - 2020-12-04
 
