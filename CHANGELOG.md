@@ -1,6 +1,12 @@
 # TypeFast.io - Release notes
 
-## 1.0.5 - 2020-12-4
+## 1.0.6 - 2021-03-29
+
+### Improvements
+
+= Set default theme to dark
+
+## 1.0.5 - 2020-12-04
 
 ### New
 
