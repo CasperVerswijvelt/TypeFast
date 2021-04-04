@@ -1,23 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <!-- Matomo Tag Manager -->
-    <script type="text/javascript">
-      var _mtm = (window._mtm = window._mtm || []);
-      _mtm.push({
-        'mtm.startTime': new Date().getTime(),
-        event: 'mtm.Start',
-      });
-      var d = document,
-        g = d.createElement('script'),
-        s = d.getElementsByTagName('script')[0];
-      g.type = 'text/javascript';
-      g.async = true;
-      g.src = 'https://analytics.casperverswijvelt.be/js/container_bxC2vGcV.js';
-      s.parentNode.insertBefore(g, s);
-    </script>
-    <!-- End Matomo Tag Manager -->
-
     <!-- Google Analytics -->
     <script
       async
@@ -60,4 +43,10 @@
   <body id="body">
     <app-root tabindex="-1"></app-root>
   </body>
+
+  <!-- Selfhosted analytics -->
+  <noscript>
+    <img src="https://analytics.casperverswijvelt.be/ingress/a3b54e7b-b3b4-45ee-bfcd-eca895b5e10b/pixel.gif">
+  </noscript>
+  <script defer src="https://analytics.casperverswijvelt.be/ingress/a3b54e7b-b3b4-45ee-bfcd-eca895b5e10b/script.js"></script>
 </html>
