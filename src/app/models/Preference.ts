@@ -20,6 +20,7 @@ export enum Language {
   DUTCH = 'dutch',
   ENGLISH_AMERICAN = 'english_american',
   ENGLISH_BRITISH = 'english_british',
+  ENGLISH_200 = 'english_200',
   FRENCH = 'french',
   GERMAN = 'german',
   HINDI = 'hindi',

@@ -92,6 +92,8 @@ export class LanguageService {
         return 'en-gb';
       case Language.ENGLISH_AMERICAN:
         return 'en-us';
+      case Language.ENGLISH_200:
+        return 'en-gb';
       case Language.ITALIAN:
         return 'it';
       case Language.HINDI:
@@ -133,6 +135,8 @@ export class LanguageService {
         return 'English (UK)';
       case Language.ENGLISH_AMERICAN:
         return 'English (US)';
+      case Language.ENGLISH_200:
+        return 'English (200)';
       default:
         return language.charAt(0).toUpperCase() + (language as string).slice(1);
     }
