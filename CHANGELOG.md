@@ -1,15 +1,16 @@
 # TypeFast.io - Release notes
 
 
-## Unreleased
+## 1.0.7 - 2021-06-07
 
-## New
+### New
 
 - Add new 'English(200)' language with 200 most common English words (Thanks for the suggestion!)
 
-## Improvements
+### Improvements
 
 - Update dependencies
+
 ## 1.0.6 - 2021-03-29
 
 ### Improvements
