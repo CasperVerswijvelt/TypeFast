@@ -120,6 +120,8 @@ export class LanguageService {
         return 'de';
       case Language.ARABIC:
         return 'sa';
+      case Language.INDONESIAN:
+        return 'id';
       case Language.PROGRAMMING:
         return 'dev';
       case Language.CUSTOM:

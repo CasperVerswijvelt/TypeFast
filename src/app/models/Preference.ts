@@ -25,6 +25,7 @@ export enum Language {
   GERMAN = 'german',
   HINDI = 'hindi',
   HUNGARIAN = 'hungarian',
+  INDONESIAN = 'indonesian',
   ITALIAN = 'italian',
   JAPANESE = 'japanese',
   KOREAN = 'korean',
