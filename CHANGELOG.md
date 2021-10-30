@@ -1,5 +1,15 @@
 # TypeFast.io - Release notes
 
+## 1.0.8 - 2021-10-30
+
+### New
+
+- Added literature texts and tongue twisters to Russian sentences mode, thanks [talkenson](https://github.com/talkenson)!
+- Added Indonesian language
+
+### Improvements
+
+- Update dependencies
 
 ## 1.0.7 - 2021-06-07
 
