@@ -168,12 +168,8 @@ input:checked + .slider:before {
   animation-delay: 0s;
 }
 @keyframes spinner {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
+  from   { opacity: 1;}
+  to  { opacity: 0;}
 }
 
 // tooltip
