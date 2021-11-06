@@ -5,6 +5,7 @@
 ### Improvements
 
 - Added words and sentences to Portuguese language, thanks Lawliet!
+- Add accented characters for 'Ignore accented characters' mode in Portuguese language
 
 ## 1.0.8 - 2021-10-30
 

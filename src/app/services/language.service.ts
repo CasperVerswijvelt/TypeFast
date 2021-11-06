@@ -78,6 +78,24 @@ export class LanguageService {
       ú: 'u',
       ü: 'u',
     },
+    [Language.PORTUGUESE]: {
+      á: 'a',
+      â: 'a',
+      ã: 'a',
+      à: 'a',
+      ç: 'c',
+      é: 'e',
+      ê: 'e',
+      è: 'e',
+      í: 'i',
+      ì: 'i',
+      ó: 'o',
+      ô: 'o',
+      õ: 'o',
+      ò: 'o',
+      ú: 'u',
+      ù: 'u'
+    },
   };
 
   // Use ISO 639-1 standard for language codes,
