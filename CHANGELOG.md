@@ -1,5 +1,12 @@
 # TypeFast.io - Release notes
 
+## 1.0.10 - 2022-03-06
+
+### Improvements
+
+- Updated to Angular 13
+- Added sentences to Portuguese language, thanks N i k a o!
+
 ## 1.0.9 - 2021-11-06
 
 ### Improvements
