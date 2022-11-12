@@ -1,5 +1,11 @@
 # TypeFast.io - Release notes
 
+## 1.0.11 - 2022-11-12
+
+### Improvements
+
+- Added sentences to Italian language, thanks [nuzguy](https://github.com/nuzguy)!
+
 ## 1.0.10 - 2022-03-06
 
 ### Improvements
