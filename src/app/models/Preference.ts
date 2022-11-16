@@ -33,6 +33,7 @@ export enum Language {
   ROMANIAN = 'romanian',
   RUSSIAN = 'russian',
   SPANISH = 'spanish',
+  UYGHUR = 'uyghur',
   PROGRAMMING = 'programming',
 }
 
