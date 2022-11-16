@@ -269,6 +269,6 @@ export class WordService {
   }
 
   private shouldReverseScroll(language: Language) {
-    return language === Language.ARABIC;
+    return language === Language.UYGHUR;
   }
 }
