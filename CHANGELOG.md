@@ -1,5 +1,11 @@
 # TypeFast.io - Release notes
 
+## 1.0.12 - 2022-12-21
+
+### New
+
+- Added Uyghur language, thanks [Waris Ruzi](https://github.com/WarisWorks)!
+
 ## 1.0.11 - 2022-11-12
 
 ### Improvements
