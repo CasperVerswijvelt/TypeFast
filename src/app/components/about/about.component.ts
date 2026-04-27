@@ -5,8 +5,7 @@ import { MarkdownComponent } from 'ngx-markdown';
     selector: 'app-about',
     templateUrl: './about.component.html',
     styleUrls: ['./about.component.scss'],
-    standalone: true,
-    imports: [MarkdownComponent],
+    imports: [MarkdownComponent]
 })
 export class AboutComponent implements OnInit {
   @Output() onAboutClosed = new EventEmitter<void>();

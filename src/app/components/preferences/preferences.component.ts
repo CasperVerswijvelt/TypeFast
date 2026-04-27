@@ -18,13 +18,12 @@ import { PopperDirective } from '../../directives/popper.directive';
     selector: 'app-preferences',
     templateUrl: './preferences.component.html',
     styleUrls: ['./preferences.component.scss'],
-    standalone: true,
     imports: [
-    FormsModule,
-    NgClass,
-    PopperDirective,
-    KeyValuePipe
-],
+        FormsModule,
+        NgClass,
+        PopperDirective,
+        KeyValuePipe
+    ]
 })
 export class PreferencesComponent implements OnInit {
   @Output() preferencesToggled = new EventEmitter<boolean>();

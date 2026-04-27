@@ -27,15 +27,14 @@ import { TimePipe } from '../../pipes/time.pipe';
     selector: 'app-typer',
     templateUrl: './typer.component.html',
     styleUrls: ['./typer.component.scss'],
-    standalone: true,
     imports: [
-    NgClass,
-    FormsModule,
-    PopperDirective,
-    IncorrectWordComponent,
-    DecimalPipe,
-    TimePipe
-],
+        NgClass,
+        FormsModule,
+        PopperDirective,
+        IncorrectWordComponent,
+        DecimalPipe,
+        TimePipe
+    ]
 })
 export class TyperComponent implements OnInit {
   @Output() focusFunctionReady = new EventEmitter<() => void>();

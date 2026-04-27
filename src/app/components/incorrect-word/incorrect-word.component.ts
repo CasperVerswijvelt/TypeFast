@@ -7,8 +7,7 @@ import { LanguageService } from 'src/app/services/language.service';
     selector: 'app-incorrect-word',
     templateUrl: './incorrect-word.component.html',
     styleUrls: ['./incorrect-word.component.scss'],
-    standalone: true,
-    imports: [],
+    imports: []
 })
 export class IncorrectWordComponent implements OnInit {
   @Input() value: string;

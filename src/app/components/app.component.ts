@@ -8,12 +8,11 @@ import { ThemeService } from '../services/theme.service';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    standalone: true,
     imports: [
         TyperComponent,
         PreferencesComponent,
         AboutComponent,
-    ],
+    ]
 })
 export class AppComponent {
   title = 'Type fast.';
