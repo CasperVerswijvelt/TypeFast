@@ -94,7 +94,7 @@ export class LanguageService {
       õ: 'o',
       ò: 'o',
       ú: 'u',
-      ù: 'u'
+      ù: 'u',
     },
   };
 
@@ -168,7 +168,7 @@ export class LanguageService {
     actual: string,
     expected: string,
     language: Language = Language.CUSTOM,
-    ignoreAccents = false
+    ignoreAccents = false,
   ): boolean {
     if (!actual || !expected) return false;
     if (actual.length !== expected.length) return false;
@@ -196,7 +196,7 @@ export class LanguageService {
     actual: string,
     expected: string,
     language: Language = Language.CUSTOM,
-    ignoreAccents = false
+    ignoreAccents = false,
   ): boolean {
     if (typeof actual !== 'string' || typeof expected !== 'string')
       return false;

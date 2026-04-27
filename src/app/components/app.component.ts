@@ -5,14 +5,10 @@ import { AboutComponent } from './about/about.component';
 import { ThemeService } from '../services/theme.service';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    imports: [
-        TyperComponent,
-        PreferencesComponent,
-        AboutComponent,
-    ]
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss'],
+  imports: [TyperComponent, PreferencesComponent, AboutComponent],
 })
 export class AppComponent {
   title = 'Type fast.';

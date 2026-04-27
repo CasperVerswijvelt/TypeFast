@@ -55,7 +55,7 @@ export class PreferencesService {
       for (const defaultPreference in this.defaults) {
         this.preferencesSubjects.set(
           defaultPreference,
-          new BehaviorSubject(this.defaults[defaultPreference])
+          new BehaviorSubject(this.defaults[defaultPreference]),
         );
       }
 

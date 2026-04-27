@@ -26,12 +26,12 @@ export class WordService {
     language: Language,
     wordMode: WordMode,
     wordListName: string,
-    shouldReverseScroll: boolean
+    shouldReverseScroll: boolean,
   ) => void)[] = [];
   private languageFetchListeners: ((
     language: Language,
     wordMode: WordMode,
-    promise: Promise<void>
+    promise: Promise<void>,
   ) => void)[] = [];
 
   private DEFAULT_WORD_AMOUNT = 100;
@@ -53,7 +53,7 @@ export class WordService {
 
     this.loadLanguage(
       this.preferencesService.getPreference(Preference.LANGUAGE),
-      this.preferencesService.getPreference(Preference.WORD_MODE)
+      this.preferencesService.getPreference(Preference.WORD_MODE),
     );
   }
 
@@ -63,14 +63,14 @@ export class WordService {
       this.preferencesService.getPreference(Preference.WORD_MODE) ===
         WordMode.WORDS
         ? WordMode.WORDS
-        : WordMode.SENTENCES
+        : WordMode.SENTENCES,
     );
   }
 
   private onWordModePreferenceUpdated(value: any): void {
     this.loadLanguage(
       this.preferencesService.getPreference(Preference.LANGUAGE),
-      value
+      value,
     );
   }
 
@@ -106,7 +106,7 @@ export class WordService {
           language,
           wordMode,
           langString,
-          this.shouldReverseScroll(language)
+          this.shouldReverseScroll(language),
         );
       })
       .catch((e) => {
@@ -145,8 +145,8 @@ export class WordService {
       language: Language,
       wordMode: WordMode,
       wordListName: string,
-      shouldReverseScroll: boolean
-    ) => void
+      shouldReverseScroll: boolean,
+    ) => void,
   ): void {
     this.wordListListeners.push(listenerFunction);
 
@@ -155,7 +155,7 @@ export class WordService {
         this.lastLoadedListLanguage,
         this.lastLoadedListMode,
         this.currentSource,
-        false
+        false,
       );
     }
   }
@@ -164,8 +164,8 @@ export class WordService {
     onLanguageFetch: (
       language: Language,
       wordMode: WordMode,
-      promise: Promise<void>
-    ) => void
+      promise: Promise<void>,
+    ) => void,
   ): void {
     this.languageFetchListeners.push(onLanguageFetch);
   }
@@ -228,8 +228,8 @@ export class WordService {
       res.push(
         this.wordsCopy.splice(
           Math.floor(Math.random() * this.wordsCopy.length),
-          1
-        )[0]
+          1,
+        )[0],
       );
     }
 
@@ -243,7 +243,7 @@ export class WordService {
 
     return this.sentencesCopy.splice(
       Math.floor(Math.random() * this.sentencesCopy.length),
-      1
+      1,
     )[0];
   }
 
@@ -251,27 +251,24 @@ export class WordService {
     language: Language,
     wordMode: WordMode,
     wordListName: string,
-    shouldReverseScroll: boolean
+    shouldReverseScroll: boolean,
   ) {
     this.wordListListeners.forEach((listener) =>
-      listener(language, wordMode, wordListName, shouldReverseScroll)
+      listener(language, wordMode, wordListName, shouldReverseScroll),
     );
   }
 
   private notifyLanguageFetchSubscribers(
     language: Language,
     wordMode: WordMode,
-    promise: Promise<any>
+    promise: Promise<any>,
   ) {
     this.languageFetchListeners.forEach((listener) =>
-      listener(language, wordMode, promise)
+      listener(language, wordMode, promise),
     );
   }
 
   private shouldReverseScroll(language: Language) {
-    return (
-      language === Language.ARABIC ||
-      language === Language.UYGHUR
-    );
+    return language === Language.ARABIC || language === Language.UYGHUR;
   }
 }

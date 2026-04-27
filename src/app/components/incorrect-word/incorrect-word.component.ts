@@ -2,12 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Language } from 'src/app/models/Preference';
 import { LanguageService } from 'src/app/services/language.service';
 
-
 @Component({
-    selector: 'app-incorrect-word',
-    templateUrl: './incorrect-word.component.html',
-    styleUrls: ['./incorrect-word.component.scss'],
-    imports: []
+  selector: 'app-incorrect-word',
+  templateUrl: './incorrect-word.component.html',
+  styleUrls: ['./incorrect-word.component.scss'],
+  imports: [],
 })
 export class IncorrectWordComponent implements OnInit {
   @Input() value: string;
@@ -38,7 +37,7 @@ export class IncorrectWordComponent implements OnInit {
           value[i],
           expected[i],
           this.language,
-          this.ignoreAccentedCharacters
+          this.ignoreAccentedCharacters,
         )
       ) {
         entry.class = 'character-correct';
@@ -58,7 +57,7 @@ export class IncorrectWordComponent implements OnInit {
               char: el,
               class: 'character-incorrect',
             };
-          })
+          }),
       );
     } else if (this.value.length < this.expected.length) {
       // append last letters of expected value, marked missing
@@ -71,7 +70,7 @@ export class IncorrectWordComponent implements OnInit {
               char: el,
               class: 'character-missing',
             };
-          })
+          }),
       );
     }
   }

@@ -5,7 +5,10 @@ import { MarkdownModule } from 'ngx-markdown';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(FormsModule, MarkdownModule.forRoot({ loader: HttpClient })),
+    importProvidersFrom(
+      FormsModule,
+      MarkdownModule.forRoot({ loader: HttpClient }),
+    ),
     provideHttpClient(withFetch()),
   ],
 };

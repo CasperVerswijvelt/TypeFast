@@ -24,17 +24,17 @@ import { IncorrectWordComponent } from '../incorrect-word/incorrect-word.compone
 import { TimePipe } from '../../pipes/time.pipe';
 
 @Component({
-    selector: 'app-typer',
-    templateUrl: './typer.component.html',
-    styleUrls: ['./typer.component.scss'],
-    imports: [
-        NgClass,
-        FormsModule,
-        PopperDirective,
-        IncorrectWordComponent,
-        DecimalPipe,
-        TimePipe
-    ]
+  selector: 'app-typer',
+  templateUrl: './typer.component.html',
+  styleUrls: ['./typer.component.scss'],
+  imports: [
+    NgClass,
+    FormsModule,
+    PopperDirective,
+    IncorrectWordComponent,
+    DecimalPipe,
+    TimePipe,
+  ],
 })
 export class TyperComponent implements OnInit {
   @Output() focusFunctionReady = new EventEmitter<() => void>();
@@ -82,18 +82,18 @@ export class TyperComponent implements OnInit {
   constructor(
     private wordService: WordService,
     private cdRef: ChangeDetectorRef,
-    private preferencesService: PreferencesService
+    private preferencesService: PreferencesService,
   ) {
     this.wordService.addWordListListener(this.onUpdatedWordList.bind(this));
 
     this.preferences = preferencesService.getPreferences();
 
     this.testTime = this.preferences.get(
-      Preference.DEFAULT_TEST_DURATION
+      Preference.DEFAULT_TEST_DURATION,
     ).value;
     this.smoothScroll = this.preferences.get(Preference.SMOOTH_SCROLLING).value;
     this.ignoreAccentedCharacters = this.preferences.get(
-      Preference.IGNORE_DIACRITICS
+      Preference.IGNORE_DIACRITICS,
     ).value;
     this.ignoreCasing = this.preferences.get(Preference.IGNORE_CASING).value;
     this.wordMode = this.preferences.get(Preference.WORD_MODE).value;
@@ -124,16 +124,16 @@ export class TyperComponent implements OnInit {
       .subscribe(this.onIgnoreCasingPreferenceUpdated.bind(this));
 
     this.containerElement = document.getElementsByClassName(
-      'word-container'
+      'word-container',
     )[0] as HTMLElement;
     this.inputElement = document.getElementsByClassName(
-      'word-input'
+      'word-input',
     )[0] as HTMLInputElement;
     this.dummyInputElement = document.getElementsByClassName(
-      'word-input-dummy'
+      'word-input-dummy',
     )[0] as HTMLInputElement;
     this.inputWordCopy = document.getElementsByClassName(
-      'word-copy'
+      'word-copy',
     )[0] as HTMLInputElement;
 
     this.inputElement.onpaste = (e) => e.preventDefault();
@@ -173,7 +173,8 @@ export class TyperComponent implements OnInit {
 
     this.testStarted = false;
     this.syncCurrentWordElement();
-    this.rightWordOffset = this.currentWordElement.getBoundingClientRect().width;
+    this.rightWordOffset =
+      this.currentWordElement.getBoundingClientRect().width;
     this.syncOffset();
   }
 
@@ -220,7 +221,8 @@ export class TyperComponent implements OnInit {
         this.inputElement.classList.remove('input-incorrect');
 
         this.inputWordCopy.innerText = wordInput;
-        this.leftCharacterOffset = this.inputWordCopy.getBoundingClientRect().width;
+        this.leftCharacterOffset =
+          this.inputWordCopy.getBoundingClientRect().width;
         this.syncOffset();
       } else {
         this.inputElement.classList.add('input-incorrect');
@@ -233,7 +235,7 @@ export class TyperComponent implements OnInit {
       this.ignoreCasing ? actual.toLowerCase() : actual,
       this.ignoreCasing ? expected.toLowerCase() : expected,
       this.language,
-      this.preferencesService.getPreference(Preference.IGNORE_DIACRITICS)
+      this.preferencesService.getPreference(Preference.IGNORE_DIACRITICS),
     );
   }
 
@@ -290,7 +292,7 @@ export class TyperComponent implements OnInit {
     language: Language,
     wordMode: WordMode,
     wordListName: string,
-    shouldReverseScroll: boolean
+    shouldReverseScroll: boolean,
   ): void {
     this.reverseScrollWordList = shouldReverseScroll;
     this.wordListName = wordListName;
@@ -479,7 +481,7 @@ export class TyperComponent implements OnInit {
     this.registerWord(
       this.wordInput.trim(),
       this.words[this.currentIndex].slice(0, this.wordInput.length),
-      false
+      false,
     );
   }
 
@@ -543,7 +545,7 @@ export class TyperComponent implements OnInit {
 
     this.preferencesService.setPreference(
       Preference.DEFAULT_TEST_DURATION,
-      this.testTime
+      this.testTime,
     );
 
     this.updateTimer(0);
@@ -567,7 +569,7 @@ export class TyperComponent implements OnInit {
 
     this.preferencesService.setPreference(
       Preference.DEFAULT_TEST_DURATION,
-      this.testTime
+      this.testTime,
     );
 
     this.updateTimer(0);

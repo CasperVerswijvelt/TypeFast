@@ -6,8 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "lint": "tsc --noEmit && eslint . --ext js,ts,json --quiet --fix",
-    "e2e": "ng e2e"
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -27,19 +26,21 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^21.2.8",
+    "@angular-eslint/builder": "^21.3.1",
+    "@angular-eslint/eslint-plugin": "^21.3.1",
+    "@angular-eslint/eslint-plugin-template": "^21.3.1",
+    "@angular-eslint/schematics": "^21.3.1",
+    "@angular-eslint/template-parser": "^21.3.1",
     "@angular/cli": "^21.2.8",
     "@angular/compiler-cli": "^21.2.10",
-    "@types/node": "^15.14.9",
-    "@typescript-eslint/eslint-plugin": "^4.33.0",
-    "codelyzer": "^6.0.2",
-    "eslint": "^7.32.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.1",
-    "prettier": "^2.4.1",
-    "prettier-eslint": "^12.0.0",
-    "protractor": "^7.0.0",
+    "@types/node": "^20.19.39",
+    "angular-eslint": "^21.3.1",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.3",
     "ts-node": "^10.4.0",
-    "tslint": "^6.1.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.59.1"
   }
 }

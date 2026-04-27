@@ -25,7 +25,7 @@ export class ThemeService {
     if (mediaQueryList.addEventListener) {
       mediaQueryList.addEventListener(
         'change',
-        this.onSystemThemeUpdated.bind(this)
+        this.onSystemThemeUpdated.bind(this),
       );
 
       // Safari compatibility, it uses deprecated method
@@ -38,7 +38,7 @@ export class ThemeService {
     this.updateTheme(
       window.matchMedia('(prefers-color-scheme: dark)').matches,
       value,
-      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value
+      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value,
     );
   }
 
@@ -46,7 +46,7 @@ export class ThemeService {
     this.updateTheme(
       window.matchMedia('(prefers-color-scheme: dark)').matches,
       this.preferences.get(Preference.THEME).value,
-      value
+      value,
     );
   }
 
@@ -54,21 +54,21 @@ export class ThemeService {
     this.updateTheme(
       event.matches,
       this.preferences.get(Preference.THEME).value,
-      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value
+      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value,
     );
   }
 
   private updateTheme(
     matchesPreferkDark: boolean,
     themePreference: Theme,
-    followSystemThemePreference: boolean
+    followSystemThemePreference: boolean,
   ) {
     this.setTheme(
       followSystemThemePreference
         ? matchesPreferkDark
           ? Theme.DARK
           : themePreference
-        : themePreference
+        : themePreference,
     );
   }
 

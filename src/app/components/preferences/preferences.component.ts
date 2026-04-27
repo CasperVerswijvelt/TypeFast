@@ -15,15 +15,10 @@ import { FormsModule } from '@angular/forms';
 import { PopperDirective } from '../../directives/popper.directive';
 
 @Component({
-    selector: 'app-preferences',
-    templateUrl: './preferences.component.html',
-    styleUrls: ['./preferences.component.scss'],
-    imports: [
-        FormsModule,
-        NgClass,
-        PopperDirective,
-        KeyValuePipe
-    ]
+  selector: 'app-preferences',
+  templateUrl: './preferences.component.html',
+  styleUrls: ['./preferences.component.scss'],
+  imports: [FormsModule, NgClass, PopperDirective, KeyValuePipe],
 })
 export class PreferencesComponent implements OnInit {
   @Output() preferencesToggled = new EventEmitter<boolean>();
@@ -48,7 +43,7 @@ export class PreferencesComponent implements OnInit {
 
   constructor(
     private preferencesService: PreferencesService,
-    private wordService: WordService
+    private wordService: WordService,
   ) {
     this.preferences = preferencesService.getPreferences();
 
@@ -62,7 +57,7 @@ export class PreferencesComponent implements OnInit {
   private onLanguageFetch(
     language: Language,
     wordMode: WordMode,
-    promise: Promise<any>
+    promise: Promise<any>,
   ) {
     this.currentlyLoadingLanguage = language;
     this.currentlyLoadingWordMode = wordMode;
@@ -93,7 +88,7 @@ export class PreferencesComponent implements OnInit {
   onFollowSystemThemeChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.FOLLOW_SYSTEM_THEME,
-      (event.target as HTMLInputElement).checked
+      (event.target as HTMLInputElement).checked,
     );
   }
 
@@ -107,7 +102,7 @@ export class PreferencesComponent implements OnInit {
     const loadFile = (file: File) => this.wordService.loadFile(file);
 
     const oldLanguage = this.preferencesService.getPreference(
-      Preference.LANGUAGE
+      Preference.LANGUAGE,
     );
     const languageChanged = oldLanguage !== language;
 
@@ -148,35 +143,35 @@ export class PreferencesComponent implements OnInit {
   onReverseScrollChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.REVERSE_SCROLL,
-      (event.target as HTMLInputElement).checked
+      (event.target as HTMLInputElement).checked,
     );
   }
 
   onSmoothScrollingChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.SMOOTH_SCROLLING,
-      (event.target as HTMLInputElement).checked
+      (event.target as HTMLInputElement).checked,
     );
   }
 
   onScrollingAnimationChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.SCROLLING_ANIMATION,
-      (event.target as HTMLInputElement).checked
+      (event.target as HTMLInputElement).checked,
     );
   }
 
   onIgnoreAccentedCharactersChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.IGNORE_DIACRITICS,
-      (event.target as HTMLInputElement).checked
+      (event.target as HTMLInputElement).checked,
     );
   }
 
   onIgnoreCasingChanged(event: Event): void {
     this.preferencesService.setPreference(
       Preference.IGNORE_CASING,
-      (event.target as HTMLInputElement).checked
+      (event.target as HTMLInputElement).checked,
     );
   }
 
@@ -187,7 +182,7 @@ export class PreferencesComponent implements OnInit {
   onClickResetPreferences(): void {
     if (
       confirm(
-        "Are you sure you want to reset your preferences? This can't be undone!"
+        "Are you sure you want to reset your preferences? This can't be undone!",
       ) == true
     ) {
       this.preferencesService.clearPreferences();
@@ -201,7 +196,7 @@ export class PreferencesComponent implements OnInit {
       input.type = 'file';
 
       input.onchange = (e: Event) => {
-        resolve((<HTMLInputElement>e.target).files[0]);
+        resolve((e.target as HTMLInputElement).files[0]);
       };
 
       input.click();
