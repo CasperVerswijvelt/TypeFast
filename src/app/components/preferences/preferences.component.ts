@@ -10,7 +10,7 @@ import {
 import { WordService } from '../../services/word.service';
 import { BehaviorSubject } from 'rxjs';
 import { LanguageService } from 'src/app/services/language.service';
-import { NgFor, NgClass, KeyValuePipe } from '@angular/common';
+import { NgClass, KeyValuePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PopperDirective } from '../../directives/popper.directive';
 
@@ -20,12 +20,11 @@ import { PopperDirective } from '../../directives/popper.directive';
     styleUrls: ['./preferences.component.scss'],
     standalone: true,
     imports: [
-        NgFor,
-        FormsModule,
-        NgClass,
-        PopperDirective,
-        KeyValuePipe,
-    ],
+    FormsModule,
+    NgClass,
+    PopperDirective,
+    KeyValuePipe
+],
 })
 export class PreferencesComponent implements OnInit {
   @Output() preferencesToggled = new EventEmitter<boolean>();

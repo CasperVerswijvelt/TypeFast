@@ -1,14 +1,15 @@
 <div class="wrapper">
   <div class="container">
     <span class="value">
-      <span
-        *ngFor="let character of valueLetters"
-        [className]="character.class"
-        >{{ character.char }}</span
-      >
-    </span>
-    <span class="expected">
-      {{ expected }}
-    </span>
+      @for (character of valueLetters; track character) {
+        <span
+          [className]="character.class"
+          >{{ character.char }}</span
+          >
+        }
+      </span>
+      <span class="expected">
+        {{ expected }}
+      </span>
+    </div>
   </div>
-</div>

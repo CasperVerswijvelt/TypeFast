@@ -1,14 +1,14 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Language } from 'src/app/models/Preference';
 import { LanguageService } from 'src/app/services/language.service';
-import { NgFor } from '@angular/common';
+
 
 @Component({
     selector: 'app-incorrect-word',
     templateUrl: './incorrect-word.component.html',
     styleUrls: ['./incorrect-word.component.scss'],
     standalone: true,
-    imports: [NgFor],
+    imports: [],
 })
 export class IncorrectWordComponent implements OnInit {
   @Input() value: string;
