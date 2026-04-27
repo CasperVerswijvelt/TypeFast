@@ -73,18 +73,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "TypeFast:build"
+            "buildTarget": "TypeFast:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "TypeFast:build:production"
+              "buildTarget": "TypeFast:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "TypeFast:build"
+            "buildTarget": "TypeFast:build"
           }
         },
         "test": {
