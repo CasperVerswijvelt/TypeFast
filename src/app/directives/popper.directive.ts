@@ -2,7 +2,8 @@ import { Directive, Input, ElementRef } from '@angular/core';
 import { createPopper, Instance, Placement } from '@popperjs/core';
 
 @Directive({
-  selector: '[popper]',
+    selector: '[popper]',
+    standalone: true,
 })
 export class PopperDirective {
   private popper: Instance;

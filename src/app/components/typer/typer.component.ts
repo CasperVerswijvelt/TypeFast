@@ -17,11 +17,27 @@ import {
 } from '../../models/Preference';
 import { skip } from 'rxjs/operators';
 import { LanguageService } from 'src/app/services/language.service';
+import { NgClass, NgFor, NgIf, DecimalPipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { PopperDirective } from '../../directives/popper.directive';
+import { IncorrectWordComponent } from '../incorrect-word/incorrect-word.component';
+import { TimePipe } from '../../pipes/time.pipe';
 
 @Component({
-  selector: 'app-typer',
-  templateUrl: './typer.component.html',
-  styleUrls: ['./typer.component.scss'],
+    selector: 'app-typer',
+    templateUrl: './typer.component.html',
+    styleUrls: ['./typer.component.scss'],
+    standalone: true,
+    imports: [
+        NgClass,
+        NgFor,
+        FormsModule,
+        PopperDirective,
+        NgIf,
+        IncorrectWordComponent,
+        DecimalPipe,
+        TimePipe,
+    ],
 })
 export class TyperComponent implements OnInit {
   @Output() focusFunctionReady = new EventEmitter<() => void>();

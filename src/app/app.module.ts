@@ -16,18 +16,15 @@ import { IncorrectWordComponent } from './components/incorrect-word/incorrect-wo
 import { AboutComponent } from './components/about/about.component';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@NgModule({ declarations: [
-        AppComponent,
-        TyperComponent,
+@NgModule({ declarations: [AppComponent],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
+        MarkdownModule.forRoot({ loader: HttpClient }), TyperComponent,
         TimePipe,
         PreferencesComponent,
         PopperDirective,
         IncorrectWordComponent,
-        AboutComponent,
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
-        FormsModule,
-        MarkdownModule.forRoot({ loader: HttpClient })], providers: [WordService, PreferencesService, ThemeService, LanguageService, provideHttpClient(withInterceptorsFromDi())] })
+        AboutComponent], providers: [WordService, PreferencesService, ThemeService, LanguageService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
   constructor(private themeService: ThemeService) {}
 }
