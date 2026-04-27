@@ -22,6 +22,7 @@ import { FormsModule } from '@angular/forms';
 import { PopperDirective } from '../../directives/popper.directive';
 import { IncorrectWordComponent } from '../incorrect-word/incorrect-word.component';
 import { TimePipe } from '../../pipes/time.pipe';
+import { AdPlaceholderComponent } from '../ad-placeholder/ad-placeholder.component';
 
 @Component({
   selector: 'app-typer',
@@ -33,6 +34,7 @@ import { TimePipe } from '../../pipes/time.pipe';
     PopperDirective,
     IncorrectWordComponent,
     DecimalPipe,
+    AdPlaceholderComponent,
     TimePipe,
   ],
 })
@@ -56,6 +58,16 @@ export class TyperComponent implements OnInit {
   testTimeLeft: number;
 
   testStarted: boolean;
+  hasCompletedFirstTest = false;
+
+  get testIsRunning(): boolean {
+    return this.testStarted && this.testTimeLeft > 0;
+  }
+
+  get testIsCompleted(): boolean {
+    return this.testStarted && this.testTimeLeft === 0;
+  }
+
   wordListName = 'Loading ...';
   language: Language;
   reverseScroll = false;
@@ -483,6 +495,8 @@ export class TyperComponent implements OnInit {
       this.words[this.currentIndex].slice(0, this.wordInput.length),
       false,
     );
+
+    this.hasCompletedFirstTest = true;
   }
 
   private breakPoints = [

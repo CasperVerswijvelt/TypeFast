@@ -105,7 +105,23 @@
     </div>
   </div>
 
-  <table cellspacing="0" cellpadding="0" class="type-test-results">
+  @if (hasCompletedFirstTest) {
+    <app-ad-placeholder
+      size="banner-slim"
+      label="Ad placeholder · post-test"
+      [class.is-hidden]="!testIsCompleted"
+    />
+  }
+
+  <div class="results-row">
+    <app-ad-placeholder
+      class="results-rail"
+      [class.is-hidden]="testIsRunning"
+      size="rectangle"
+      label="Ad placeholder · stats-left"
+    />
+
+    <table cellspacing="0" cellpadding="0" class="type-test-results">
     <tr class="type-test-results-wpm">
       <th colspan="2">
         <span class="type-test-results-wpm-value">{{
@@ -238,7 +254,15 @@
           </td>
         </tr>
       </table>
-    </div>
+
+    <app-ad-placeholder
+      class="results-rail"
+      [class.is-hidden]="testIsRunning"
+      size="rectangle"
+      label="Ad placeholder · stats-right"
+    />
+  </div>
+</div>
 
     <div
       [class.type-test-incorrect-words-modal-show]="incorrectWordsOpen"
