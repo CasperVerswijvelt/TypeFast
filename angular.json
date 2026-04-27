@@ -114,7 +114,6 @@
       }
     }
   },
-  "defaultProject": "TypeFast",
   "cli": {
     "analytics": false
   },
