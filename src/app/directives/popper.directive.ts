@@ -1,11 +1,11 @@
-import { Directive, Input, ElementRef } from '@angular/core';
+import { Directive, Input, ElementRef, OnInit, OnDestroy } from '@angular/core';
 import { createPopper, Instance, Placement } from '@popperjs/core';
 
 @Directive({
     selector: '[popper]',
     standalone: true,
 })
-export class PopperDirective {
+export class PopperDirective implements OnInit, OnDestroy {
   private popper: Instance;
 
   @Input() text: string;

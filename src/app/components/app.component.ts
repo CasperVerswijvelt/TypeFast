@@ -1,9 +1,19 @@
 import { Component } from '@angular/core';
+import { TyperComponent } from './typer/typer.component';
+import { PreferencesComponent } from './preferences/preferences.component';
+import { AboutComponent } from './about/about.component';
+import { ThemeService } from '../services/theme.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    standalone: true,
+    imports: [
+        TyperComponent,
+        PreferencesComponent,
+        AboutComponent,
+    ],
 })
 export class AppComponent {
   title = 'Type fast.';
@@ -11,6 +21,8 @@ export class AppComponent {
   showAbout = false;
 
   private typeTestFocusFunction: () => void;
+
+  constructor(private readonly themeService: ThemeService) {}
 
   onPreferencesToggled(show: boolean): void {
     if (show === false && this.typeTestFocusFunction) {
