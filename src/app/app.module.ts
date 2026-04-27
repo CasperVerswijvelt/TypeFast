@@ -14,27 +14,20 @@ import { ThemeService } from './services/theme.service';
 import { PopperDirective } from './directives/popper.directive';
 import { IncorrectWordComponent } from './components/incorrect-word/incorrect-word.component';
 import { AboutComponent } from './components/about/about.component';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    TyperComponent,
-    TimePipe,
-    PreferencesComponent,
-    PopperDirective,
-    IncorrectWordComponent,
-    AboutComponent,
-  ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    HttpClientModule,
-    MarkdownModule.forRoot({ loader: HttpClient }),
-  ],
-  providers: [WordService, PreferencesService, ThemeService, LanguageService],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        TyperComponent,
+        TimePipe,
+        PreferencesComponent,
+        PopperDirective,
+        IncorrectWordComponent,
+        AboutComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        FormsModule,
+        MarkdownModule.forRoot({ loader: HttpClient })], providers: [WordService, PreferencesService, ThemeService, LanguageService, provideHttpClient(withInterceptorsFromDi())] })
 export class AppModule {
   constructor(private themeService: ThemeService) {}
 }
