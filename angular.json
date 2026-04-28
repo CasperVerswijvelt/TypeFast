@@ -14,7 +14,8 @@
           "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": {
-              "base": "dist/TypeFast"
+              "base": "dist/TypeFast",
+              "browser": ""
             },
             "index": "src/index.html",
             "polyfills": ["zone.js"],
