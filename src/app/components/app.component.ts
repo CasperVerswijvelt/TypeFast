@@ -1,41 +1,25 @@
 import { Component } from '@angular/core';
-import { TyperComponent } from './typer/typer.component';
+import { RouterOutlet } from '@angular/router';
+import { NavComponent } from './nav/nav.component';
 import { PreferencesComponent } from './preferences/preferences.component';
-import { AboutComponent } from './about/about.component';
 import { ThemeService } from '../services/theme.service';
+import { TyperStateService } from '../services/typer-state.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [TyperComponent, PreferencesComponent, AboutComponent],
+  imports: [RouterOutlet, NavComponent, PreferencesComponent],
 })
 export class AppComponent {
-  title = 'Type fast.';
-
-  showAbout = false;
-
-  private typeTestFocusFunction: () => void;
-
-  constructor(private readonly themeService: ThemeService) {}
+  constructor(
+    private readonly themeService: ThemeService,
+    private readonly typerState: TyperStateService,
+  ) {}
 
   onPreferencesToggled(show: boolean): void {
-    if (show === false && this.typeTestFocusFunction) {
-      this.typeTestFocusFunction();
+    if (show === false) {
+      this.typerState.requestFocus();
     }
-  }
-
-  onFocusFunctionReady(focusFunction: () => void): void {
-    if (focusFunction) {
-      this.typeTestFocusFunction = focusFunction;
-    }
-  }
-
-  preferencesAboutClicked(): void {
-    this.showAbout = true;
-  }
-
-  closeAbout(): void {
-    this.showAbout = false;
   }
 }

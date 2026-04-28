@@ -1,14 +1,9 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-  Output,
-  EventEmitter,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
 import { timer, Subscription, BehaviorSubject } from 'rxjs';
 import { PreferencesService } from '../../services/preferences.service';
+import { TyperStateService } from '../../services/typer-state.service';
 import {
   Preference,
   WordMode,
@@ -38,9 +33,7 @@ import { AdPlaceholderComponent } from '../ad-placeholder/ad-placeholder.compone
     TimePipe,
   ],
 })
-export class TyperComponent implements OnInit {
-  @Output() focusFunctionReady = new EventEmitter<() => void>();
-
+export class TyperComponent implements OnInit, OnDestroy {
   words: string[] = ['Loading...'];
 
   wordInput: string;
@@ -90,14 +83,20 @@ export class TyperComponent implements OnInit {
   private currentIndex: number;
   private reverseScrollWordList: boolean;
   private secondTimer: Subscription;
+  private boundFocus: () => void;
+  private boundWordListListener: (
+    language: Language,
+    wordMode: WordMode,
+    wordListName: string,
+    shouldReverseScroll: boolean,
+  ) => void;
 
   constructor(
     private wordService: WordService,
     private cdRef: ChangeDetectorRef,
     private preferencesService: PreferencesService,
+    private typerState: TyperStateService,
   ) {
-    this.wordService.addWordListListener(this.onUpdatedWordList.bind(this));
-
     this.preferences = preferencesService.getPreferences();
 
     this.testTime = this.preferences.get(
@@ -153,8 +152,20 @@ export class TyperComponent implements OnInit {
     this.updateTimer(0);
     this.syncTextSizeClass();
 
-    this.focusFunctionReady.emit(this.focusInput.bind(this));
+    this.boundFocus = this.focusInput.bind(this);
+    this.typerState.register(this.boundFocus);
     this.focusInput();
+
+    this.boundWordListListener = this.onUpdatedWordList.bind(this);
+    this.wordService.addWordListListener(this.boundWordListListener);
+  }
+
+  ngOnDestroy(): void {
+    if (this.boundFocus) this.typerState.unregister(this.boundFocus);
+    if (this.boundWordListListener)
+      this.wordService.removeWordListListener(this.boundWordListListener);
+    this.typerState.running.set(false);
+    this.secondTimer?.unsubscribe();
   }
 
   setupTest(): void {
@@ -184,6 +195,7 @@ export class TyperComponent implements OnInit {
     this.inputElement.disabled = false;
 
     this.testStarted = false;
+    this.typerState.running.set(false);
     this.syncCurrentWordElement();
     this.rightWordOffset =
       this.currentWordElement.getBoundingClientRect().width;
@@ -317,6 +329,7 @@ export class TyperComponent implements OnInit {
   startTest(): void {
     this.secondTimer = timer(0, 1000).subscribe(this.onSecond.bind(this));
     this.testStarted = true;
+    this.typerState.running.set(true);
     this.testResults.timeElapsed = 0;
   }
 
@@ -487,6 +500,7 @@ export class TyperComponent implements OnInit {
     this.secondTimer.unsubscribe();
     this.secondTimer = undefined;
     this.inputElement.disabled = true;
+    this.typerState.running.set(false);
     this.dummyInputElement.focus();
 
     // Add right/wrong characters for current word

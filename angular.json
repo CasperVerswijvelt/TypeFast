@@ -30,7 +30,9 @@
               "src/android-chrome-192x192",
               "src/site.webmanifest",
               "src/assets",
-              { "glob": "CHANGELOG.md", "input": "./", "output": "./" }
+              { "glob": "CHANGELOG.md", "input": "./", "output": "./" },
+              { "glob": "ads.txt", "input": "src", "output": "/" },
+              { "glob": "_redirects", "input": "src", "output": "/" }
             ],
             "styles": ["src/styles.scss"],
             "scripts": [],

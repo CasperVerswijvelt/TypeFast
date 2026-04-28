@@ -160,6 +160,18 @@ export class WordService {
     }
   }
 
+  removeWordListListener(
+    listenerFunction: (
+      language: Language,
+      wordMode: WordMode,
+      wordListName: string,
+      shouldReverseScroll: boolean,
+    ) => void,
+  ): void {
+    const idx = this.wordListListeners.indexOf(listenerFunction);
+    if (idx >= 0) this.wordListListeners.splice(idx, 1);
+  }
+
   addLanguageFetchListener(
     onLanguageFetch: (
       language: Language,

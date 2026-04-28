@@ -1,10 +1,5 @@
-<div class="title">type fast. alpha</div>
-<app-typer (focusFunctionReady)="onFocusFunctionReady($event)"></app-typer>
+<app-nav></app-nav>
+<router-outlet></router-outlet>
 <app-preferences
   (preferencesToggled)="onPreferencesToggled($event)"
-  (aboutClicked)="preferencesAboutClicked()"
 ></app-preferences>
-<app-about
-  [class.about-show]="showAbout"
-  (aboutClosed)="closeAbout()"
-></app-about>

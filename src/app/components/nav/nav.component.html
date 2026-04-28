@@ -1,0 +1,14 @@
+<nav class="top-nav" aria-label="Primary">
+  <a
+    class="brand"
+    routerLink="/"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    >typefast.</a
+  >
+  @for (link of links; track link.path) {
+    <a class="nav-link" [routerLink]="link.path" routerLinkActive="active">{{
+      link.label
+    }}</a>
+  }
+</nav>
