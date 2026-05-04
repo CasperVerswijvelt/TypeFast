@@ -1,4 +1,16 @@
 <nav class="top-nav" aria-label="Primary">
+  <button
+    class="hamburger"
+    [class.hamburger-open]="menuOpen()"
+    type="button"
+    [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'"
+    [attr.aria-expanded]="menuOpen()"
+    aria-controls="mobile-nav-overlay"
+    (click)="toggleMenu()"
+  >
+    <span></span><span></span><span></span>
+  </button>
+
   <a
     class="brand"
     routerLink="/"
@@ -6,9 +18,37 @@
     [routerLinkActiveOptions]="{ exact: true }"
     >typefast.</a
   >
-  @for (link of links; track link.path) {
-    <a class="nav-link" [routerLink]="link.path" routerLinkActive="active">{{
-      link.label
-    }}</a>
-  }
+
+  <div class="desktop-links">
+    @for (link of links; track link.path) {
+      <a class="nav-link" [routerLink]="link.path" routerLinkActive="active">{{
+        link.label
+      }}</a>
+    }
+  </div>
 </nav>
+
+<div
+  id="mobile-nav-overlay"
+  class="mobile-nav"
+  [class.mobile-nav-show]="menuOpen()"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site navigation"
+>
+  <div class="mobile-nav-background" (click)="closeMenu()"></div>
+  <div class="mobile-nav-panel">
+    <ul class="mobile-nav-list">
+      @for (link of links; track link.path) {
+        <li>
+          <a
+            [routerLink]="link.path"
+            routerLinkActive="active"
+            (click)="closeMenu()"
+            >{{ link.label }}</a
+          >
+        </li>
+      }
+    </ul>
+  </div>
+</div>
