@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import {
   Preference,
   Preferences,
@@ -42,23 +43,28 @@ export class PreferencesService {
   };
 
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   constructor() {
-    addEventListener('storage', this.onStorage.bind(this), false);
+    this.initDefaults();
 
-    this.retrievePreferences();
+    if (this.isBrowser) {
+      window.addEventListener('storage', this.onStorage.bind(this), false);
+      this.retrievePreferences();
+    }
+  }
+
+  private initDefaults() {
+    for (const defaultPreference in this.defaults) {
+      this.preferencesSubjects.set(
+        defaultPreference,
+        new BehaviorSubject(this.defaults[defaultPreference]),
+      );
+    }
   }
 
   private retrievePreferences() {
     try {
-      // Set default preferences
-      for (const defaultPreference in this.defaults) {
-        this.preferencesSubjects.set(
-          defaultPreference,
-          new BehaviorSubject(this.defaults[defaultPreference]),
-        );
-      }
-
       const preferences = JSON.parse(localStorage.getItem('preferences'));
       if (typeof preferences === 'undefined') throw null;
 
@@ -104,7 +110,7 @@ export class PreferencesService {
   setPreference(key: Preference, value: unknown): void {
     if (!this.validatePreferenceType(key, value)) return;
 
-    if (!this.isTemporaryPreference(key, value)) {
+    if (this.isBrowser && !this.isTemporaryPreference(key, value)) {
       // Retrieve preferences object
       let pref: Preferences;
 
@@ -124,7 +130,7 @@ export class PreferencesService {
   }
 
   clearPreferences(): void {
-    if (localStorage.getItem('preferences') !== null) {
+    if (this.isBrowser && localStorage.getItem('preferences') !== null) {
       localStorage.removeItem('preferences');
       for (const defaultPreference in this.defaults) {
         this.preferencesSubjects

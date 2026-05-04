@@ -8,6 +8,13 @@ export const routes: Routes = [
         (m) => m.HomePageComponent,
       ),
     title: 'TypeFast.io - Test your typing speed',
+    data: {
+      seo: {
+        description:
+          'Free, minimalistic typing speed test. Measure your WPM and accuracy across 18+ languages, with sentence and word modes, custom themes, and no signup required.',
+        canonical: '/',
+      },
+    },
   },
   {
     path: 'about',
@@ -16,6 +23,13 @@ export const routes: Routes = [
         (m) => m.AboutPageComponent,
       ),
     title: 'About - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'About TypeFast.io — a free, open, ad-supported typing-speed test focused on minimalism, multilanguage word lists, and customisation.',
+        canonical: '/about',
+      },
+    },
   },
   {
     path: 'how-it-works',
@@ -24,6 +38,13 @@ export const routes: Routes = [
         (m) => m.HowItWorksPageComponent,
       ),
     title: 'How it works - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'How TypeFast.io measures your typing speed: WPM calculation, accuracy scoring, word-mode vs sentence-mode, and supported languages.',
+        canonical: '/how-it-works',
+      },
+    },
   },
   {
     path: 'tips',
@@ -32,6 +53,13 @@ export const routes: Routes = [
         (m) => m.TipsPageComponent,
       ),
     title: 'Typing tips - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'Practical tips to improve your typing speed and accuracy: posture, finger placement, rhythm, and what to focus on between tests.',
+        canonical: '/tips',
+      },
+    },
   },
   {
     path: 'privacy',
@@ -40,6 +68,13 @@ export const routes: Routes = [
         (m) => m.PrivacyPageComponent,
       ),
     title: 'Privacy - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'Privacy policy for TypeFast.io — what data is collected, how analytics works, and which third parties are involved.',
+        canonical: '/privacy',
+      },
+    },
   },
   {
     path: 'changelog',
@@ -48,6 +83,13 @@ export const routes: Routes = [
         (m) => m.ChangelogPageComponent,
       ),
     title: 'Changelog - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'Release history for TypeFast.io — features, fixes, and improvements over time.',
+        canonical: '/changelog',
+      },
+    },
   },
   {
     path: 'contribute',
@@ -56,6 +98,13 @@ export const routes: Routes = [
         (m) => m.ContributePageComponent,
       ),
     title: 'Contribute - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'Help improve TypeFast.io — contribute new languages, report issues, or suggest features on GitHub.',
+        canonical: '/contribute',
+      },
+    },
   },
   {
     path: 'feedback',
@@ -64,6 +113,12 @@ export const routes: Routes = [
         (m) => m.FeedbackPageComponent,
       ),
     title: 'Feedback - TypeFast.io',
+    data: {
+      seo: {
+        description: 'Share feedback, ideas, or bug reports for TypeFast.io.',
+        canonical: '/feedback',
+      },
+    },
   },
   { path: '**', redirectTo: '' },
 ];

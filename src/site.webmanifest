@@ -1,6 +1,9 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "TypeFast.io",
+  "short_name": "TypeFast",
+  "description": "Free, minimalistic typing speed test with multilingual word lists, sentence and word modes, and customisable themes.",
+  "start_url": "/",
+  "scope": "/",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

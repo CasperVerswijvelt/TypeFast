@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { PreferencesService } from './preferences.service';
 import { Preference, Language, WordMode } from '../models/Preference';
 import { skip } from 'rxjs/operators';
@@ -39,6 +40,8 @@ export class WordService {
   private LANGUAGE_PREFERENCE_CHANGED =
     'Language preference changed during loading, cancelling.';
 
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   constructor(private preferencesService: PreferencesService) {
     const preferences = this.preferencesService.getPreferences();
 
@@ -51,10 +54,12 @@ export class WordService {
       .pipe(skip(1))
       .subscribe(this.onWordModePreferenceUpdated.bind(this));
 
-    this.loadLanguage(
-      this.preferencesService.getPreference(Preference.LANGUAGE),
-      this.preferencesService.getPreference(Preference.WORD_MODE),
-    );
+    if (this.isBrowser) {
+      this.loadLanguage(
+        this.preferencesService.getPreference(Preference.LANGUAGE),
+        this.preferencesService.getPreference(Preference.WORD_MODE),
+      );
+    }
   }
 
   private onLanguagePreferenceUpdated(value: any): void {

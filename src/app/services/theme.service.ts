@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { PreferencesService } from './preferences.service';
 import { Preference, Theme } from '../models/Preference';
 import { BehaviorSubject } from 'rxjs';
@@ -7,11 +8,11 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class ThemeService {
+  private readonly document = inject(DOCUMENT);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private preferences: Map<string, BehaviorSubject<any>>;
 
   constructor(private preferencesService: PreferencesService) {
-    const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-
     this.preferences = this.preferencesService.getPreferences();
 
     this.preferences
@@ -21,7 +22,10 @@ export class ThemeService {
       .get(Preference.FOLLOW_SYSTEM_THEME)
       .subscribe(this.onFollowSystemPreferenceUpdated.bind(this));
 
-    // Listen to localstorage changes
+    if (!this.isBrowser) return;
+
+    const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
+
     if (mediaQueryList.addEventListener) {
       mediaQueryList.addEventListener(
         'change',
@@ -36,7 +40,7 @@ export class ThemeService {
 
   private onThemePreferenceUpdated(value: any) {
     this.updateTheme(
-      window.matchMedia('(prefers-color-scheme: dark)').matches,
+      this.prefersDark(),
       value,
       this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value,
     );
@@ -44,7 +48,7 @@ export class ThemeService {
 
   private onFollowSystemPreferenceUpdated(value: any) {
     this.updateTheme(
-      window.matchMedia('(prefers-color-scheme: dark)').matches,
+      this.prefersDark(),
       this.preferences.get(Preference.THEME).value,
       value,
     );
@@ -56,6 +60,12 @@ export class ThemeService {
       this.preferences.get(Preference.THEME).value,
       this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value,
     );
+  }
+
+  private prefersDark(): boolean {
+    return this.isBrowser
+      ? window.matchMedia('(prefers-color-scheme: dark)').matches
+      : false;
   }
 
   private updateTheme(
@@ -73,6 +83,8 @@ export class ThemeService {
   }
 
   setTheme(theme: Theme): void {
-    document.body.className = `theme--${theme as string}`;
+    if (this.document.body) {
+      this.document.body.className = `theme--${theme as string}`;
+    }
   }
 }

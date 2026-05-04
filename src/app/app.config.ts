@@ -1,9 +1,18 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { provideHttpClient, withFetch, HttpClient } from '@angular/common/http';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import {
+  provideClientHydration,
+  withEventReplay,
+} from '@angular/platform-browser';
+import {
+  provideRouter,
+  TitleStrategy,
+  withInMemoryScrolling,
+} from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 import { routes } from './app.routes';
+import { SeoTitleStrategy } from './seo/seo-title-strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -12,6 +21,7 @@ export const appConfig: ApplicationConfig = {
       MarkdownModule.forRoot({ loader: HttpClient }),
     ),
     provideHttpClient(withFetch()),
+    provideClientHydration(withEventReplay()),
     provideRouter(
       routes,
       withInMemoryScrolling({
@@ -19,5 +29,6 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
       }),
     ),
+    { provide: TitleStrategy, useClass: SeoTitleStrategy },
   ],
 };
