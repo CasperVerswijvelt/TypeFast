@@ -21,9 +21,17 @@ app-root {
 }
 
 app-root {
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   overflow-x: hidden;
   position: relative;
+}
+
+router-outlet + * {
+  display: block;
+  width: 100%;
+  flex: 1 0 auto;
 }
 
 .underline {

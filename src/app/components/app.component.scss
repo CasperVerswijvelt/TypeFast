@@ -6,11 +6,6 @@ app-nav {
   z-index: 5;
 }
 
-router-outlet + * {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
 
 app-preferences {
   position: absolute;

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { NavComponent } from './nav/nav.component';
+import { FooterComponent } from './footer/footer.component';
 import { PreferencesComponent } from './preferences/preferences.component';
 import { ThemeService } from '../services/theme.service';
 import { TyperStateService } from '../services/typer-state.service';
@@ -9,7 +10,7 @@ import { TyperStateService } from '../services/typer-state.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
-  imports: [RouterOutlet, NavComponent, PreferencesComponent],
+  imports: [RouterOutlet, NavComponent, FooterComponent, PreferencesComponent],
 })
 export class AppComponent {
   constructor(
