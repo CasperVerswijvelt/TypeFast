@@ -41,6 +41,7 @@
             "scripts": [],
             "browser": "src/main.ts"
           },
+          "defaultConfiguration": "production",
           "configurations": {
             "production": {
               "fileReplacements": [
