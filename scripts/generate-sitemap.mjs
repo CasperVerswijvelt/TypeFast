@@ -1,4 +1,4 @@
-import { readdirSync, statSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, readdirSync, statSync, writeFileSync } from 'node:fs';
 import { join, relative } from 'node:path';
 
 const ORIGIN = 'https://typefast.io';
@@ -15,6 +15,9 @@ const PRIORITY_BY_PATH = {
   '/feedback': { priority: '0.3', changefreq: 'yearly' },
 };
 const DEFAULT_ENTRY = { priority: '0.5', changefreq: 'monthly' };
+
+// Routes that prerender to HTML but should NOT be advertised in the sitemap.
+const SITEMAP_EXCLUDE = new Set(['/404']);
 
 function findIndexHtmlFiles(dir, root = dir) {
   const out = [];
@@ -33,9 +36,10 @@ function findIndexHtmlFiles(dir, root = dir) {
 }
 
 const today = new Date().toISOString().slice(0, 10);
-const paths = findIndexHtmlFiles(DIST_DIR).sort();
+const allPaths = findIndexHtmlFiles(DIST_DIR).sort();
+const sitemapPaths = allPaths.filter((p) => !SITEMAP_EXCLUDE.has(p));
 
-const urls = paths
+const urls = sitemapPaths
   .map((p) => {
     const meta = PRIORITY_BY_PATH[p] ?? DEFAULT_ENTRY;
     return [
@@ -56,5 +60,19 @@ ${urls}
 `;
 
 writeFileSync(join(DIST_DIR, 'sitemap.xml'), xml);
-console.log(`sitemap.xml written with ${paths.length} URL${paths.length === 1 ? '' : 's'}:`);
-for (const p of paths) console.log(`  ${ORIGIN}${p}`);
+console.log(
+  `sitemap.xml written with ${sitemapPaths.length} URL${sitemapPaths.length === 1 ? '' : 's'}:`,
+);
+for (const p of sitemapPaths) console.log(`  ${ORIGIN}${p}`);
+
+// Copy the prerendered 404 page out to a top-level 404.html so Netlify's
+// `/* /404.html 404` rewrite has a target. The Angular prerender produces
+// dist/TypeFast/404/index.html.
+const prerendered404 = join(DIST_DIR, '404', 'index.html');
+const target404 = join(DIST_DIR, '404.html');
+if (existsSync(prerendered404)) {
+  copyFileSync(prerendered404, target404);
+  console.log(`404.html copied from ${prerendered404}`);
+} else {
+  console.warn(`WARNING: ${prerendered404} not found — 404.html not generated`);
+}

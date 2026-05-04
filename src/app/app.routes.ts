@@ -120,5 +120,34 @@ export const routes: Routes = [
       },
     },
   },
-  { path: '**', redirectTo: '' },
+  {
+    path: '404',
+    loadComponent: () =>
+      import('./components/pages/not-found-page/not-found-page.component').then(
+        (m) => m.NotFoundPageComponent,
+      ),
+    title: 'Page not found - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'The page you requested could not be found on TypeFast.io.',
+        canonical: '/404',
+      },
+    },
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('./components/pages/not-found-page/not-found-page.component').then(
+        (m) => m.NotFoundPageComponent,
+      ),
+    title: 'Page not found - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'The page you requested could not be found on TypeFast.io.',
+        canonical: '/404',
+      },
+    },
+  },
 ];
