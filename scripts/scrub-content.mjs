@@ -21,7 +21,11 @@ const LANG_DIR = path.join(ROOT, 'src/assets/languages');
 const PROF_DIR = path.join(__dirname, 'data/profanity');
 
 // Words obscenity flags that we explicitly allow.
-const EN_ALLOWLIST = new Set(['hell', 'damn', 'stupid', 'hate', 'screw', 'screwed']);
+const EN_ALLOWLIST = new Set([
+  'hell', 'damn', 'stupid', 'hate', 'screw', 'screwed',
+  'butt',                               // kid-safe word for buttocks
+  'suck', 'sucks', 'sucked', 'sucking', // mild slang ("this sucks") and literal use
+]);
 
 // Per-language false positives — words flagged by their LDNOOBW list that
 // have a dominant innocent meaning in everyday use, or are mild enough to
