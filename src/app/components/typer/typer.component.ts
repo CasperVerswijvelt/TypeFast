@@ -1,4 +1,12 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { WordService } from '../../services/word.service';
 import { TestResults, TestResultsStats } from '../../models/TestResults';
 import { timer, Subscription, BehaviorSubject } from 'rxjs';
@@ -44,6 +52,15 @@ export class TyperComponent implements OnInit, OnDestroy {
   inputElement: HTMLInputElement;
   inputWordCopy: HTMLElement;
   dummyInputElement: HTMLElement;
+
+  @ViewChild('wordContainer', { static: true })
+  private wordContainerRef!: ElementRef<HTMLElement>;
+  @ViewChild('wordInputEl', { static: true })
+  private wordInputRef!: ElementRef<HTMLInputElement>;
+  @ViewChild('wordInputDummy', { static: true })
+  private wordInputDummyRef!: ElementRef<HTMLElement>;
+  @ViewChild('wordCopy', { static: true })
+  private wordCopyRef!: ElementRef<HTMLElement>;
 
   testResults: TestResults;
 
@@ -110,6 +127,11 @@ export class TyperComponent implements OnInit, OnDestroy {
     this.wordMode = this.preferences.get(Preference.WORD_MODE).value;
 
     this.updateIgnoreResultString();
+
+    afterNextRender(() => {
+      this.inputElement.onpaste = (e) => e.preventDefault();
+      this.focusInput();
+    });
   }
 
   ngOnInit(): void {
@@ -134,27 +156,16 @@ export class TyperComponent implements OnInit, OnDestroy {
       .pipe(skip(1))
       .subscribe(this.onIgnoreCasingPreferenceUpdated.bind(this));
 
-    this.containerElement = document.getElementsByClassName(
-      'word-container',
-    )[0] as HTMLElement;
-    this.inputElement = document.getElementsByClassName(
-      'word-input',
-    )[0] as HTMLInputElement;
-    this.dummyInputElement = document.getElementsByClassName(
-      'word-input-dummy',
-    )[0] as HTMLInputElement;
-    this.inputWordCopy = document.getElementsByClassName(
-      'word-copy',
-    )[0] as HTMLInputElement;
-
-    this.inputElement.onpaste = (e) => e.preventDefault();
+    this.containerElement = this.wordContainerRef.nativeElement;
+    this.inputElement = this.wordInputRef.nativeElement;
+    this.dummyInputElement = this.wordInputDummyRef.nativeElement;
+    this.inputWordCopy = this.wordCopyRef.nativeElement;
 
     this.updateTimer(0);
     this.syncTextSizeClass();
 
     this.boundFocus = this.focusInput.bind(this);
     this.typerState.register(this.boundFocus);
-    this.focusInput();
 
     this.boundWordListListener = this.onUpdatedWordList.bind(this);
     this.wordService.addWordListListener(this.boundWordListListener);

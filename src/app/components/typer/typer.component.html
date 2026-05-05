@@ -10,14 +10,19 @@
   >
   <div class="type-test">
     <div class="word-container-wrapper">
-      <div class="word-container">
+      <div class="word-container" #wordContainer>
         @for (word of words; track word) {
           <div class="word">{{ word }}</div>
         }
       </div>
     </div>
-    <div class="word-copy"></div>
-    <input type="text" class="word-input-dummy" tabindex="-1" />
+    <div class="word-copy" #wordCopy></div>
+    <input
+      type="text"
+      class="word-input-dummy"
+      tabindex="-1"
+      #wordInputDummy
+    />
     <input
       [(ngModel)]="wordInput"
       (input)="wordInputChanged($event.target.value)"
@@ -25,11 +30,12 @@
       type="text"
       spellcheck="false"
       placeholder="type here"
-     
+
       autocomplete="off"
       autocapitalize="off"
       class="word-input"
       tabindex="0"
+      #wordInputEl
       />
   </div>
 

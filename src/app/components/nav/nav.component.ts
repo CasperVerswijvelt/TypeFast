@@ -1,4 +1,5 @@
 import { Component, HostListener, effect, inject, signal } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TyperStateService } from '../../services/typer-state.service';
 
@@ -31,9 +32,11 @@ export class NavComponent {
 
   menuOpen = signal(false);
 
+  private readonly document = inject(DOCUMENT);
+
   constructor() {
     effect(() => {
-      document.body.style.overflow = this.menuOpen() ? 'hidden' : '';
+      this.document.body.style.overflow = this.menuOpen() ? 'hidden' : '';
     });
   }
 
