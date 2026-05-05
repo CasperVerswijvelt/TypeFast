@@ -207,6 +207,10 @@ export class WordService {
   }
 
   private parseText(wordMode: WordMode, text: string) {
+    // Normalize to NFC so word lengths and per-character comparisons match
+    // user keyboard input (which is virtually always NFC) regardless of the
+    // source file's encoding.
+    text = text.normalize('NFC');
     if (wordMode === WordMode.WORDS) {
       this.words = text.split(/\s+/);
       this.wordsCopy = [];

@@ -171,6 +171,8 @@ export class LanguageService {
     ignoreAccents = false,
   ): boolean {
     if (!actual || !expected) return false;
+    actual = actual.normalize('NFC');
+    expected = expected.normalize('NFC');
     if (actual.length !== expected.length) return false;
     if (!ignoreAccents) return actual === expected;
 
@@ -200,6 +202,8 @@ export class LanguageService {
   ): boolean {
     if (typeof actual !== 'string' || typeof expected !== 'string')
       return false;
+    actual = actual.normalize('NFC');
+    expected = expected.normalize('NFC');
     if (actual.length !== expected.length) return false;
 
     const length = actual.length;
