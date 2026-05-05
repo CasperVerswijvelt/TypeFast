@@ -27,6 +27,13 @@ const EN_ALLOWLIST = new Set([
   'suck', 'sucks', 'sucked', 'sucking', // mild slang ("this sucks") and literal use
 ]);
 
+// Multi-word phrases where flagged terms are part of a proper noun or fixed
+// expression — masked out before sentence scanning so they don't re-flag.
+// Only applied to languages with obscenity:true (i.e. English variants).
+const EN_PHRASE_ALLOWLIST = [
+  'Death Star',  // Star Wars proper noun
+];
+
 // Per-language false positives — words flagged by their LDNOOBW list that
 // have a dominant innocent meaning in everyday use, or are mild enough to
 // align with our English allowlist (hell/damn/stupid/hate/crap-not).
@@ -220,18 +227,28 @@ function buildLangChecker(name, cfg) {
   const ldnoobwPatterns = buildPattern([...ldnoobwTerms]);
   const maturePatterns = buildPattern([...matureTerms]);
 
+  const maskAllowedPhrases = (sentence) => {
+    if (!useObscenity) return sentence;
+    let masked = sentence;
+    for (const phrase of EN_PHRASE_ALLOWLIST) {
+      masked = masked.replace(new RegExp(escapeRe(phrase), 'gi'), ' '.repeat(phrase.length));
+    }
+    return masked;
+  };
+
   const checkSentence = (sentence) => {
+    const masked = maskAllowedPhrases(sentence);
     const hits = [];
     for (const { term, re } of ldnoobwPatterns) {
       if (allowlist.has(term)) continue;
-      if (re.test(sentence)) hits.push({ term, kind: 'profanity' });
+      if (re.test(masked)) hits.push({ term, kind: 'profanity' });
     }
     for (const { term, re } of maturePatterns) {
       if (allowlist.has(term)) continue;
-      if (re.test(sentence)) hits.push({ term, kind: 'mature' });
+      if (re.test(masked)) hits.push({ term, kind: 'mature' });
     }
     if (useObscenity) {
-      const matches = ENGLISH_MATCHER.getAllMatches(sentence, true);
+      const matches = ENGLISH_MATCHER.getAllMatches(masked, true);
       for (const m of matches) {
         const meta = englishDataset.getPayloadWithPhraseMetadata(m).phraseMetadata;
         const word = meta?.originalWord;
