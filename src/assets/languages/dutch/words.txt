@@ -1754,7 +1754,6 @@ hoed
 hoede
 hoek
 hoelang
-hoer
 hoesten
 hoeveel
 hoeveelheid
@@ -2586,7 +2585,6 @@ mysterieus
 mythe
 na
 naaien
-naakt
 naald
 naam
 naar
@@ -2648,7 +2646,6 @@ nestelen
 net
 netjes
 netwerk
-neuken
 neus
 neutraal
 nicht
@@ -3578,7 +3575,6 @@ serveren
 service
 set
 sfeer
-shit
 show
 sigaar
 sigaret
@@ -4826,7 +4822,6 @@ wiens
 wij
 wijd
 wijden
-wijf
 wijk
 wijken
 wijn

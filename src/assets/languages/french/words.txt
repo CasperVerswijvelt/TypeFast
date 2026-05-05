@@ -1886,7 +1886,6 @@ café
 annonce
 régulièrement
 oreille
-foutre
 apercevoir
 refléter
 bouger
@@ -2372,7 +2371,6 @@ malheureux
 numérique
 fréquenter
 soupçonner
-merde
 entrepreneur
 exposition
 marchand
@@ -2700,7 +2698,6 @@ plage
 repousser
 plante
 nuire
-putain
 imagination
 accusé
 repérer
@@ -2813,7 +2810,6 @@ strictement
 permanence
 compensation
 lycée
-con
 combinaison
 injustice
 reportage
@@ -2945,7 +2941,6 @@ bancaire
 défaire
 calendrier
 repas
-cul
 vouer
 surprenant
 paradis
@@ -4241,7 +4236,6 @@ contacter
 commissariat
 gai
 confrontation
-chier
 fatal
 rude
 panneau
@@ -4531,7 +4525,6 @@ versement
 bosser
 articuler
 successivement
-bordel
 provision
 amplifier
 ceinture
@@ -4672,7 +4665,6 @@ inhérent
 réconcilier
 réservoir
 désignation
-emmerder
 inondation
 câble
 poumon
@@ -4866,7 +4858,6 @@ couramment
 précipitation
 caution
 affectation
-salaud
 cave
 bond
 enclin

@@ -266,7 +266,6 @@ causa
 causare
 cavaliere
 cavallo
-cazzo
 ce
 cedere
 cellula
@@ -321,7 +320,6 @@ cliente
 coda
 codice
 cogliere
-coglione
 coinvolgere
 collega
 collegare
@@ -448,7 +446,6 @@ critico
 cucina
 cucinare
 cui
-culo
 cultura
 culturale
 cuore
@@ -1018,7 +1015,6 @@ mentire
 mentre
 meraviglioso
 mercato
-merda
 meridionale
 meritare
 merito
@@ -1773,7 +1769,6 @@ strategia
 strega
 stretto
 stringere
-stronzo
 strumento
 struttura
 studente
@@ -2391,7 +2386,6 @@ cabina
 cacca
 cacciatore
 caduta
-cagare
 calare
 calciatore
 calcolare
@@ -2459,7 +2453,6 @@ caviglia
 cavità
 cavo
 cavolo
-cazzata
 celare
 celebrare
 celebre
@@ -2480,7 +2473,6 @@ certificare
 certificato
 cespuglio
 cessare
-cesso
 chat
 chiacchiera
 chiacchierare
@@ -3153,7 +3145,6 @@ fossa
 fotografare
 fotografico
 fotografo
-fottere
 fragile
 frammento
 francamente
@@ -3331,7 +3322,6 @@ incaricare
 incarico
 incassare
 incastrare
-incazzarsi
 incendio
 incertezza
 incerto
@@ -3664,7 +3654,6 @@ milanese
 millennio
 millimetro
 minaccia
-minchia
 miniera
 minoranza
 minuscolo
@@ -4149,7 +4138,6 @@ puntino
 puntuale
 pupa
 purché
-puttana
 puzza
 puzzare
 quaderno
@@ -4431,7 +4419,6 @@ sconto
 scontrare
 scontro
 sconvolgere
-scopare
 
 scorgere
 scorta
@@ -4697,7 +4684,6 @@ strettamente
 strillare
 striscia
 strisciare
-stronzata
 studioso
 stupefacente
 stupendo
@@ -4901,7 +4887,6 @@ utilità
 utilizzo
 vabbè
 vacca
-vaffanculo
 vagare
 vago
 valido

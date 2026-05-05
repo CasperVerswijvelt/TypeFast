@@ -1659,7 +1659,6 @@ valle
 fallar
 vuelo
 vecino
-sexo
 iniciativa
 increíble
 concentración
@@ -3317,7 +3316,6 @@ suicidio
 placa
 calmar
 brusco
-asesinato
 mentalidad
 jerarquía
 duración
@@ -4333,7 +4331,6 @@ inminente
 eternidad
 repasar
 pastilla
-mierda
 contienda
 imperial
 inexplicable
