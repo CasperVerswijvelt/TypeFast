@@ -12,6 +12,7 @@
 
 ### Improvements
 
+- Slimmed the footer to a single line (copyright · privacy · terms · contact email), with a more compact variant on narrow viewports that hides the author name and shortens the email link to "email"
 - Scrubbed profanity and mature themes from word lists across English (American + British), Dutch, French, German, Italian, Portuguese, Russian, and Spanish
 - Rewrote or dropped flagged sentences in the English and Spanish sentence sources to remove graphic violence, suicide, drug, and sexual content
 

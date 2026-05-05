@@ -36,3 +36,19 @@
     text-decoration-color: currentColor;
   }
 }
+
+.copy-short,
+.email-short {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .copy-full,
+  .email-full {
+    display: none;
+  }
+  .copy-short,
+  .email-short {
+    display: inline;
+  }
+}
