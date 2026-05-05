@@ -9,7 +9,7 @@
   width: 100%;
   max-width: 760px;
   margin: 0 auto;
-  padding: 88px 24px 96px;
+  padding: 120px 24px 96px;
   display: flex;
   flex-direction: column;
 }
@@ -132,7 +132,7 @@
 
 @media (max-width: 600px) {
   .landing {
-    padding: 40px 20px 32px;
+    padding: 96px 20px 32px;
   }
 
   .hero {
