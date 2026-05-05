@@ -62,7 +62,12 @@
           ></path>
         </svg>
       </button>
-      <div class="type-test-timer-time">
+      <div
+        class="type-test-timer-time"
+        [class.is-hidden]="
+          testIsRunning && preferences.get(Preference.HIDE_TIMER).value
+        "
+        >
         {{ testTimeLeft | time }}
       </div>
       <button
@@ -127,7 +132,14 @@
       label="Ad placeholder · stats-left"
     />
 
-    <table cellspacing="0" cellpadding="0" class="type-test-results">
+    <table
+      cellspacing="0"
+      cellpadding="0"
+      class="type-test-results"
+      [class.is-hidden]="
+        testIsRunning && preferences.get(Preference.HIDE_LIVE_STATS).value
+      "
+      >
     <tr class="type-test-results-wpm">
       <th colspan="2">
         <span class="type-test-results-wpm-value">{{

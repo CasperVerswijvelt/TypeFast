@@ -26,6 +26,8 @@ export class PreferencesService {
     [Preference.SCROLLING_ANIMATION]: true,
     [Preference.IGNORE_DIACRITICS]: false,
     [Preference.IGNORE_CASING]: false,
+    [Preference.HIDE_TIMER]: false,
+    [Preference.HIDE_LIVE_STATS]: false,
   };
 
   private preferenceTypes: Record<string, unknown> = {
@@ -40,6 +42,8 @@ export class PreferencesService {
     [Preference.SCROLLING_ANIMATION]: 'boolean',
     [Preference.IGNORE_DIACRITICS]: 'boolean',
     [Preference.IGNORE_CASING]: 'boolean',
+    [Preference.HIDE_TIMER]: 'boolean',
+    [Preference.HIDE_LIVE_STATS]: 'boolean',
   };
 
   private preferencesSubjects = new Map<string, BehaviorSubject<any>>();

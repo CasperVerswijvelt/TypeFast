@@ -174,6 +174,20 @@ export class PreferencesComponent implements OnInit {
     );
   }
 
+  onHideTimerChanged(event: Event): void {
+    this.preferencesService.setPreference(
+      Preference.HIDE_TIMER,
+      (event.target as HTMLInputElement).checked,
+    );
+  }
+
+  onHideLiveStatsChanged(event: Event): void {
+    this.preferencesService.setPreference(
+      Preference.HIDE_LIVE_STATS,
+      (event.target as HTMLInputElement).checked,
+    );
+  }
+
   onClickResetPreferences(): void {
     if (
       confirm(

@@ -10,6 +10,8 @@ export enum Preference {
   SCROLLING_ANIMATION = 'scrolling_animation',
   IGNORE_DIACRITICS = 'ignore_diacritics',
   IGNORE_CASING = 'ignore_casing',
+  HIDE_TIMER = 'hide_timer',
+  HIDE_LIVE_STATS = 'hide_live_stats',
 }
 
 export enum Language {
@@ -65,4 +67,6 @@ export interface Preferences {
   [Preference.SCROLLING_ANIMATION]?: boolean;
   [Preference.IGNORE_DIACRITICS]?: boolean;
   [Preference.IGNORE_CASING]?: boolean;
+  [Preference.HIDE_TIMER]?: boolean;
+  [Preference.HIDE_LIVE_STATS]?: boolean;
 }
