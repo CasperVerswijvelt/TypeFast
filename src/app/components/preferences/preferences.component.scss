@@ -92,6 +92,15 @@ $preferences-entry-main-height: 37px;
   display: flex;
   flex-direction: column;
   pointer-events: initial;
+  transition: opacity var(--duration-slow) var(--ease);
+
+  &.dimmed {
+    opacity: 0.12;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
 
 .preferences-icon {

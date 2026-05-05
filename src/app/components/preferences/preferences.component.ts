@@ -5,6 +5,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
 import {
@@ -21,6 +22,7 @@ import { NgClass, KeyValuePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DISCORD_URL, GITHUB_URL } from '../../constants';
 import { PopperDirective } from '../../directives/popper.directive';
+import { TyperStateService } from '../../services/typer-state.service';
 
 @Component({
   selector: 'app-preferences',
@@ -33,6 +35,8 @@ export class PreferencesComponent implements OnInit {
 
   @ViewChild('preferencesDialog')
   private preferencesDialogRef!: ElementRef<HTMLDialogElement>;
+
+  readonly state = inject(TyperStateService);
 
   Language = Language;
   Theme = Theme;

@@ -309,29 +309,40 @@ input:checked + .slider:before {
 
 // tooltip
 
+// Tooltips use the HTML `popover` attribute (set by [popper]) so they
+// render in the top layer and escape ancestor overflow/clip — including
+// from inside an open <dialog>. allow-discrete + @starting-style let the
+// open/close fade through `display`/`overlay` transitions.
 .tooltip {
   background-color: var(--tooltip-bg);
   color: var(--tooltip-fg);
   padding: 5px 10px;
   border-radius: var(--radius-sm);
   font-size: 15px;
-  opacity: 0;
-  pointer-events: none;
   max-width: 300px;
-  transition: opacity var(--duration-fast);
   overflow-wrap: break-word;
   white-space: break-spaces;
   font-weight: normal;
   text-align: initial;
   width: max-content;
-  z-index: 1;
   text-transform: none;
+  border: none;
+  margin: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition:
+    opacity var(--duration-fast),
+    overlay var(--duration-fast) allow-discrete,
+    display var(--duration-fast) allow-discrete;
+
+  &:popover-open {
+    opacity: 1;
+  }
 }
 
-*:hover {
-  & > .tooltip {
-    opacity: 1;
-    pointer-events: initial;
+@starting-style {
+  .tooltip:popover-open {
+    opacity: 0;
   }
 }
 

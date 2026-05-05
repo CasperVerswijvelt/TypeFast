@@ -520,7 +520,7 @@
   </div>
 </dialog>
 
-<div class="preferences-icons">
+<div class="preferences-icons" [class.dimmed]="state.running()">
       <button
         class="preferences-icon"
         (click)="onPreferencesIconClicked()"

@@ -398,10 +398,6 @@ $word-spacing: 20px;
   border-radius: var(--radius-xl);
   background-color: var(--modal-bg);
   color: var(--modal-fg);
-  // The info-icon tooltip inside the title is absolutely positioned and
-  // can extend past the dialog's right edge; clip it horizontally so the
-  // dialog's UA-default `overflow: auto` doesn't show a stray scrollbar.
-  overflow-x: hidden;
   overflow-y: auto;
 
   // Fade in/out. allow-discrete + @starting-style let display/overlay

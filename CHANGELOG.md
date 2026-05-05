@@ -1,5 +1,16 @@
 # Release notes
 
+## Unreleased
+
+### Improvements
+
+- Tooltips now render in the browser top layer so they're never clipped by parent overflow or hidden behind a modal backdrop
+- The settings, Discord, and GitHub icons now dim during a test, matching the header and footer
+
+### Fixed
+
+- Navigating between pages now resets scroll to the top instead of preserving the previous page's scroll position
+
 ## 1.2.0 - 2026-05-05
 
 ### New
