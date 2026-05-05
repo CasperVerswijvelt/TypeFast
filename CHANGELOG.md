@@ -18,6 +18,7 @@
 
 ### Fixed
 
+- Corrected the supported language list on the About page: Polish was listed but never shipped, Hindi was missing, and the programming mode is now described accurately (it focuses on keywords and punctuation across programming languages, rather than full code snippets)
 - Spanish sentences mode: accented letters (á, é, í, ó, ú, ü) and ñ are no longer counted as errors when typed correctly (Unicode normalisation mismatch between the source file and keyboard input)
 - Russian word list: lowercased "Здравствуй" / "Здравствуйте" to match the rest of the dictionary
 - British word list: corrected the typo "offencive" → "offensive"
