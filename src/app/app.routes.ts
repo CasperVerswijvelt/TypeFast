@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { FAQS } from './components/pages/home-page/home-page.faqs';
 
 export const routes: Routes = [
   {
@@ -7,12 +8,13 @@ export const routes: Routes = [
       import('./components/pages/home-page/home-page.component').then(
         (m) => m.HomePageComponent,
       ),
-    title: 'TypeFast.io - Test your typing speed',
+    title: 'TypeFast.io – Free typing speed test online',
     data: {
       seo: {
         description:
-          'Free, minimalistic typing speed test. Measure your WPM and accuracy across 18+ languages, with sentence and word modes, custom themes, and no signup required.',
+          'Free online typing speed test with WPM, CPM and accuracy. 18+ languages, word and sentence modes, custom word lists, light and dark themes — no signup.',
         canonical: '/',
+        faq: FAQS,
       },
     },
   },

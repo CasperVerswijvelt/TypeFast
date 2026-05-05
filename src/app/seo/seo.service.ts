@@ -46,6 +46,7 @@ export interface SeoData {
   description?: string;
   canonical?: string;
   ogImage?: string;
+  faq?: { question: string; answer: string }[];
 }
 
 @Injectable({ providedIn: 'root' })
@@ -77,19 +78,38 @@ export class SeoService {
     this.meta.updateTag({ name: 'twitter:image', content: ogImage });
 
     this.setCanonical(url);
-    this.setStructuredData(this.buildStructuredData(data.title, path));
+    this.setStructuredData(this.buildStructuredData(data.title, path, data.faq));
   }
 
   private buildStructuredData(
     title: string,
     path: string,
+    faq?: { question: string; answer: string }[],
   ): Record<string, unknown>[] {
     const items: Record<string, unknown>[] = [
       { ...ORGANIZATION_LD },
       this.buildBreadcrumb(title, path),
     ];
     if (path === '/test') items.push({ ...WEB_APPLICATION_LD });
+    if (faq?.length) items.push(this.buildFaqPage(faq));
     return items;
+  }
+
+  private buildFaqPage(
+    faq: { question: string; answer: string }[],
+  ): Record<string, unknown> {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map(({ question, answer }) => ({
+        '@type': 'Question',
+        name: question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: answer,
+        },
+      })),
+    };
   }
 
   private buildBreadcrumb(

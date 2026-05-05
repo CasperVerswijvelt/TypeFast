@@ -4,8 +4,10 @@
 
 ### New
 
-- Moved the typing test to a dedicated `/test` route (the home page now hosts a content landing page — see below)
+- Replaced the bare typing test on `/` with a content landing page: hero, "What you get" feature list, "How it works" snippet, FAQ, and CTAs that link to the typing test
+- Moved the typing test to a dedicated `/test` route
 - Added a Terms of Use page at `/terms`
+- Added FAQPage structured data (JSON-LD) on the landing page so search engines can pick up the Q&A
 - Added "Display options" preferences group with toggles to hide the timer and the live stats during a test
 
 ### Improvements

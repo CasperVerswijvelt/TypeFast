@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { TyperComponent } from '../../typer/typer.component';
+import { RouterLink } from '@angular/router';
+import { FAQS, FaqEntry } from './home-page.faqs';
 
 @Component({
   selector: 'app-home-page',
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
-  imports: [TyperComponent],
+  imports: [RouterLink],
 })
-export class HomePageComponent {}
+export class HomePageComponent {
+  readonly faqs: FaqEntry[] = FAQS;
+}

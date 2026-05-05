@@ -16,6 +16,7 @@ export class SeoTitleStrategy extends TitleStrategy {
       description: seoData.description,
       canonical: seoData.canonical,
       ogImage: seoData.ogImage,
+      faq: seoData.faq,
     });
   }
 

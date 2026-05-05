@@ -1,1 +1,75 @@
-<app-typer ngSkipHydration></app-typer>
+<main class="landing">
+  <section class="hero">
+    <h1>Test your typing speed</h1>
+    <p class="hero-subtitle">
+      Measure your WPM (words per minute) and accuracy across 18 languages,
+      with word and sentence modes and custom word lists.
+    </p>
+    <a routerLink="/test" class="cta-primary">Start test</a>
+  </section>
+
+  <section class="prose">
+    <h2>What you get</h2>
+    <ul>
+      <li>
+        <strong>Multilingual word lists.</strong> Arabic, Catalan, Chinese,
+        Dutch, English (American and British), French, German, Hindi,
+        Hungarian, Indonesian, Italian, Japanese, Korean, Portuguese,
+        Romanian, Russian, Spanish, and Uyghur — with case folding and accent
+        handling per language. Plus a programming mode that focuses on the
+        keywords and punctuation often found across programming languages.
+      </li>
+      <li>
+        <strong>Word mode and sentence mode.</strong> Drill raw speed against
+        random words, or practice rhythm and punctuation against real
+        sentences.
+      </li>
+      <li>
+        <strong>Custom word lists.</strong> Load any plain-text file from
+        your device and run the test against it locally.
+      </li>
+      <li>
+        <strong>Adjustable test duration</strong>, from a few seconds up to
+        many minutes.
+      </li>
+      <li>
+        <strong>Configurable scoring.</strong> Optionally ignore casing or
+        diacritics.
+      </li>
+      <li>
+        <strong>Light and dark themes</strong>, following your system
+        preference by default.
+      </li>
+    </ul>
+
+    <h2>How it works, briefly</h2>
+    <p>
+      Pick a language, pick a duration, and start typing. The site measures
+      words per minute and accuracy in real time. By convention one “word” is
+      five characters, so WPM = (correct characters ÷ 5) ÷ (elapsed minutes).
+      The
+      <a routerLink="/how-it-works">how-it-works page</a> covers the full
+      breakdown — CPM, accuracy, and the difference between word and sentence
+      mode.
+    </p>
+    <p>
+      Word mode generates random words from a dictionary; sentence mode pulls
+      real sentences from a curated source. If you’re trying to actually get
+      faster, the <a routerLink="/tips">tips page</a> covers the technique
+      fundamentals — touch typing, posture, rhythm, and why accuracy comes
+      first.
+    </p>
+
+    <h2>Frequently asked questions</h2>
+    @for (item of faqs; track item.question) {
+      <details class="faq-item">
+        <summary>{{ item.question }}</summary>
+        <p>{{ item.answer }}</p>
+      </details>
+    }
+  </section>
+
+  <section class="cta-bottom">
+    <a routerLink="/test" class="cta-secondary">Ready? Start typing →</a>
+  </section>
+</main>
