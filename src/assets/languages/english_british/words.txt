@@ -2290,7 +2290,7 @@ odds
 of
 off
 offence
-offencive
+offensive
 offer
 office
 officer
