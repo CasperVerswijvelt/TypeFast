@@ -206,12 +206,12 @@ $word-spacing: 20px;
   }
 }
 
-.type-test-timer-time.is-hidden {
-  visibility: hidden;
-}
+.type-test-timer-time {
+  transition: opacity 0.4s ease;
 
-.type-test-results.is-hidden {
-  display: none;
+  &.is-hidden {
+    opacity: 0;
+  }
 }
 
 .type-test-results {
@@ -220,6 +220,12 @@ $word-spacing: 20px;
   border-radius: 10px;
   width: 310px;
   flex: 0 0 310px;
+  transition: opacity 0.4s ease;
+
+  &.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 
   th,
   td {
