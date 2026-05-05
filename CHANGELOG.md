@@ -1,5 +1,32 @@
 # TypeFast.io - Release notes
 
+## 1.1.0 - 2026-05-05
+
+### New
+
+- Added top navigation with About, Privacy, Terms, and Changelog content pages
+- Added mobile hamburger menu with full-screen overlay
+- Added minimal site footer with mailto contact link
+- Added Google AdSense integration and ads.txt
+- Added server-side rendering and prerendering for all routes
+- Added per-route SEO metadata, dynamic sitemap, JSON-LD structured data, Organization schema, and a 1200x630 social/Open Graph image
+
+### Improvements
+
+- Updated Angular from 13 to 21 (8 major version upgrades) along with ngx-markdown
+- Migrated to standalone components and the new `@if` / `@for` template control flow
+- Switched the build to the application builder (esbuild)
+- Modernized linting and formatting tooling (ESLint flat config, Prettier, angular-eslint)
+- Switched analytics to GA4 and tracked SPA route changes (Shynet + GA4)
+- Preload lazy route chunks after initial bundle for faster navigation
+- Pinned Node 22 via `.nvmrc` and pinned the Netlify build command
+
+### Fixed
+
+- Serve a real 404 page instead of a soft-404 home redirect
+- Stop the footer from overlaying typer content on short viewports
+- Made nav and typer components prerender-safe
+
 ## 1.0.12 - 2022-12-21
 
 ### New
