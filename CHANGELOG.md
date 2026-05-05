@@ -4,6 +4,8 @@
 
 ### New
 
+- Moved the typing test to a dedicated `/test` route (the home page now hosts a content landing page — see below)
+- Added a Terms of Use page at `/terms`
 - Added "Display options" preferences group with toggles to hide the timer and the live stats during a test
 
 ### Improvements

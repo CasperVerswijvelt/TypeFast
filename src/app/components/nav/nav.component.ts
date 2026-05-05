@@ -21,10 +21,12 @@ export class NavComponent {
   state = inject(TyperStateService);
 
   links: NavLink[] = [
+    { path: '/test', label: 'test' },
     { path: '/about', label: 'about' },
     { path: '/how-it-works', label: 'how-it-works' },
     { path: '/tips', label: 'tips' },
     { path: '/privacy', label: 'privacy' },
+    { path: '/terms', label: 'terms' },
     { path: '/changelog', label: 'changelog' },
     { path: '/contribute', label: 'contribute' },
     { path: '/feedback', label: 'feedback' },

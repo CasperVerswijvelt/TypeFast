@@ -23,7 +23,7 @@ const WEB_APPLICATION_LD = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: SITE_NAME,
-  url: `${ORIGIN}/`,
+  url: `${ORIGIN}/test`,
   description:
     'Free, minimalistic typing speed test that measures WPM and accuracy across 18+ languages, with sentence and word modes and customisable themes.',
   applicationCategory: 'EducationalApplication',
@@ -88,7 +88,7 @@ export class SeoService {
       { ...ORGANIZATION_LD },
       this.buildBreadcrumb(title, path),
     ];
-    if (path === '/') items.push({ ...WEB_APPLICATION_LD });
+    if (path === '/test') items.push({ ...WEB_APPLICATION_LD });
     return items;
   }
 

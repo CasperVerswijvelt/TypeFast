@@ -17,6 +17,21 @@ export const routes: Routes = [
     },
   },
   {
+    path: 'test',
+    loadComponent: () =>
+      import('./components/pages/test-page/test-page.component').then(
+        (m) => m.TestPageComponent,
+      ),
+    title: 'Typing test - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'Free, minimalistic typing speed test. Measure your WPM and accuracy across 18+ languages, with sentence and word modes, custom themes, and no signup required.',
+        canonical: '/test',
+      },
+    },
+  },
+  {
     path: 'about',
     loadComponent: () =>
       import('./components/pages/about-page/about-page.component').then(
@@ -73,6 +88,21 @@ export const routes: Routes = [
         description:
           'Privacy policy for TypeFast.io — what data is collected, how analytics works, and which third parties are involved.',
         canonical: '/privacy',
+      },
+    },
+  },
+  {
+    path: 'terms',
+    loadComponent: () =>
+      import('./components/pages/terms-page/terms-page.component').then(
+        (m) => m.TermsPageComponent,
+      ),
+    title: 'Terms of Use - TypeFast.io',
+    data: {
+      seo: {
+        description:
+          'Terms of use for TypeFast.io — what to expect when using the site, advertising, custom word lists, open-source license, and contact details.',
+        canonical: '/terms',
       },
     },
   },

@@ -6,12 +6,14 @@ const DIST_DIR = 'dist/TypeFast';
 
 const PRIORITY_BY_PATH = {
   '/': { priority: '1.0', changefreq: 'weekly' },
+  '/test': { priority: '0.9', changefreq: 'weekly' },
   '/about': { priority: '0.7', changefreq: 'monthly' },
   '/how-it-works': { priority: '0.7', changefreq: 'monthly' },
   '/tips': { priority: '0.7', changefreq: 'monthly' },
   '/contribute': { priority: '0.5', changefreq: 'monthly' },
   '/changelog': { priority: '0.3', changefreq: 'weekly' },
   '/privacy': { priority: '0.3', changefreq: 'yearly' },
+  '/terms': { priority: '0.3', changefreq: 'yearly' },
   '/feedback': { priority: '0.3', changefreq: 'yearly' },
 };
 const DEFAULT_ENTRY = { priority: '0.5', changefreq: 'monthly' };
