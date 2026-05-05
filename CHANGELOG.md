@@ -1,5 +1,22 @@
 # TypeFast.io - Release notes
 
+## Unreleased
+
+### New
+
+- Added "Display options" preferences group with toggles to hide the timer and the live stats during a test
+
+### Improvements
+
+- Scrubbed profanity and mature themes from word lists across English (American + British), Dutch, French, German, Italian, Portuguese, Russian, and Spanish
+- Rewrote or dropped flagged sentences in the English and Spanish sentence sources to remove graphic violence, suicide, drug, and sexual content
+
+### Fixed
+
+- Spanish sentences mode: accented letters (á, é, í, ó, ú, ü) and ñ are no longer counted as errors when typed correctly (Unicode normalisation mismatch between the source file and keyboard input)
+- Russian word list: lowercased "Здравствуй" / "Здравствуйте" to match the rest of the dictionary
+- British word list: corrected the typo "offencive" → "offensive"
+
 ## 1.1.0 - 2026-05-05
 
 ### New
