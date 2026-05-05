@@ -6,9 +6,11 @@ import {
   withEventReplay,
 } from '@angular/platform-browser';
 import {
+  PreloadAllModules,
   provideRouter,
   TitleStrategy,
   withInMemoryScrolling,
+  withPreloading,
 } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 import { routes } from './app.routes';
@@ -28,6 +30,7 @@ export const appConfig: ApplicationConfig = {
         scrollPositionRestoration: 'top',
         anchorScrolling: 'enabled',
       }),
+      withPreloading(PreloadAllModules),
     ),
     { provide: TitleStrategy, useClass: SeoTitleStrategy },
   ],
