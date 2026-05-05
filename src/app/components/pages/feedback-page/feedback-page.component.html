@@ -11,9 +11,7 @@
   <p>
     For anything that doesn't fit Discord, GitHub, or the form below, you
     can email me directly at
-    <a href="mailto:typefast@casperverswijvelt.be"
-      >typefast&#64;casperverswijvelt.be</a
-    >.
+    <a [href]="mailtoHref">{{ contactEmail }}</a>.
   </p>
 
   <h2>Discord</h2>
@@ -26,7 +24,7 @@
 
   <a
     class="image-button"
-    href="https://discord.gg/SsHXt9t"
+    [href]="discordUrl"
     target="_blank"
     rel="noopener"
   >
@@ -38,10 +36,7 @@
   <p>
     For bug reports and feature requests that benefit from being trackable
     and searchable, open an issue on the
-    <a
-      href="https://github.com/CasperVerswijvelt/TypeFast/issues"
-      target="_blank"
-      rel="noopener"
+    <a [href]="githubIssuesUrl" target="_blank" rel="noopener"
       >GitHub issue tracker</a
     >. Issues are the canonical place to follow what's planned and what's
     been resolved. See the <a routerLink="/contribute">contribute page</a>

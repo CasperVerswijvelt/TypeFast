@@ -4,8 +4,8 @@
   ·
   <a class="footer-link" routerLink="/privacy">privacy</a> ·
   <a class="footer-link" routerLink="/terms">terms</a> ·
-  <a class="footer-link" href="mailto:typefast@casperverswijvelt.be">
-    <span class="email-full">typefast&#64;casperverswijvelt.be</span>
+  <a class="footer-link" [href]="mailtoHref">
+    <span class="email-full">{{ contactEmail }}</span>
     <span class="email-short">email</span>
   </a>
 </footer>

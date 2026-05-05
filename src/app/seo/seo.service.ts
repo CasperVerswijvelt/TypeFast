@@ -1,14 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import { GITHUB_URL, ORIGIN, SITE_NAME } from '../constants';
 
-const ORIGIN = 'https://typefast.io';
 const DEFAULT_OG_IMAGE = `${ORIGIN}/og-image.png`;
 const DEFAULT_DESCRIPTION =
   'At TypeFast.io you can test your typing speed in a minimalistic way, without skimping out on features such as multilanguage, sentence/word mode, and themes.';
-const SITE_NAME = 'TypeFast.io';
 const LOGO_URL = `${ORIGIN}/android-chrome-512x512.png`;
-const GITHUB_URL = 'https://github.com/CasperVerswijvelt/TypeFast';
 
 const ORGANIZATION_LD = {
   '@context': 'https://schema.org',
@@ -72,13 +70,18 @@ export class SeoService {
     this.meta.updateTag({ property: 'og:url', content: url });
     this.meta.updateTag({ property: 'og:image', content: ogImage });
 
-    this.meta.updateTag({ name: 'twitter:card', content: 'summary_large_image' });
+    this.meta.updateTag({
+      name: 'twitter:card',
+      content: 'summary_large_image',
+    });
     this.meta.updateTag({ name: 'twitter:title', content: data.title });
     this.meta.updateTag({ name: 'twitter:description', content: description });
     this.meta.updateTag({ name: 'twitter:image', content: ogImage });
 
     this.setCanonical(url);
-    this.setStructuredData(this.buildStructuredData(data.title, path, data.faq));
+    this.setStructuredData(
+      this.buildStructuredData(data.title, path, data.faq),
+    );
   }
 
   private buildStructuredData(

@@ -1,3 +1,5 @@
+@use '../../../../styles/breakpoints' as bp;
+
 :host {
   display: block;
   width: 100%;
@@ -7,10 +9,10 @@
 .prose-layout {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  max-width: 720px;
+  max-width: var(--max-content-width);
   margin: 0 auto;
-  padding: 88px 32px 0;
-  gap: 48px;
+  padding: var(--page-pad-y-top) var(--space-8) 0;
+  gap: var(--space-12);
 }
 
 .prose {
@@ -19,17 +21,17 @@
 
 .prose-bottom-ad {
   display: block;
-  margin-top: 56px;
+  margin-top: var(--space-14);
 }
 
 .prose-rail {
   display: none;
 }
 
-@media (min-width: 1100px) {
+@media (min-width: bp.$bp-2xl) {
   .prose-layout {
-    grid-template-columns: minmax(0, 1fr) 300px;
-    max-width: 1080px;
+    grid-template-columns: minmax(0, 1fr) var(--rail-width);
+    max-width: var(--max-content-width-with-rail);
   }
 
   .prose-rail {
@@ -38,6 +40,6 @@
 
   .prose-rail-ad {
     position: sticky;
-    top: 96px;
+    top: var(--space-24);
   }
 }

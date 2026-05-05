@@ -56,15 +56,15 @@ export class WordService {
 
     if (this.isBrowser) {
       this.loadLanguage(
-        this.preferencesService.getPreference(Preference.LANGUAGE),
-        this.preferencesService.getPreference(Preference.WORD_MODE),
+        this.preferencesService.getPreference<Language>(Preference.LANGUAGE),
+        this.preferencesService.getPreference<WordMode>(Preference.WORD_MODE),
       );
     }
   }
 
-  private onLanguagePreferenceUpdated(value: any): void {
+  private onLanguagePreferenceUpdated(value: unknown): void {
     this.loadLanguage(
-      value,
+      value as Language,
       this.preferencesService.getPreference(Preference.WORD_MODE) ===
         WordMode.WORDS
         ? WordMode.WORDS
@@ -72,10 +72,10 @@ export class WordService {
     );
   }
 
-  private onWordModePreferenceUpdated(value: any): void {
+  private onWordModePreferenceUpdated(value: unknown): void {
     this.loadLanguage(
-      this.preferencesService.getPreference(Preference.LANGUAGE),
-      value,
+      this.preferencesService.getPreference<Language>(Preference.LANGUAGE),
+      value as WordMode,
     );
   }
 
@@ -282,7 +282,7 @@ export class WordService {
   private notifyLanguageFetchSubscribers(
     language: Language,
     wordMode: WordMode,
-    promise: Promise<any>,
+    promise: Promise<void>,
   ) {
     this.languageFetchListeners.forEach((listener) =>
       listener(language, wordMode, promise),

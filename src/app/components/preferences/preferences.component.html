@@ -1,11 +1,11 @@
-<div class="preferences-wrapper" [class.preferences-show]="showPreferences">
-  <div
-    class="preferences-background"
-    (click)="onPreferencesIconClicked()"
-  ></div>
-  <div class="preferences">
-    <div class="preferences-list">
-      <!-- Theme preferences group -->
+<dialog
+  #preferencesDialog
+  class="preferences-dialog"
+  (click)="onDialogBackdropClick($event, preferencesDialog)"
+  (close)="onPreferencesDialogClosed()"
+  >
+  <div class="preferences-list">
+    <!-- Theme preferences group -->
       <div
         class="preferences-group"
         [class.preferences-group-opened]="
@@ -42,6 +42,7 @@
           </div>
         </div>
         <div class="preferences-group-entries preferences-group-entries-theme">
+          <div class="preferences-group-entries-inner">
           @for (them of Theme | keyvalue; track them) {
             <div
               class="preferences-entry preferences-select-option capitalize"
@@ -70,6 +71,7 @@
                 />
               <span class="slider round"></span>
             </label>
+          </div>
           </div>
         </div>
       </div>
@@ -113,6 +115,7 @@
         <div
           class="preferences-group-entries preferences-group-entries-word-mode"
           >
+          <div class="preferences-group-entries-inner">
           @for (mode of WordMode | keyvalue; track mode) {
             <div
               class="preferences-entry preferences-select-option capitalize"
@@ -147,6 +150,7 @@
               </div>
             </div>
           }
+          </div>
         </div>
       </div>
 
@@ -161,7 +165,7 @@
           >
           <div class="preferences-group-title-key">Language</div>
           <div class="preferences-group-title-value">
-            {{ getNameForLanguage(preferences.get(Preference.LANGUAGE).value) }}
+            {{ getNameForLanguage($any(preferences.get(Preference.LANGUAGE).value)) }}
           </div>
           <div class="preferences-group-title-arrow">
             <svg
@@ -187,6 +191,7 @@
         <div
           class="preferences-group-entries preferences-group-entries-language"
           >
+          <div class="preferences-group-entries-inner">
           @for (lang of Language | keyvalue: originalOrder; track lang) {
             <div
               class="preferences-entry preferences-select-option"
@@ -272,6 +277,7 @@
               <span class="slider round"></span>
             </label>
           </div>
+          </div>
         </div>
       </div>
 
@@ -314,6 +320,7 @@
         <div
           class="preferences-group-entries preferences-group-entries-text-size"
           >
+          <div class="preferences-group-entries-inner">
           @for (size of TextSize | keyvalue; track size) {
             <label
               class="preferences-entry preferences-select-option"
@@ -328,6 +335,7 @@
               </div>
             </label>
           }
+          </div>
         </div>
       </div>
 
@@ -367,6 +375,7 @@
         <div
           class="preferences-group-entries preferences-group-entries-scrolling"
           >
+          <div class="preferences-group-entries-inner">
           <!-- Reverse scroll -->
           <div
             class="preferences-entry preferences-entry-main preferences-toggle-entry"
@@ -422,6 +431,7 @@
               <span class="slider round"></span>
             </label>
           </div>
+          </div>
         </div>
       </div>
 
@@ -457,6 +467,7 @@
           </div>
         </div>
         <div class="preferences-group-entries">
+          <div class="preferences-group-entries-inner">
           <!-- Hide timer during test -->
           <div
             class="preferences-entry preferences-entry-main preferences-toggle-entry"
@@ -492,6 +503,7 @@
               <span class="slider round"></span>
             </label>
           </div>
+          </div>
         </div>
       </div>
 
@@ -505,8 +517,10 @@
           </div>
         </div>
       </div>
-    </div>
-    <div class="preferences-icons">
+  </div>
+</dialog>
+
+<div class="preferences-icons">
       <button
         class="preferences-icon"
         (click)="onPreferencesIconClicked()"
@@ -520,7 +534,7 @@
       </button>
       <a
         class="preferences-icon preferences-icon-discord preferences-icon-extra"
-        href="https://discord.gg/SsHXt9t"
+        [href]="discordUrl"
         target="_blank"
         title="Join our Discord server"
         >
@@ -532,7 +546,7 @@
       </a>
       <a
         class="preferences-icon preferences-icon-github preferences-icon-extra"
-        href="https://github.com/CasperVerswijvelt/TypeFast"
+        [href]="githubUrl"
         target="_blank"
         title="Open GitHub repository"
         >
@@ -546,6 +560,4 @@
           ></path>
         </svg>
       </a>
-    </div>
-  </div>
 </div>

@@ -1,4 +1,11 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnInit,
+  Output,
+  ViewChild,
+} from '@angular/core';
 import { PreferencesService } from '../../services/preferences.service';
 import {
   Preference,
@@ -12,6 +19,7 @@ import { BehaviorSubject } from 'rxjs';
 import { LanguageService } from 'src/app/services/language.service';
 import { NgClass, KeyValuePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DISCORD_URL, GITHUB_URL } from '../../constants';
 import { PopperDirective } from '../../directives/popper.directive';
 
 @Component({
@@ -23,14 +31,18 @@ import { PopperDirective } from '../../directives/popper.directive';
 export class PreferencesComponent implements OnInit {
   @Output() preferencesToggled = new EventEmitter<boolean>();
 
-  showPreferences = false;
+  @ViewChild('preferencesDialog')
+  private preferencesDialogRef!: ElementRef<HTMLDialogElement>;
+
   Language = Language;
   Theme = Theme;
   WordMode = WordMode;
   TextSize = TextSize;
   Preference = Preference;
+  readonly discordUrl = DISCORD_URL;
+  readonly githubUrl = GITHUB_URL;
 
-  preferences: Map<string, BehaviorSubject<any>>;
+  preferences: Map<string, BehaviorSubject<unknown>>;
 
   openedPreferencesGroup: string;
   currentlyLoadingLanguage: Language;
@@ -56,7 +68,7 @@ export class PreferencesComponent implements OnInit {
   private onLanguageFetch(
     language: Language,
     wordMode: WordMode,
-    promise: Promise<any>,
+    promise: Promise<void>,
   ) {
     this.currentlyLoadingLanguage = language;
     this.currentlyLoadingWordMode = wordMode;
@@ -71,9 +83,38 @@ export class PreferencesComponent implements OnInit {
   }
 
   onPreferencesIconClicked(): void {
-    this.showPreferences = !this.showPreferences;
-    this.preferencesToggled.emit(this.showPreferences);
+    const dialog = this.preferencesDialogRef.nativeElement;
+    if (dialog.open) {
+      dialog.close();
+    } else {
+      this.openedPreferencesGroup = '';
+      dialog.showModal();
+      this.preferencesToggled.emit(true);
+      // Group-collapse transitions are suppressed until the dialog's
+      // opening fade finishes; otherwise a quick click on a group title
+      // would visually compose with the parent's still-fading opacity.
+      requestAnimationFrame(() => {
+        setTimeout(
+          () => dialog.classList.add('preferences-dialog--ready'),
+          250,
+        );
+      });
+    }
+  }
+
+  // Native <dialog> doesn't auto-close on backdrop click; handle it
+  // ourselves by checking whether the click target is the dialog itself.
+  onDialogBackdropClick(event: MouseEvent, dialog: HTMLDialogElement): void {
+    if (event.target === dialog) dialog.close();
+  }
+
+  // Fires for ESC, backdrop click, and explicit close() calls.
+  onPreferencesDialogClosed(): void {
     this.openedPreferencesGroup = '';
+    this.preferencesToggled.emit(false);
+    this.preferencesDialogRef.nativeElement.classList.remove(
+      'preferences-dialog--ready',
+    );
   }
 
   onThemeChanged(theme: Theme): void {

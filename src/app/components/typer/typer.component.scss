@@ -1,3 +1,6 @@
+@use '../../../styles/breakpoints' as bp;
+@use '../../../styles/mixins' as m;
+
 :host {
   display: flex;
   flex-direction: column;
@@ -21,7 +24,7 @@
 .type-test {
   order: 2;
   width: 100%;
-  margin: 0 auto 20px auto;
+  margin: 0 auto var(--space-5) auto;
 }
 
 .type-test-container > app-ad-placeholder {
@@ -29,11 +32,11 @@
   overflow: hidden;
   max-height: 140px;
   opacity: 1;
-  animation: ad-banner-enter 0.6s ease;
+  animation: ad-banner-enter 0.6s var(--ease);
   transition:
-    max-height 0.6s ease,
-    opacity 0.5s ease,
-    margin 0.6s ease;
+    max-height 0.6s var(--ease),
+    opacity var(--duration-slower) var(--ease),
+    margin 0.6s var(--ease);
 
   &.is-hidden {
     max-height: 0;
@@ -92,10 +95,12 @@ $word-center-offset: 80px;
 
 $word-spacing: 20px;
 .word {
-  color: white;
+  color: var(--word-color);
   font-size: 3em;
   text-align: center;
-  transition: color 1s, opacity 1s;
+  transition:
+    color 1s,
+    opacity 1s;
   user-select: none;
   padding: 0 $word-spacing 0 0;
   flex-shrink: 0;
@@ -111,25 +116,27 @@ $word-spacing: 20px;
   }
 
   &.word-incorrect {
-    color: #ff0000;
+    color: var(--word-color-incorrect);
     opacity: 0.2;
   }
 }
 
 .word-input {
   background: transparent;
-  color: white;
+  color: var(--word-color);
   font-size: 3em;
   height: auto;
   border: none;
   outline: none;
   padding: 0 0 0 calc(50% - #{$word-center-offset});
   width: 100%;
-  caret-color: white;
-  transition: color 0.2s, padding-left 0.1s ease-in-out;
+  caret-color: var(--word-color);
+  transition:
+    color var(--duration-fast),
+    padding-left 0.1s ease-in-out;
 
   &.input-incorrect {
-    color: rgb(255, 68, 68);
+    color: var(--error-soft);
   }
 
   &::placeholder {
@@ -187,17 +194,17 @@ $word-spacing: 20px;
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  gap: clamp(32px, 6vw, 120px);
-  margin: auto auto 40px auto;
+  gap: clamp(var(--space-8), 6vw, var(--space-30));
+  margin: auto auto var(--space-10) auto;
 }
 
 .results-rail {
   display: none;
 
-  @media (min-width: 1024px) {
+  @media (min-width: bp.$bp-xl) {
     display: block;
-    flex: 0 0 300px;
-    transition: opacity 0.5s ease;
+    flex: 0 0 var(--rail-width);
+    transition: opacity var(--duration-slower) var(--ease);
 
     &.is-hidden {
       opacity: 0;
@@ -207,7 +214,7 @@ $word-spacing: 20px;
 }
 
 .type-test-timer-time {
-  transition: opacity 0.4s ease;
+  transition: opacity var(--duration-slow) var(--ease);
 
   &.is-hidden {
     opacity: 0;
@@ -215,12 +222,12 @@ $word-spacing: 20px;
 }
 
 .type-test-results {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: rgba(255, 255, 255, 0.555);
-  border-radius: 10px;
+  background-color: var(--results-bg);
+  color: var(--results-fg);
+  border-radius: var(--radius-lg);
   width: 310px;
   flex: 0 0 310px;
-  transition: opacity 0.4s ease;
+  transition: opacity var(--duration-slow) var(--ease);
 
   &.is-hidden {
     opacity: 0;
@@ -234,7 +241,7 @@ $word-spacing: 20px;
 
   th {
     text-align: right;
-    padding-right: 12px;
+    padding-right: var(--space-3);
     padding-left: 18px;
     width: 170px;
     min-width: 170px;
@@ -262,13 +269,13 @@ $word-spacing: 20px;
 
   tr {
     &:nth-child(even) {
-      background-color: rgba(128, 128, 128, 0.07);
+      background-color: var(--results-row-even);
     }
 
     &:last-child {
       th,
       td {
-        padding-bottom: 12px;
+        padding-bottom: var(--space-3);
       }
     }
   }
@@ -292,11 +299,11 @@ $word-spacing: 20px;
 .type-test-controls {
   position: relative;
   order: 1;
-  margin: 40px auto auto auto;
+  margin: var(--space-10) auto auto auto;
 }
 
 .type-test-timer {
-  color: white;
+  color: var(--timer-fg);
   font-size: 2.5em;
   opacity: 0.5;
 
@@ -304,7 +311,7 @@ $word-spacing: 20px;
   justify-content: center;
 
   .type-test-timer-time {
-    padding: 8px 16px;
+    padding: var(--space-2) var(--space-4);
     user-select: none;
     min-width: $word-center-offset;
     text-align: center;
@@ -312,25 +319,17 @@ $word-spacing: 20px;
 
   .type-test-timer-increase,
   .type-test-timer-decrease {
-    transition: visibility 0.2s, opacity 0.5s;
-    cursor: pointer;
-    padding: 8px;
+    @include m.icon-button;
+    transition:
+      visibility var(--duration-fast),
+      opacity var(--duration-fast);
+    padding: var(--space-2);
     opacity: 0.35;
     width: 24px;
-    position: relative;
-    transition: opacity 0.2s;
-    border: none;
-    background: no-repeat;
-    display: block;
-    box-sizing: content-box;
 
     svg {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate3d(-50%, -50%, 0);
       width: 50%;
-      fill: white;
+      fill: var(--timer-svg);
     }
 
     &:hover {
@@ -353,11 +352,11 @@ $word-spacing: 20px;
   background: no-repeat;
   display: block;
   box-sizing: content-box;
-  transition: opacity 0.2s;
+  transition: opacity var(--duration-fast);
   opacity: 0.5;
 
   svg {
-    fill: rgba(255, 255, 255, 0.788);
+    fill: var(--restart-svg);
   }
 
   &:hover {
@@ -365,19 +364,12 @@ $word-spacing: 20px;
 
     svg {
       transform: rotate(360deg);
-      transition: transform 0.5s;
+      transition: transform var(--duration-slower);
     }
   }
 
   &:active {
     opacity: 1;
-  }
-}
-
-.type-test-restart,
-.type-test-timer-increase,
-.type-test-timer-decrease {
-  &:active {
     outline: none;
   }
 }
@@ -392,100 +384,123 @@ $word-spacing: 20px;
   right: 10px;
 }
 
-.type-test-incorrect-words-modal {
+// Native <dialog>: rendered in the browser's top layer, so it sits above
+// the nav and any other positioned content without needing a z-index war.
+.incorrect-words-dialog {
   position: fixed;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
+  inset: 0;
+  margin: auto;
+  width: 330px;
+  max-width: 90vw;
+  max-height: 90vh;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-xl);
+  background-color: var(--modal-bg);
+  color: var(--modal-fg);
+  // The info-icon tooltip inside the title is absolutely positioned and
+  // can extend past the dialog's right edge; clip it horizontally so the
+  // dialog's UA-default `overflow: auto` doesn't show a stray scrollbar.
+  overflow-x: hidden;
+  overflow-y: auto;
 
+  // Fade in/out. allow-discrete + @starting-style let display/overlay
+  // participate so the close also animates instead of disappearing instantly.
   opacity: 0;
-  visibility: hidden;
-  transition: visibility 0.2s, opacity 0.2s;
+  transition:
+    opacity var(--duration-fast) var(--ease),
+    overlay var(--duration-fast) allow-discrete,
+    display var(--duration-fast) allow-discrete;
 
-  &.type-test-incorrect-words-modal-show {
+  &[open] {
     opacity: 1;
-    visibility: visible;
   }
 
-  .type-test-incorrect-words-modal-background {
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+  &::backdrop {
+    background-color: transparent;
+    transition:
+      background-color var(--duration-fast) var(--ease),
+      overlay var(--duration-fast) allow-discrete,
+      display var(--duration-fast) allow-discrete;
   }
 
-  .type-test-incorrect-words-modal-inner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    min-width: auto;
-    width: 330px;
-    height: auto;
-    max-width: 90%;
-    max-height: 90%;
-    background-color: rgba(7, 7, 7);
-    border-radius: 15px;
-    color: white;
+  &[open]::backdrop {
+    background-color: var(--modal-overlay);
+  }
+
+  .incorrect-words-dialog-inner {
     display: flex;
     flex-direction: column;
+    max-height: inherit;
+  }
 
-    .incorrect-words-modal-title {
-      text-align: center;
-      width: 100%;
-      padding: 16px;
-      flex: 0;
+  .incorrect-words-dialog-title {
+    text-align: center;
+    width: 100%;
+    padding: var(--space-4);
+    flex: 0 0 auto;
+    position: relative;
+  }
+
+  .info-icon-tooltip-incorrect-words {
+    position: absolute;
+    right: var(--space-4);
+    top: var(--space-4);
+  }
+
+  .incorrect-words-placeholder {
+    padding: var(--space-4);
+    opacity: 0.8;
+    text-align: center;
+  }
+
+  .incorrect-words-dialog-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
+    min-height: 0;
+  }
+
+  .incorrect-words-dialog-entry {
+    font-size: 1.5em;
+    width: 100%;
+    text-align: center;
+
+    &:nth-child(odd) {
+      background-color: var(--modal-row-odd);
     }
+  }
 
-    .info-icon-tooltip-incorrect-words {
-      position: absolute;
-      right: 16px;
-      top: 16px;
-    }
+  .incorrect-words-dialog-close {
+    border: none;
+    border-radius: 50px;
+    background-color: var(--danger-bg);
+    opacity: 0.8;
+    color: #ffffff;
+    font-size: 16px;
+    padding: var(--space-2);
+    width: 50%;
+    margin: var(--space-4) auto;
+    flex: 0 0 auto;
 
-    .incorrect-words-placeholder {
-      padding: 16px;
-      opacity: 0.8;
-      text-align: center;
-    }
-
-    .incorrect-words-modal-list {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      overflow: auto;
-    }
-
-    .type-test-incorrect-words-modal-entry {
-      font-size: 1.5em;
-      width: 100%;
-      text-align: center;
-
-      &:nth-child(odd) {
-        background-color: rgb(10, 10, 10);
-      }
-    }
-
-    .incorrect-words-modal-close {
-      border: none;
-      border-radius: 50px;
-      background-color: rgb(177, 0, 0);
-      opacity: 0.8;
-      color: white;
-      font-size: 16px;
-      padding: 8px;
-      width: 50%;
-      margin: 16px auto;
-
-      &:hover {
-        cursor: pointer;
-        opacity: 1;
-      }
+    &:hover {
+      cursor: pointer;
+      opacity: 1;
     }
   }
 }
 
-@media (max-width: 500px) {
+@starting-style {
+  .incorrect-words-dialog[open] {
+    opacity: 0;
+  }
+  .incorrect-words-dialog[open]::backdrop {
+    background-color: transparent;
+  }
+}
+
+@media (max-width: bp.$bp-sm) {
   .word-input,
   .word {
     font-size: 2em;

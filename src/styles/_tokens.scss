@@ -1,0 +1,200 @@
+// Design tokens. Defaults are dark theme; values under #body.theme--light
+// override the same custom properties so component styles only need to
+// reference var(--*) — theming is automatic.
+//
+// This file is loaded once from src/styles.scss. Component stylesheets
+// reference the tokens directly via var(--*) without needing to @use it.
+
+:root {
+  // Surfaces
+  --surface-bg: #080808;
+  --surface-elevated: rgb(7, 7, 7);
+  --surface-elevated-soft: #00000066;
+  --surface-overlay-soft: #00000033;
+  --surface-overlay: #00000099;
+  --surface-overlay-strong: rgba(0, 0, 0, 0.9);
+
+  // Foregrounds
+  --text: #cacaca;
+  --text-strong: #e6e6e6;
+  --text-strong-hover: #ffffff;
+  --text-muted: #ababab;
+  --text-subtle: #4a4a4a;
+  --text-faint: #6a6a6a;
+  --text-on-cta: #080808;
+
+  // Borders
+  --border: #1f1f1f;
+  --border-strong: rgba(123, 123, 123, 0.42);
+  --border-divider: #85858544;
+
+  // Interactive
+  --cta-bg: #e6e6e6;
+  --cta-bg-hover: #ffffff;
+  --accent: #2196f3;
+  --switch-track-off: #4a4a4a;
+
+  // Semantic
+  --error: #ff0000;
+  --error-soft: rgb(255, 68, 68);
+  --danger-bg: rgb(177, 0, 0);
+
+  // Typer (typing test surface)
+  --word-color: #ffffff;
+  --word-color-incorrect: #ff0000;
+  --results-bg: rgba(255, 255, 255, 0.05);
+  --results-fg: rgba(255, 255, 255, 0.555);
+  --results-row-even: rgba(128, 128, 128, 0.07);
+  --timer-fg: #ffffff;
+  --timer-svg: #ffffff;
+  --restart-svg: rgba(255, 255, 255, 0.788);
+
+  // Modal (incorrect-words modal)
+  --modal-bg: rgb(7, 7, 7);
+  --modal-fg: #ffffff;
+  --modal-row-odd: rgb(10, 10, 10);
+  --modal-overlay: rgba(0, 0, 0, 0.9);
+
+  // Preferences
+  --pref-bg: #252525e0;
+  --pref-fg: #ffffff;
+  --pref-entries-bg: #00000066;
+  --pref-entry-hover: rgba(128, 128, 128, 0.08);
+  --pref-group-hover: rgba(128, 128, 128, 0.062);
+  --pref-select-even: rgba(128, 128, 128, 0.04);
+  --pref-arrow-svg: #ffffff;
+  --pref-checkmark: #ffffff;
+  --pref-icon-fill: rgb(105, 105, 105);
+
+  // Misc
+  --code-bg: rgba(255, 255, 255, 0.08);
+  --code-fg: var(--text-strong);
+  --info-icon-bg: rgba(128, 128, 128, 0.151);
+  --tooltip-bg: rgba(54, 54, 54, 0.705);
+  --tooltip-fg: rgb(218, 218, 218);
+
+  // Ad placeholder gradient
+  --ad-grad-1: rgba(120, 119, 198, 0.55);
+  --ad-grad-2: rgba(255, 119, 198, 0.45);
+  --ad-grad-3: rgba(120, 219, 226, 0.55);
+  --ad-stripe: rgba(255, 255, 255, 0.05);
+  --ad-border: rgba(255, 255, 255, 0.35);
+  --ad-text: rgba(255, 255, 255, 0.95);
+
+  // Spacing scale (4-px base)
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-22: 88px;
+  --space-24: 96px;
+  --space-30: 120px;
+
+  // Page paddings
+  --page-pad-x: var(--space-6);
+  --page-pad-x-sm: var(--space-5);
+  --page-pad-y-top: var(--space-22);
+  --page-pad-y-bottom: var(--space-24);
+  --landing-pad-y-top: var(--space-30);
+
+  // Layout
+  --max-content-width: 720px;
+  --max-content-width-landing: 760px;
+  --max-content-width-with-rail: 1080px;
+  --rail-width: 300px;
+
+  // Typography
+  --font-mono: 'Roboto Mono', monospace;
+  --font-sans: Roboto, sans-serif;
+
+  // Motion
+  --ease: ease;
+  --duration-fast: 0.2s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.4s;
+  --duration-slower: 0.5s;
+
+  // Radii
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+  --radius-xl: 15px;
+
+  // Focus
+  --focus-ring-color: currentColor;
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+}
+
+#body.theme--light {
+  --surface-bg: rgb(219, 219, 219);
+  --surface-elevated: rgb(245, 245, 245);
+  --surface-elevated-soft: #b7b7b766;
+  --surface-overlay-soft: rgba(0, 0, 0, 0.18);
+  --surface-overlay: rgba(0, 0, 0, 0.5);
+  --surface-overlay-strong: rgba(0, 0, 0, 0.7);
+
+  --text: rgb(31, 31, 31);
+  --text-strong: #0a0a0a;
+  --text-strong-hover: #000000;
+  --text-muted: #4a4a4a;
+  --text-subtle: #6a6a6a;
+  --text-faint: #6a6a6a;
+  --text-on-cta: #ffffff;
+
+  --border: rgba(0, 0, 0, 0.12);
+  --border-strong: rgba(0, 0, 0, 0.18);
+  --border-divider: rgba(0, 0, 0, 0.18);
+
+  --cta-bg: #1a1a1a;
+  --cta-bg-hover: #000000;
+  --switch-track-off: #adadad;
+
+  --error-soft: rgb(255, 94, 94);
+
+  // Typer
+  --word-color: rgba(26, 26, 26, 0.74);
+  --results-bg: rgba(77, 77, 77, 0.062);
+  --results-fg: rgba(32, 32, 32, 0.582);
+  --results-row-even: rgba(51, 51, 51, 0.07);
+  --timer-fg: rgb(32, 32, 32);
+  --timer-svg: rgb(48, 48, 48);
+  --restart-svg: rgb(48, 48, 48);
+
+  // Modal
+  --modal-bg: rgb(245, 245, 245);
+  --modal-fg: rgb(37, 37, 37);
+  --modal-row-odd: rgb(228, 228, 228);
+  --modal-overlay: rgba(0, 0, 0, 0.7);
+
+  // Preferences
+  --pref-bg: #cececeee;
+  --pref-fg: #424242;
+  --pref-entries-bg: #b7b7b766;
+  --pref-entry-hover: rgba(90, 90, 90, 0.075);
+  --pref-group-hover: rgba(90, 90, 90, 0.014);
+  --pref-select-even: rgba(90, 90, 90, 0.04);
+  --pref-arrow-svg: rgb(26, 26, 26);
+  --pref-checkmark: rgb(0, 0, 0);
+  --pref-icon-fill: rgb(105, 105, 105);
+
+  // Misc
+  --code-bg: rgba(0, 0, 0, 0.08);
+  --code-fg: #0a0a0a;
+  --info-icon-bg: rgba(128, 128, 128, 0.26);
+
+  // Ad placeholder gradient (lighter variant for light theme)
+  --ad-grad-1: rgba(120, 119, 198, 0.45);
+  --ad-grad-2: rgba(255, 119, 198, 0.35);
+  --ad-grad-3: rgba(120, 219, 226, 0.45);
+  --ad-stripe: rgba(0, 0, 0, 0.04);
+  --ad-border: rgba(0, 0, 0, 0.18);
+  --ad-text: rgba(40, 40, 60, 0.85);
+}

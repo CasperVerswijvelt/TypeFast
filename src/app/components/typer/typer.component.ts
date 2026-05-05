@@ -61,6 +61,8 @@ export class TyperComponent implements OnInit, OnDestroy {
   private wordInputDummyRef!: ElementRef<HTMLElement>;
   @ViewChild('wordCopy', { static: true })
   private wordCopyRef!: ElementRef<HTMLElement>;
+  @ViewChild('incorrectWordsDialog', { static: true })
+  private incorrectWordsDialogRef!: ElementRef<HTMLDialogElement>;
 
   testResults: TestResults;
 
@@ -89,9 +91,7 @@ export class TyperComponent implements OnInit, OnDestroy {
 
   Preference = Preference;
 
-  incorrectWordsOpen = false;
-
-  preferences: Map<string, BehaviorSubject<any>>;
+  preferences: Map<string, BehaviorSubject<unknown>>;
 
   private leftWordOffset = 0;
   private rightWordOffset = 0;
@@ -116,15 +116,17 @@ export class TyperComponent implements OnInit, OnDestroy {
   ) {
     this.preferences = preferencesService.getPreferences();
 
-    this.testTime = this.preferences.get(
-      Preference.DEFAULT_TEST_DURATION,
-    ).value;
-    this.smoothScroll = this.preferences.get(Preference.SMOOTH_SCROLLING).value;
+    this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION)
+      .value as number;
+    this.smoothScroll = this.preferences.get(Preference.SMOOTH_SCROLLING)
+      .value as boolean;
     this.ignoreAccentedCharacters = this.preferences.get(
       Preference.IGNORE_DIACRITICS,
-    ).value;
-    this.ignoreCasing = this.preferences.get(Preference.IGNORE_CASING).value;
-    this.wordMode = this.preferences.get(Preference.WORD_MODE).value;
+    ).value as boolean;
+    this.ignoreCasing = this.preferences.get(Preference.IGNORE_CASING)
+      .value as boolean;
+    this.wordMode = this.preferences.get(Preference.WORD_MODE)
+      .value as WordMode;
 
     this.updateIgnoreResultString();
 
@@ -270,33 +272,35 @@ export class TyperComponent implements OnInit, OnDestroy {
       this.ignoreCasing ? actual.toLowerCase() : actual,
       this.ignoreCasing ? expected.toLowerCase() : expected,
       this.language,
-      this.preferencesService.getPreference(Preference.IGNORE_DIACRITICS),
+      this.preferencesService.getPreference<boolean>(
+        Preference.IGNORE_DIACRITICS,
+      ),
     );
   }
 
-  private onReverseScrollPreferenceUpdated(_value: any) {
+  private onReverseScrollPreferenceUpdated(_value: unknown) {
     this.syncReverseScroll();
     this.syncOffset();
   }
 
-  private onTextSizePreferenceUpdated(_value: any) {
+  private onTextSizePreferenceUpdated(_value: unknown) {
     this.syncTextSizeClass();
     this.setupTest();
   }
 
-  private onSmoothScrollingPreferenceUpdated(value: any) {
-    this.smoothScroll = value;
+  private onSmoothScrollingPreferenceUpdated(value: unknown) {
+    this.smoothScroll = value as boolean;
     this.syncOffset();
   }
 
-  private onIgnoreAccentedCharactersPreferenceUpdated(value: any) {
-    this.ignoreAccentedCharacters = value;
+  private onIgnoreAccentedCharactersPreferenceUpdated(value: unknown) {
+    this.ignoreAccentedCharacters = value as boolean;
     this.setupTest();
     this.updateIgnoreResultString();
   }
 
-  private onIgnoreCasingPreferenceUpdated(value: any) {
-    this.ignoreCasing = value;
+  private onIgnoreCasingPreferenceUpdated(value: unknown) {
+    this.ignoreCasing = value as boolean;
     this.setupTest();
     this.updateIgnoreResultString();
   }
@@ -369,12 +373,12 @@ export class TyperComponent implements OnInit, OnDestroy {
 
   private syncReverseScroll() {
     this.reverseScroll =
-      this.preferences.get(Preference.REVERSE_SCROLL).value !==
+      (this.preferences.get(Preference.REVERSE_SCROLL).value as boolean) !==
       this.reverseScrollWordList;
   }
 
   private syncTextSizeClass() {
-    switch (this.preferences.get(Preference.TEXT_SIZE).value) {
+    switch (this.preferences.get(Preference.TEXT_SIZE).value as TextSize) {
       case TextSize.SMALL:
         this.textSizeClass = 'text-size--small';
         break;
@@ -621,6 +625,13 @@ export class TyperComponent implements OnInit, OnDestroy {
   }
 
   onIncorrectWordCountClicked(): void {
-    this.incorrectWordsOpen = true;
+    this.incorrectWordsDialogRef.nativeElement.showModal();
+  }
+
+  // Native <dialog> doesn't auto-close when the user clicks the backdrop;
+  // a click whose target is the dialog itself (not inner content) is a
+  // backdrop click.
+  onDialogBackdropClick(event: MouseEvent, dialog: HTMLDialogElement): void {
+    if (event.target === dialog) dialog.close();
   }
 }

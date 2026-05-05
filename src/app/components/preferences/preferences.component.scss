@@ -1,3 +1,7 @@
+@use '../../../styles/breakpoints' as bp;
+@use '../../../styles/mixins' as m;
+
+// Layout-only locals (not theme-related, kept as SCSS).
 $preferences-offset: 16px;
 $preferences-entry-padding-side: 16px;
 $preferences-entry-padding-vertical: 9px;
@@ -8,56 +12,108 @@ $preferences-entry-main-height: 37px;
   user-select: none;
 }
 
-.preferences-wrapper {
+// Native <dialog>, anchored top-right next to the always-visible icon column.
+// Browser default centers and adds margin: auto; we override to keep the
+// existing top-right placement. Renders in the top layer so it can never be
+// hidden behind the nav.
+.preferences-dialog {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  inset: $preferences-offset (40px + $preferences-offset + 10px) auto auto;
+  margin: 0;
+  width: 240px;
+  max-height: calc(100dvh - #{$preferences-offset * 2});
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-md);
+  background-color: var(--pref-bg);
+  color: var(--pref-fg);
+  overflow: hidden;
+
+  // Fade in/out. allow-discrete + @starting-style let display/overlay
+  // participate so close also animates instead of disappearing instantly.
+  opacity: 0;
+  transition:
+    opacity var(--duration-fast) var(--ease),
+    overlay var(--duration-fast) allow-discrete,
+    display var(--duration-fast) allow-discrete;
+
+  &[open] {
+    opacity: 1;
+  }
+
+  &::backdrop {
+    background-color: transparent;
+    transition:
+      background-color var(--duration-fast) var(--ease),
+      overlay var(--duration-fast) allow-discrete,
+      display var(--duration-fast) allow-discrete;
+  }
+
+  &[open]::backdrop {
+    background-color: var(--surface-overlay-soft);
+  }
 }
 
-.preferences {
-  position: absolute;
-  right: $preferences-offset;
-  top: $preferences-offset;
+// Disable the in-dialog group-collapse transition during the dialog's
+// own opening fade. If the user clicks a group title before the dialog
+// finishes fading in, the parent's opacity would otherwise visually
+// compose onto the expanding group and look like a slide-in.
+.preferences-dialog:not(.preferences-dialog--ready)
+  .preferences-group-entries {
+  transition: none;
+}
+
+@starting-style {
+  .preferences-dialog[open] {
+    opacity: 0;
+  }
+  .preferences-dialog[open]::backdrop {
+    background-color: transparent;
+  }
+}
+
+.preferences-list {
   display: flex;
-  max-height: calc(100% - 32px);
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: inherit;
+
+  label {
+    text-transform: capitalize;
+  }
+}
+
+.preferences-icons {
+  position: fixed;
+  top: $preferences-offset;
+  right: $preferences-offset;
+  z-index: 11;
+  display: flex;
+  flex-direction: column;
+  pointer-events: initial;
 }
 
 .preferences-icon {
+  @include m.icon-button;
   padding: 5px;
   width: 20px;
   height: 20px;
-  opacity: 0.5;
-  background: no-repeat;
-  display: block;
-  box-sizing: content-box;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  position: relative;
   margin-bottom: 5px;
-  pointer-events: initial;
+  outline: none;
 
   svg {
-    fill: rgb(105, 105, 105);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
+    fill: var(--pref-icon-fill);
     width: 80%;
     height: 80%;
   }
 
-  &:hover {
-    opacity: 0.75;
-  }
-
   &:active {
-    opacity: 1;
     border: none;
   }
 }
 
-@media (min-width: 800px) {
+@media (min-width: bp.$bp-lg) {
   .preferences-icon {
     width: 23px;
     height: 23px;
@@ -75,30 +131,6 @@ $preferences-entry-main-height: 37px;
   margin-bottom: 2px;
 }
 
-.preferences-icons {
-  display: flex;
-  flex-direction: column;
-}
-
-.preferences-list {
-  background-color: #252525e0;
-  border-radius: 6px;
-  margin-right: 10px;
-  color: white;
-  width: 240px;
-  opacity: 0;
-  transition: opacity 0.2s, visibility 0.3s;
-  overflow-x: hidden;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-  visibility: hidden;
-
-  label {
-    text-transform: capitalize;
-  }
-}
-
 .preferences-padding {
   padding: $preferences-entry-padding-vertical $preferences-entry-padding-side;
 }
@@ -114,7 +146,7 @@ $preferences-entry-main-height: 37px;
   overflow: hidden;
 
   &:nth-child(even) {
-    background-color: rgba(128, 128, 128, 0.04);
+    background-color: var(--pref-select-even);
   }
 
   input {
@@ -128,7 +160,7 @@ $preferences-entry-main-height: 37px;
   .checkmark {
     position: absolute;
     top: 2px;
-    right: 16px;
+    right: var(--space-4);
     height: 25px;
     width: 25px;
   }
@@ -169,20 +201,20 @@ $preferences-entry-main-height: 37px;
     top: 5px;
     width: 5px;
     height: 10px;
-    border: solid white;
+    border: solid var(--pref-checkmark);
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
   }
 }
 
 .preferences-entry {
-  transition: background-color 0.2s;
+  transition: background-color var(--duration-fast);
   background-color: transparent;
   height: $preferences-entry-height;
 
   &:hover {
     cursor: pointer;
-    background-color: rgba(128, 128, 128, 0.08);
+    background-color: var(--pref-entry-hover);
   }
 
   &.preferences-toggle-entry {
@@ -202,7 +234,7 @@ $preferences-entry-main-height: 37px;
   }
 
   &.preferences-entry-ignore-accented-characters {
-    border-top: solid #85858544 1px;
+    border-top: solid var(--border-divider) 1px;
   }
 }
 
@@ -222,33 +254,35 @@ $preferences-entry-main-height: 37px;
   }
 }
 
-.preferences-background {
-  opacity: 0;
-  transition: visibility 0.2s, opacity 0.2s;
-  width: 100%;
-  height: 100%;
-  background-color: #00000033;
-  pointer-events: none;
-}
-
-.preferences-show {
-  .preferences-background,
-  .preferences-list {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: initial;
-  }
-}
-
 .preferences-group {
+  // Collapse animation: grid-template-rows transitions between 0fr (closed)
+  // and 1fr (open). The inner wrapper takes its content's natural height
+  // and the outer grid container interpolates the row track. No magic
+  // max-height numbers required.
+  .preferences-group-entries {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows var(--duration-slow);
+    background-color: var(--pref-entries-bg);
+
+    .preferences-group-entries-inner {
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .preferences-toggle-label {
+      font-weight: normal;
+    }
+  }
+
   .preferences-group-title {
     padding: $preferences-entry-padding-vertical $preferences-entry-padding-side;
     cursor: pointer;
     display: flex;
-    transition: background-color 0.2s;
+    transition: background-color var(--duration-fast);
 
     &:hover {
-      background-color: rgba(128, 128, 128, 0.062);
+      background-color: var(--pref-group-hover);
     }
 
     .preferences-group-title-value {
@@ -265,18 +299,6 @@ $preferences-entry-main-height: 37px;
     }
   }
 
-  .preferences-group-entries {
-    height: auto;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.4s;
-    background-color: #00000066;
-
-    .preferences-toggle-label {
-      font-weight: normal;
-    }
-  }
-
   .preferences-group-title-arrow {
     margin-left: 6px;
     height: 18px;
@@ -289,37 +311,16 @@ $preferences-entry-main-height: 37px;
       left: 50%;
       top: 50%;
       transform: translate3d(-50%, -50%, 0) rotate(-90deg);
-      fill: white;
+      fill: var(--pref-arrow-svg);
       width: 80%;
-      transition: transform 0.4s;
+      transition: transform var(--duration-slow);
       transform-origin: center;
     }
   }
 
   &.preferences-group-opened {
     .preferences-group-entries {
-      max-height: 100px;
-
-      &.preferences-group-entries-theme {
-        max-height: 93px;
-      }
-
-      &.preferences-group-entries-language {
-        // 1 Entry is 31 px, increase by this much when adding a language
-        max-height: 756px;
-      }
-
-      &.preferences-group-entries-word-mode {
-        max-height: 62px;
-      }
-
-      &.preferences-group-entries-scrolling {
-        max-height: 111px;
-      }
-
-      &.preferences-group-entries-text-size {
-        max-height: 93px;
-      }
+      grid-template-rows: 1fr;
     }
 
     .preferences-group-title-arrow {

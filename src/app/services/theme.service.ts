@@ -10,7 +10,7 @@ import { BehaviorSubject } from 'rxjs';
 export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-  private preferences: Map<string, BehaviorSubject<any>>;
+  private preferences: Map<string, BehaviorSubject<unknown>>;
 
   constructor(private preferencesService: PreferencesService) {
     this.preferences = this.preferencesService.getPreferences();
@@ -38,27 +38,27 @@ export class ThemeService {
     }
   }
 
-  private onThemePreferenceUpdated(value: any) {
+  private onThemePreferenceUpdated(value: unknown) {
     this.updateTheme(
       this.prefersDark(),
-      value,
-      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value,
+      value as Theme,
+      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value as boolean,
     );
   }
 
-  private onFollowSystemPreferenceUpdated(value: any) {
+  private onFollowSystemPreferenceUpdated(value: unknown) {
     this.updateTheme(
       this.prefersDark(),
-      this.preferences.get(Preference.THEME).value,
-      value,
+      this.preferences.get(Preference.THEME).value as Theme,
+      value as boolean,
     );
   }
 
   private onSystemThemeUpdated(event: MediaQueryListEvent) {
     this.updateTheme(
       event.matches,
-      this.preferences.get(Preference.THEME).value,
-      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value,
+      this.preferences.get(Preference.THEME).value as Theme,
+      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value as boolean,
     );
   }
 

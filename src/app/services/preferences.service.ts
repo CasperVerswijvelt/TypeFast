@@ -46,7 +46,7 @@ export class PreferencesService {
     [Preference.HIDE_LIVE_STATS]: 'boolean',
   };
 
-  private preferencesSubjects = new Map<string, BehaviorSubject<any>>();
+  private preferencesSubjects = new Map<string, BehaviorSubject<unknown>>();
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   constructor() {
@@ -102,13 +102,16 @@ export class PreferencesService {
     return key === Preference.LANGUAGE && value == Language.CUSTOM;
   }
 
-  getPreferences(): Map<string, BehaviorSubject<any>> {
+  getPreferences(): Map<string, BehaviorSubject<unknown>> {
     return new Map(this.preferencesSubjects);
   }
 
-  getPreference(key: Preference): any {
+  // Generic to let callers narrow the value type at the call site, e.g.
+  // getPreference<Language>(Preference.LANGUAGE). Storage is heterogeneous
+  // so the underlying subject is BehaviorSubject<unknown>.
+  getPreference<T = unknown>(key: Preference): T | undefined {
     const subject = this.preferencesSubjects.get(key);
-    return subject?.value;
+    return subject?.value as T | undefined;
   }
 
   setPreference(key: Preference, value: unknown): void {

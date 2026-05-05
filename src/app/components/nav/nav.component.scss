@@ -1,8 +1,9 @@
-$breakpoint: 900px;
+@use '../../../styles/breakpoints' as bp;
+@use '../../../styles/mixins' as m;
 
 :host {
   display: block;
-  transition: opacity 0.4s ease;
+  transition: opacity var(--duration-slow) var(--ease);
 }
 
 :host(.dimmed) {
@@ -18,24 +19,27 @@ $breakpoint: 900px;
   z-index: 9;
   display: flex;
   align-items: baseline;
-  gap: 16px;
-  padding: 12px 64px 8px 16px;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-16) var(--space-2) var(--space-4);
   font-size: 0.95rem;
   pointer-events: auto;
   user-select: none;
-  background-color: #080808;
+  background-color: var(--surface-bg);
 }
 
 .brand {
-  font-family: 'Roboto Mono', monospace;
+  @include m.link-underline(2px, 4px);
+  font-family: var(--font-mono);
   font-size: 1.4rem;
-  color: #cacaca;
-  text-decoration: none;
-  margin-right: 8px;
-  transition: color 0.3s;
+  color: var(--text);
+  margin-right: var(--space-2);
 
   &:hover {
-    color: #ffffff;
+    color: var(--text-strong-hover);
+  }
+
+  &.active {
+    text-decoration-color: currentColor;
   }
 }
 
@@ -43,26 +47,21 @@ $breakpoint: 900px;
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 16px;
+  gap: var(--space-4);
 }
 
 .nav-link {
-  color: #ababab;
+  @include m.link-underline(2px, 4px);
+  color: var(--text-muted);
   font-size: 0.95rem;
   letter-spacing: 0.01em;
-  text-decoration: underline transparent;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-  transition:
-    color 0.3s,
-    text-decoration-color 0.3s;
 
   &:hover {
-    color: #cacaca;
+    color: var(--text);
   }
 
   &.active {
-    color: #cacaca;
+    color: var(--text);
     text-decoration-color: currentColor;
   }
 }
@@ -84,12 +83,12 @@ $breakpoint: 900px;
     left: 6px;
     right: 6px;
     height: 2px;
-    background-color: #ababab;
+    background-color: var(--text-muted);
     transition:
       transform 0.25s,
-      opacity 0.2s,
+      opacity var(--duration-fast),
       top 0.25s,
-      background-color 0.3s;
+      background-color var(--duration-normal);
   }
 
   span:nth-child(1) {
@@ -105,12 +104,12 @@ $breakpoint: 900px;
   }
 
   &:hover span {
-    background-color: #cacaca;
+    background-color: var(--text);
   }
 
   &.hamburger-open {
     span {
-      background-color: #cacaca;
+      background-color: var(--text);
     }
 
     span:nth-child(1) {
@@ -138,8 +137,8 @@ $breakpoint: 900px;
   visibility: hidden;
   pointer-events: none;
   transition:
-    opacity 0.2s,
-    visibility 0.2s;
+    opacity var(--duration-fast),
+    visibility var(--duration-fast);
 }
 
 .mobile-nav-show {
@@ -151,55 +150,60 @@ $breakpoint: 900px;
 .mobile-nav-background {
   position: absolute;
   inset: 0;
-  background-color: #00000099;
+  background-color: var(--surface-overlay);
 }
 
 .mobile-nav-panel {
   position: absolute;
   inset: 0;
-  background-color: #080808;
+  // Use dvh so iOS Safari address-bar shrinking doesn't clip the panel.
+  height: 100dvh;
+  background-color: var(--surface-bg);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 24px;
+  // Pin to top + scroll when content exceeds viewport. Vertical padding
+  // grows with available space so a normal phone still has the menu
+  // visually centered, while a short landscape viewport keeps everything
+  // reachable via scroll.
+  justify-content: flex-start;
+  padding-block: clamp(var(--space-6), 12vh, var(--space-12));
+  padding-inline: var(--space-6);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .mobile-nav-list {
   list-style: none;
-  margin: 0;
+  margin: auto 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2);
 
   a {
+    @include m.link-underline(2px, 6px);
     display: block;
-    font-family: 'Roboto Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 1.4rem;
-    color: #ababab;
-    text-decoration: underline transparent;
-    text-decoration-thickness: 2px;
-    text-underline-offset: 6px;
-    padding: 12px 16px;
+    color: var(--text-muted);
+    padding: var(--space-3) var(--space-4);
     min-height: 44px;
-    transition:
-      color 0.3s,
-      text-decoration-color 0.3s;
 
     &:hover {
-      color: #cacaca;
+      color: var(--text);
     }
 
     &.active {
-      color: #cacaca;
+      color: var(--text);
       text-decoration-color: currentColor;
     }
   }
 }
 
-@media (max-width: $breakpoint) {
+@media (max-width: bp.$bp-nav) {
   .desktop-links {
     display: none;
   }

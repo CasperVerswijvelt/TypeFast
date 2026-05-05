@@ -1,27 +1,24 @@
-# TypeFast.io - Release notes
+# Release notes
 
 ## Unreleased
 
 ### New
 
-- Replaced the bare typing test on `/` with a content landing page: hero, "What you get" feature list, "How it works" snippet, FAQ, and CTAs that link to the typing test
-- Moved the typing test to a dedicated `/test` route
-- Added a Terms of Use page at `/terms`
-- Added FAQPage structured data (JSON-LD) on the landing page so search engines can pick up the Q&A
-- Added "Display options" preferences group with toggles to hide the timer and the live stats during a test
+- New landing page at `/` with a feature overview and FAQ; the typing test moved to `/test`
+- Terms of Use page at `/terms`
+- Display options to hide the timer and live stats during a test
+- Skip-to-content link for keyboard users
 
 ### Improvements
 
-- Slimmed the footer to a single line (copyright · privacy · terms · contact email), with a more compact variant on narrow viewports that hides the author name and shortens the email link to "email"
-- Scrubbed profanity and mature themes from word lists across English (American + British), Dutch, French, German, Italian, Portuguese, Russian, and Spanish
-- Rewrote or dropped flagged sentences in the English and Spanish sentence sources to remove graphic violence, suicide, drug, and sexual content
+- Cleaner word and sentence sources across English, Dutch, French, German, Italian, Portuguese, Russian, and Spanish
+- Refreshed visual design with consistent spacing, typography, and improved light theme
 
 ### Fixed
 
-- Corrected the supported language list on the About page: Polish was listed but never shipped, Hindi was missing, and the programming mode is now described accurately (it focuses on keywords and punctuation across programming languages, rather than full code snippets)
-- Spanish sentences mode: accented letters (á, é, í, ó, ú, ü) and ñ are no longer counted as errors when typed correctly (Unicode normalisation mismatch between the source file and keyboard input)
-- Russian word list: lowercased "Здравствуй" / "Здравствуйте" to match the rest of the dictionary
-- British word list: corrected the typo "offencive" → "offensive"
+- Mobile navigation overlay now scrolls on short viewports
+- Spanish sentence accents (á, é, í, ó, ú, ü, ñ) are no longer counted as errors
+- Corrected the supported-language list and programming-mode description on the About page
 
 ## 1.1.0 - 2026-05-05
 

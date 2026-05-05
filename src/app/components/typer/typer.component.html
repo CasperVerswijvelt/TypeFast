@@ -282,16 +282,13 @@
   </div>
 </div>
 
-    <div
-      [class.type-test-incorrect-words-modal-show]="incorrectWordsOpen"
-      class="type-test-incorrect-words-modal"
+    <dialog
+      #incorrectWordsDialog
+      class="incorrect-words-dialog"
+      (click)="onDialogBackdropClick($event, incorrectWordsDialog)"
       >
-      <div
-        class="type-test-incorrect-words-modal-background"
-        (click)="incorrectWordsOpen = false"
-      ></div>
-      <div class="type-test-incorrect-words-modal-inner">
-        <h2 class="incorrect-words-modal-title">
+      <div class="incorrect-words-dialog-inner">
+        <h2 class="incorrect-words-dialog-title">
           Incorrect words
           <div
             popper
@@ -314,10 +311,10 @@
             No incorrect words have been registered yet.
           </p>
         }
-        <div class="incorrect-words-modal-list">
+        <div class="incorrect-words-dialog-list">
           @for (word of testResults?.incorrectWords; track word) {
             <div
-              class="type-test-incorrect-words-modal-entry"
+              class="incorrect-words-dialog-entry"
               >
               <app-incorrect-word
                 [expected]="word.expected"
@@ -330,10 +327,10 @@
           }
         </div>
         <button
-          class="incorrect-words-modal-close"
-          (click)="incorrectWordsOpen = false"
+          class="incorrect-words-dialog-close"
+          (click)="incorrectWordsDialog.close()"
           >
           Close
         </button>
       </div>
-    </div>
+    </dialog>

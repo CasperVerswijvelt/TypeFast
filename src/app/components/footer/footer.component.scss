@@ -1,6 +1,9 @@
+@use '../../../styles/breakpoints' as bp;
+@use '../../../styles/mixins' as m;
+
 :host {
   display: block;
-  transition: opacity 0.4s ease;
+  transition: opacity var(--duration-slow) var(--ease);
   flex-shrink: 0;
 }
 
@@ -13,26 +16,21 @@
 }
 
 .bottom-footer {
-  padding: 8px 16px;
-  font-family: 'Roboto Mono', monospace;
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-mono);
   font-size: 0.7rem;
-  color: #4a4a4a;
-  background-color: #080808;
+  color: var(--text-subtle);
+  background-color: var(--surface-bg);
   text-align: center;
   user-select: none;
 }
 
 .footer-link {
+  @include m.link-underline(1px, 3px);
   color: inherit;
-  text-decoration: underline transparent;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  transition:
-    color 0.3s,
-    text-decoration-color 0.3s;
 
   &:hover {
-    color: #ababab;
+    color: var(--text-muted);
     text-decoration-color: currentColor;
   }
 }
@@ -42,7 +40,7 @@
   display: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: bp.$bp-md) {
   .copy-full,
   .email-full {
     display: none;

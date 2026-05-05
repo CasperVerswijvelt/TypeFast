@@ -3,10 +3,17 @@
   flex-direction: column;
   width: 100%;
   flex: 1 0 auto;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1 0 auto;
   // Typer's .type-test-controls already adds 40px top margin; together with
   // this 48px we land at 88px from the nav — same as prose pages and the
   // landing's hero.
-  padding-top: 48px;
+  padding-top: var(--space-12);
 }
 
 app-typer {

@@ -1,0 +1,50 @@
+// Shared SCSS mixins. Import with:
+//   @use '../../../styles/mixins' as m;
+// then reference as `@include m.link-underline;`.
+
+// Underlined link with smooth color/underline transitions.
+// Caller provides hover/active rules in their own scope.
+@mixin link-underline($thickness: 1px, $offset: 3px) {
+  text-decoration: underline transparent;
+  text-decoration-thickness: $thickness;
+  text-underline-offset: $offset;
+  transition:
+    color var(--duration-normal),
+    text-decoration-color var(--duration-normal);
+}
+
+// Base for icon buttons (timer +/-, restart, preferences gear). Caller can
+// override opacity values and add svg sizing rules.
+@mixin icon-button {
+  border: none;
+  background: no-repeat;
+  cursor: pointer;
+  display: block;
+  box-sizing: content-box;
+  position: relative;
+  opacity: 0.5;
+  transition: opacity var(--duration-fast);
+  pointer-events: initial;
+
+  svg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+  }
+
+  &:hover {
+    opacity: 0.75;
+  }
+
+  &:active {
+    opacity: 1;
+    outline: none;
+  }
+}
+
+// Visible focus outline for keyboard users.
+@mixin focus-ring {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}

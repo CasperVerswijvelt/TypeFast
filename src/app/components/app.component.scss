@@ -6,13 +6,5 @@ app-nav {
   z-index: 5;
 }
 
-
-app-preferences {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 100%;
-  width: 100%;
-  pointer-events: none;
-  z-index: 10;
-}
+// app-preferences renders a fixed icon column at the top-right and a
+// <dialog> for the menu — no host-level positioning needed.

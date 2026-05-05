@@ -1,0 +1,11 @@
+// Shared responsive breakpoints. SCSS variables (compile-time) so they
+// can be used inside @media queries. Import with:
+//   @use '../../../styles/breakpoints' as bp;
+// then reference as `bp.$bp-md`.
+
+$bp-sm: 500px; // tiny phones / typer font scaling
+$bp-md: 600px; // landing & footer mobile variant
+$bp-lg: 800px; // tablet (preferences icon scale-up)
+$bp-nav: 900px; // desktop / mobile nav boundary
+$bp-xl: 1024px; // results rail
+$bp-2xl: 1100px; // prose layout with sidebar

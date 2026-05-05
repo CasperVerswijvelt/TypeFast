@@ -1,11 +1,11 @@
+@use 'styles/tokens';
+
 body {
-  background-color: #080808;
-  // TODO: only enable this transition after file load to make sure it doesnt animate the initial transition
-  //transition: background-color 0.4s;
+  background-color: var(--surface-bg);
 }
 
 * {
-  font-family: Roboto, sans-serif;
+  font-family: var(--font-sans);
   box-sizing: border-box;
   margin: 0;
 }
@@ -38,34 +38,63 @@ router-outlet + * {
   text-decoration: underline;
 }
 
+// Skip-to-content link target shouldn't show its own focus ring; the
+// keyboard user already saw the skip-link's focus before activation.
+main[tabindex='-1']:focus,
+main[tabindex='-1']:focus-visible {
+  outline: none;
+}
+
+// Skip-to-content link: visually hidden until focused.
+.skip-link {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+  z-index: 1000;
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--surface-elevated);
+  color: var(--text-strong);
+  font-family: var(--font-mono);
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  transform: translateY(-200%);
+  transition: transform var(--duration-fast);
+
+  &:focus {
+    transform: translateY(0);
+    outline: var(--focus-ring-width) solid var(--accent);
+    outline-offset: var(--focus-ring-offset);
+  }
+}
+
 /* Prose / content-page typography. Applied globally because the markup is projected
    into <app-prose-page> via <ng-content>, so component-scoped styles wouldn't reach it. */
 .prose {
-  color: #cacaca;
+  color: var(--text);
   line-height: 1.75;
   font-size: 1rem;
 
   h1 {
-    font-family: 'Roboto Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 1.85rem;
     margin: 0 0 28px;
-    color: #e6e6e6;
+    color: var(--text-strong);
     line-height: 1.3;
   }
 
   h2 {
-    font-family: 'Roboto Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 1.3rem;
-    margin: 56px 0 18px;
-    color: #e6e6e6;
+    margin: var(--space-10) 0 18px;
+    color: var(--text-strong);
     line-height: 1.4;
   }
 
   h3 {
-    font-family: 'Roboto Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 1.05rem;
-    margin: 36px 0 12px;
-    color: #e6e6e6;
+    margin: var(--space-8) 0 var(--space-3);
+    color: var(--text-strong);
   }
 
   p {
@@ -74,8 +103,8 @@ router-outlet + * {
 
   ul,
   ol {
-    margin: 0 0 22px 20px;
-    padding-left: 4px;
+    margin: 0 0 22px var(--space-5);
+    padding-left: var(--space-1);
   }
 
   li {
@@ -94,36 +123,37 @@ router-outlet + * {
     text-decoration-color: currentColor;
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
-    transition: color 0.3s;
+    transition: color var(--duration-normal);
   }
 
   a:hover {
-    color: #ffffff;
+    color: var(--text-strong-hover);
   }
 
   strong {
-    color: #e6e6e6;
+    color: var(--text-strong);
     font-weight: 600;
   }
 
   code {
-    background: #141414;
-    padding: 1px 6px;
-    border-radius: 4px;
-    font-family: 'Roboto Mono', monospace;
+    background: var(--code-bg);
+    color: var(--code-fg);
+    padding: 1px var(--space-2);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
     font-size: 0.88em;
   }
 
   hr {
     border: none;
-    border-top: 1px solid #262626;
-    margin: 40px 0;
+    border-top: 1px solid var(--border-strong);
+    margin: var(--space-10) 0;
   }
 
   .image-button {
     display: inline-block;
-    margin: 12px 16px 20px 0;
-    transition: opacity 0.3s;
+    margin: var(--space-3) var(--space-4) var(--space-5) 0;
+    transition: opacity var(--duration-normal);
   }
 
   .image-button:hover {
@@ -131,7 +161,7 @@ router-outlet + * {
   }
 
   .image-button img {
-    max-height: 48px;
+    max-height: var(--space-12);
   }
 }
 
@@ -158,9 +188,9 @@ router-outlet + * {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: #4a4a4a;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  background-color: var(--switch-track-off);
+  -webkit-transition: var(--duration-slow);
+  transition: var(--duration-slow);
 }
 
 .slider:before {
@@ -171,16 +201,16 @@ router-outlet + * {
   left: 3px;
   bottom: 3px;
   background-color: white;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
+  -webkit-transition: var(--duration-slow);
+  transition: var(--duration-slow);
 }
 
 input:checked + .slider {
-  background-color: #2196f3;
+  background-color: var(--accent);
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196f3;
+  box-shadow: 0 0 1px var(--accent);
 }
 
 input:checked + .slider:before {
@@ -220,9 +250,9 @@ input:checked + .slider:before {
   top: 1px;
   left: 9px;
   width: 1px;
-  height: 4px;
+  height: var(--space-1);
   border-radius: 20%;
-  background: #fff;
+  background: var(--text-strong);
 }
 .spinner div:nth-child(1) {
   transform: rotate(0deg);
@@ -280,15 +310,15 @@ input:checked + .slider:before {
 // tooltip
 
 .tooltip {
-  background-color: rgba(54, 54, 54, 0.705);
-  color: rgb(218, 218, 218);
+  background-color: var(--tooltip-bg);
+  color: var(--tooltip-fg);
   padding: 5px 10px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   font-size: 15px;
   opacity: 0;
   pointer-events: none;
   max-width: 300px;
-  transition: opacity 0.2s;
+  transition: opacity var(--duration-fast);
   overflow-wrap: break-word;
   white-space: break-spaces;
   font-weight: normal;
@@ -311,7 +341,7 @@ input:checked + .slider:before {
 }
 
 .info-icon {
-  background-color: rgba(128, 128, 128, 0.151);
+  background-color: var(--info-icon-bg);
   mask-image: url('assets/icons/info-circle-solid.svg');
   mask-position: center;
   mask-repeat: no-repeat;
@@ -416,225 +446,3 @@ input:checked + .slider:before {
   background-image: url(assets/icons/flags/ug.svg);
 }
 
-// Markdown
-
-markdown {
-  h1,
-  h2,
-  h3,
-  p {
-    margin-block-start: 0.5em;
-    margin-block-end: 0.5em;
-  }
-
-  h1 {
-    padding-bottom: 4px;
-    border-bottom: 2px solid #7b7b7b6b;
-  }
-
-  h2 {
-    padding: 6px 0;
-    border-bottom: 1px solid #7b7b7b6b;
-  }
-  h3 {
-    font-style: italic;
-    font-weight: lighter;
-  }
-  a {
-    color: rgb(82, 82, 255);
-  }
-}
-
-// Themes (default is dark)
-
-#body.theme--light {
-  background-color: rgb(219, 219, 219);
-
-  .title {
-    color: rgb(24, 24, 24);
-    user-select: none;
-  }
-
-  .spinner div:after {
-    background: rgb(0, 0, 0);
-  }
-
-  .info-icon {
-    background-color: rgba(128, 128, 128, 0.26);
-  }
-
-  input:not(:checked) + .slider {
-    background-color: #adadad;
-  }
-
-  // Preferences component
-  app-preferences {
-    .preferences-list {
-      background-color: #cececeee;
-      color: #424242;
-    }
-
-    .checkmark:after {
-      border-color: rgb(0, 0, 0);
-    }
-
-    .preferences-entry:hover {
-      background-color: rgba(90, 90, 90, 0.075);
-    }
-
-    .preferences-group-title:hover {
-      background-color: rgba(90, 90, 90, 0.014);
-    }
-
-    .preferences-group-entries {
-      background-color: #b7b7b766;
-    }
-
-    .preferences-group-title-arrow {
-      svg {
-        fill: rgb(26, 26, 26);
-      }
-    }
-  }
-
-  app-typer {
-    .word {
-      color: rgba(26, 26, 26, 0.74);
-
-      &.word-incorrect {
-        color: #ff0000;
-      }
-    }
-
-    .word-input {
-      background: transparent;
-      color: rgba(26, 26, 26, 0.74);
-      caret-color: rgba(26, 26, 26, 0.74);
-
-      &.input-incorrect {
-        color: rgb(255, 94, 94);
-      }
-    }
-
-    .type-test-results {
-      background-color: rgba(77, 77, 77, 0.062);
-      color: rgba(32, 32, 32, 0.582);
-
-      tr {
-        &:nth-child(even) {
-          background-color: rgba(51, 51, 51, 0.07);
-        }
-      }
-    }
-
-    .type-test-timer {
-      color: rgb(32, 32, 32);
-
-      .type-test-timer-increase,
-      .type-test-timer-decrease {
-        svg {
-          fill: rgb(48, 48, 48);
-        }
-      }
-    }
-
-    .type-test-restart {
-      svg {
-        fill: rgb(48, 48, 48);
-      }
-    }
-
-    .type-test-incorrect-words-modal {
-      .type-test-incorrect-words-modal-background {
-        background-color: rgba(0, 0, 0, 0.7);
-      }
-
-      .type-test-incorrect-words-modal-inner {
-        background-color: rgb(245, 245, 245);
-        color: rgb(37, 37, 37);
-
-        .type-test-incorrect-words-modal-entry {
-          &:nth-child(odd) {
-            background-color: rgb(228, 228, 228);
-          }
-        }
-
-        .incorrect-words-modal-close {
-          background-color: rgb(177, 0, 0);
-          color: white;
-        }
-      }
-    }
-  }
-
-  app-about {
-    .about-wrapper {
-      background-color: rgba(0, 0, 0, 0.336);
-    }
-
-    .tab-wrap {
-      background-color: #fff;
-    }
-
-    .tab {
-      &:checked + label {
-        background-color: #fff;
-        &:hover {
-          background-color: #fff;
-        }
-      }
-      + label {
-        color: #333;
-        background-color: #efefef;
-        &:hover {
-          background-color: #f9f9f9;
-        }
-      }
-      &__content {
-        color: rgb(85, 85, 85);
-      }
-    }
-  }
-
-  // Top nav
-  app-nav {
-    .brand {
-      color: #1a1a1a;
-    }
-    .brand:hover {
-      color: #000000;
-    }
-    .nav-link {
-      color: #4a4a4a;
-    }
-    .nav-link:hover,
-    .nav-link.active {
-      color: #1a1a1a;
-    }
-  }
-
-  // Prose / content pages
-  .prose {
-    color: #1f1f1f;
-  }
-  .prose h1,
-  .prose h2,
-  .prose h3,
-  .prose strong {
-    color: #0a0a0a;
-  }
-  .prose a:hover {
-    color: #000000;
-  }
-  .prose code {
-    background: rgba(0, 0, 0, 0.06);
-    color: #1f1f1f;
-  }
-  .prose hr {
-    border-top-color: rgba(0, 0, 0, 0.12);
-  }
-  markdown h1,
-  markdown h2 {
-    border-bottom-color: rgba(0, 0, 0, 0.18);
-  }
-}

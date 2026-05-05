@@ -7,6 +7,7 @@ import {
   TitleStrategy,
 } from '@angular/router';
 import { filter, skip } from 'rxjs/operators';
+import { SITE_NAME } from '../constants';
 import { NavComponent } from './nav/nav.component';
 import { FooterComponent } from './footer/footer.component';
 import { PreferencesComponent } from './preferences/preferences.component';
@@ -36,7 +37,7 @@ export class AppComponent {
         .subscribe((e) => {
           const pageTitle =
             this.titleStrategy.buildTitle(this.router.routerState.snapshot) ??
-            'TypeFast.io';
+            SITE_NAME;
           const w = window as unknown as {
             Shynet?: { newPageLoad?: () => void };
             gtag?: (...args: unknown[]) => void;

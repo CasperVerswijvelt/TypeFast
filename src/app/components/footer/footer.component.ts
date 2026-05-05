@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { CONTACT_EMAIL, MAILTO_HREF } from '../../constants';
 import { TyperStateService } from '../../services/typer-state.service';
 
 @Component({
@@ -15,4 +16,6 @@ export class FooterComponent {
   state = inject(TyperStateService);
 
   readonly year = new Date().getFullYear();
+  readonly contactEmail = CONTACT_EMAIL;
+  readonly mailtoHref = MAILTO_HREF;
 }

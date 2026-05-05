@@ -1,3 +1,6 @@
+// Ad placeholder uses a token-driven gradient + border + text color so it
+// adapts to dark/light themes via :root variables (see _tokens.scss).
+
 :host {
   display: block;
   width: 100%;
@@ -20,36 +23,36 @@
   background:
     linear-gradient(
       135deg,
-      rgba(120, 119, 198, 0.55) 0%,
-      rgba(255, 119, 198, 0.45) 50%,
-      rgba(120, 219, 226, 0.55) 100%
+      var(--ad-grad-1) 0%,
+      var(--ad-grad-2) 50%,
+      var(--ad-grad-3) 100%
     ),
     repeating-linear-gradient(
       45deg,
       transparent 0,
       transparent 12px,
-      rgba(255, 255, 255, 0.05) 12px,
-      rgba(255, 255, 255, 0.05) 24px
+      var(--ad-stripe) 12px,
+      var(--ad-stripe) 24px
     );
-  border: 1px dashed rgba(255, 255, 255, 0.35);
-  color: rgba(255, 255, 255, 0.95);
+  border: 1px dashed var(--ad-border);
+  color: var(--ad-text);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
 
   &--banner {
     min-height: 90px;
-    margin: 16px auto;
+    margin: var(--space-4) auto;
     max-width: 728px;
   }
 
   &--banner-slim {
     min-height: 60px;
-    margin: 12px auto;
+    margin: var(--space-3) auto;
     max-width: 728px;
   }
 
   &--rectangle {
     min-height: 250px;
-    margin: 16px auto;
+    margin: var(--space-4) auto;
     max-width: 300px;
   }
 
@@ -62,24 +65,4 @@
     opacity: 0.7;
     font-size: 9px;
   }
-}
-
-#body.theme--light .ad-placeholder,
-body.theme--light .ad-placeholder {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(120, 119, 198, 0.45) 0%,
-      rgba(255, 119, 198, 0.35) 50%,
-      rgba(120, 219, 226, 0.45) 100%
-    ),
-    repeating-linear-gradient(
-      45deg,
-      transparent 0,
-      transparent 12px,
-      rgba(0, 0, 0, 0.04) 12px,
-      rgba(0, 0, 0, 0.04) 24px
-    );
-  border-color: rgba(0, 0, 0, 0.18);
-  color: rgba(40, 40, 60, 0.85);
 }
