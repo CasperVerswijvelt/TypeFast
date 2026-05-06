@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { firstValueFrom, take } from 'rxjs';
 import { PreferencesService } from './preferences.service';
-import { WordListLoaded, WordService } from './word.service';
+import { WordService } from './word.service';
 import { Language, Preference, WordMode } from '../models/Preference';
 
 const STORAGE_KEY = 'preferences';
@@ -85,20 +85,18 @@ describe('WordService', () => {
     }
   });
 
-  it('emits on wordListLoaded with language + computed name on success', async () => {
+  it('exposes the loaded list as a signal with language + computed name on success', async () => {
     spyOnFetch({ body: 'alpha bravo charlie' });
 
     const { service } = injectWordService();
     await awaitInitialLoad(service);
 
-    // ReplaySubject(1) caches the latest emission — fine to subscribe after.
-    const loaded: WordListLoaded = await firstValueFrom(
-      service.wordListLoaded.pipe(take(1)),
-    );
-    expect(loaded.language).toBe(Language.ENGLISH_AMERICAN);
-    expect(loaded.wordMode).toBe(WordMode.WORDS);
-    expect(loaded.wordListName).toBe('English (US)');
-    expect(loaded.shouldReverseScroll).toBeFalse();
+    const loaded = service.loadedList();
+    expect(loaded).not.toBeNull();
+    expect(loaded?.language).toBe(Language.ENGLISH_AMERICAN);
+    expect(loaded?.wordMode).toBe(WordMode.WORDS);
+    expect(loaded?.wordListName).toBe('English (US)');
+    expect(loaded?.shouldReverseScroll).toBeFalse();
   });
 
   it('loadFile primes CUSTOM language with file contents and name', async () => {
@@ -198,8 +196,9 @@ describe('WordService', () => {
 
     await service.loadLanguage(Language.ARABIC, WordMode.WORDS);
 
-    const loaded = await firstValueFrom(service.wordListLoaded.pipe(take(1)));
-    expect(loaded.language).toBe(Language.ARABIC);
-    expect(loaded.shouldReverseScroll).toBeTrue();
+    const loaded = service.loadedList();
+    expect(loaded).not.toBeNull();
+    expect(loaded?.language).toBe(Language.ARABIC);
+    expect(loaded?.shouldReverseScroll).toBeTrue();
   });
 });

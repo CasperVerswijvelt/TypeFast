@@ -214,7 +214,7 @@ $word-spacing: 20px;
 }
 
 .type-test-timer-time {
-  transition: opacity var(--duration-slow) var(--ease);
+  @include m.fade-transition;
 
   &.is-hidden {
     opacity: 0;
@@ -227,7 +227,7 @@ $word-spacing: 20px;
   border-radius: var(--radius-lg);
   width: 310px;
   flex: 0 0 310px;
-  transition: opacity var(--duration-slow) var(--ease);
+  @include m.fade-transition;
 
   &.is-hidden {
     opacity: 0;
@@ -293,6 +293,10 @@ $word-spacing: 20px;
 
   .type-test-results-incorrect-words {
     cursor: pointer;
+
+    &:focus-visible {
+      @include m.focus-ring;
+    }
   }
 }
 
@@ -400,24 +404,12 @@ $word-spacing: 20px;
   color: var(--modal-fg);
   overflow-y: auto;
 
-  // Fade in/out. allow-discrete + @starting-style let display/overlay
-  // participate so the close also animates instead of disappearing instantly.
-  opacity: 0;
-  transition:
-    opacity var(--duration-fast) var(--ease),
-    overlay var(--duration-fast) allow-discrete,
-    display var(--duration-fast) allow-discrete;
-
-  &[open] {
-    opacity: 1;
-  }
+  // Fade in/out. The mixin pairs with @starting-style below to drive the
+  // transition on both open and close.
+  @include m.dialog-fade;
 
   &::backdrop {
-    background-color: transparent;
-    transition:
-      background-color var(--duration-fast) var(--ease),
-      overlay var(--duration-fast) allow-discrete,
-      display var(--duration-fast) allow-discrete;
+    @include m.dialog-backdrop-fade;
   }
 
   &[open]::backdrop {

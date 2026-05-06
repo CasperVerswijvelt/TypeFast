@@ -22,16 +22,24 @@ const PROF_DIR = path.join(__dirname, 'data/profanity');
 
 // Words obscenity flags that we explicitly allow.
 const EN_ALLOWLIST = new Set([
-  'hell', 'damn', 'stupid', 'hate', 'screw', 'screwed',
-  'butt',                               // kid-safe word for buttocks
-  'suck', 'sucks', 'sucked', 'sucking', // mild slang ("this sucks") and literal use
+  'hell',
+  'damn',
+  'stupid',
+  'hate',
+  'screw',
+  'screwed',
+  'butt', // kid-safe word for buttocks
+  'suck',
+  'sucks',
+  'sucked',
+  'sucking', // mild slang ("this sucks") and literal use
 ]);
 
 // Multi-word phrases where flagged terms are part of a proper noun or fixed
 // expression — masked out before sentence scanning so they don't re-flag.
 // Only applied to languages with obscenity:true (i.e. English variants).
 const EN_PHRASE_ALLOWLIST = [
-  'Death Star',  // Star Wars proper noun
+  'Death Star', // Star Wars proper noun
 ];
 
 // Per-language false positives — words flagged by their LDNOOBW list that
@@ -43,137 +51,300 @@ const ALLOWLIST_BY_LANG = {
   english_200: EN_ALLOWLIST,
 
   dutch: new Set([
-    'balen',    // bales / to be unhappy (mild)
-    'beurt',    // turn (innocent)
-    'gat',      // hole
-    'hol',      // hollow / lair
-    'kont',     // butt (mild, like English "butt")
-    'muts',     // hat / cap
-    'naaien',   // to sew
-    'nicht',    // cousin / niece
-    'paal',     // pole
-    'poot',     // paw / leg
-    'pot',      // pot
-    'rukken',   // to pull / jerk (mostly innocent)
-    'spuiten',  // to spray / inject
-    'wippen',   // to seesaw
-    'zuigen',   // to suck (vacuum etc.)
+    'balen', // bales / to be unhappy (mild)
+    'beurt', // turn (innocent)
+    'gat', // hole
+    'hol', // hollow / lair
+    'kont', // butt (mild, like English "butt")
+    'muts', // hat / cap
+    'naaien', // to sew
+    'nicht', // cousin / niece
+    'paal', // pole
+    'poot', // paw / leg
+    'pot', // pot
+    'rukken', // to pull / jerk (mostly innocent)
+    'spuiten', // to spray / inject
+    'wippen', // to seesaw
+    'zuigen', // to suck (vacuum etc.)
   ]),
 
   french: new Set([
-    'jouir',    // to enjoy (slang sense exists but innocent dominant)
-    'baiser',   // a kiss (noun); verb form is vulgar
-    'gueule',   // mouth / face (mild slang, like "mug")
+    'jouir', // to enjoy (slang sense exists but innocent dominant)
+    'baiser', // a kiss (noun); verb form is vulgar
+    'gueule', // mouth / face (mild slang, like "mug")
   ]),
 
   italian: new Set([
-    'battere',    // to hit / strike
-    'cadavere',   // corpse (literal medical term)
-    'pesce',      // fish
-    'regina',     // queen
-    'sbattere',   // to slam
-    'tirare',     // to pull
-    'cacca',      // poo (mild, kid word)
-    'imbecille',  // imbecile (mild, like "stupid")
-    'montare',    // to mount / assemble
-    'pompa',      // pump
-    'porco',      // pig
-    'vacca',      // cow
+    'battere', // to hit / strike
+    'cadavere', // corpse (literal medical term)
+    'pesce', // fish
+    'regina', // queen
+    'sbattere', // to slam
+    'tirare', // to pull
+    'cacca', // poo (mild, kid word)
+    'imbecille', // imbecile (mild, like "stupid")
+    'montare', // to mount / assemble
+    'pompa', // pump
+    'porco', // pig
+    'vacca', // cow
   ]),
 
   portuguese: new Set([
-    'amador',   // amateur
-    'aranha',   // spider
-    'burro',    // donkey
-    'cerveja',  // beer
-    'comer',    // to eat (slang sense exists but eating dominant)
-    'corno',    // horn (animal)
-    'gozar',    // to enjoy
-    'inferno',  // hell (allowed per English policy)
-    'pau',      // stick / wood
-    'saco',     // bag / sack
+    'amador', // amateur
+    'aranha', // spider
+    'burro', // donkey
+    'cerveja', // beer
+    'comer', // to eat (slang sense exists but eating dominant)
+    'corno', // horn (animal)
+    'gozar', // to enjoy
+    'inferno', // hell (allowed per English policy)
+    'pau', // stick / wood
+    'saco', // bag / sack
   ]),
 
   spanish: new Set([
-    'asno',      // donkey
-    'concha',    // shell (vulgar in some Latin American Spanish, innocent in EU Spanish)
-    'caca',      // poo (mild)
-    'idiota',    // mild like "stupid"
-    'imbécil',   // mild like "stupid"
-    'infierno',  // hell
-    'maldito',   // damn
-    'martillo',  // hammer
-    'orina',     // urine (medical)
-    'pedo',      // fart (mild, kid word)
-    'pis',       // pee (mild, kid word)
-    'pinche',    // kitchen helper / "damn" (mild)
-    'esperma',   // sperm (medical)
-    'semen',     // semen (medical)
-    'pezón',     // nipple (anatomical)
-    'vulva',     // (anatomical)
-    'nazi',      // historical / political term
+    'asno', // donkey
+    'concha', // shell (vulgar in some Latin American Spanish, innocent in EU Spanish)
+    'caca', // poo (mild)
+    'idiota', // mild like "stupid"
+    'imbécil', // mild like "stupid"
+    'infierno', // hell
+    'maldito', // damn
+    'martillo', // hammer
+    'orina', // urine (medical)
+    'pedo', // fart (mild, kid word)
+    'pis', // pee (mild, kid word)
+    'pinche', // kitchen helper / "damn" (mild)
+    'esperma', // sperm (medical)
+    'semen', // semen (medical)
+    'pezón', // nipple (anatomical)
+    'vulva', // (anatomical)
+    'nazi', // historical / political term
   ]),
 
   russian: new Set([
-    'бугор',  // hill / bump
+    'бугор', // hill / bump
   ]),
 
   hungarian: new Set([
-    'marha',  // cattle / cow (literal innocent)
+    'marha', // cattle / cow (literal innocent)
   ]),
 
   indonesian: new Set([
-    'anjing',  // literal "dog" dominant in word lists
-    'bodoh',   // stupid (allowed per policy)
+    'anjing', // literal "dog" dominant in word lists
+    'bodoh', // stupid (allowed per policy)
   ]),
 
   japanese: new Set([
-    '女の子',   // girl
-    '嫌い',    // dislike
+    '女の子', // girl
+    '嫌い', // dislike
     'いたずら', // mischief / prank
-    '支配',    // rule / control
-    '人種',    // race (ethnicity)
+    '支配', // rule / control
+    '人種', // race (ethnicity)
   ]),
 };
 
 // English mature-themes block list (applied on top of obscenity).
 const EN_MATURE = [
-  'kill', 'kills', 'killed', 'killing', 'killer', 'killers',
-  'murder', 'murders', 'murdered', 'murdering', 'murderer',
-  'slaughter', 'massacre',
-  'dead', 'death', 'deaths', 'die', 'dying', 'died', 'dies',
-  'corpse', 'corpses',
-  'sex', 'sexy', 'sexual', 'sexually', 'sexes',
-  'naked', 'nude', 'porn', 'pornography', 'pornographic',
-  'drug', 'drugs', 'drugged', 'cocaine', 'heroin', 'marijuana', 'meth', 'addict',
-  'drunk', 'drunken', 'alcoholic', 'alcohol',
-  'crap', 'crappy',
-  'suicide', 'suicidal',
+  'kill',
+  'kills',
+  'killed',
+  'killing',
+  'killer',
+  'killers',
+  'murder',
+  'murders',
+  'murdered',
+  'murdering',
+  'murderer',
+  'slaughter',
+  'massacre',
+  'dead',
+  'death',
+  'deaths',
+  'die',
+  'dying',
+  'died',
+  'dies',
+  'corpse',
+  'corpses',
+  'sex',
+  'sexy',
+  'sexual',
+  'sexually',
+  'sexes',
+  'naked',
+  'nude',
+  'porn',
+  'pornography',
+  'pornographic',
+  'drug',
+  'drugs',
+  'drugged',
+  'cocaine',
+  'heroin',
+  'marijuana',
+  'meth',
+  'addict',
+  'drunk',
+  'drunken',
+  'alcoholic',
+  'alcohol',
+  'crap',
+  'crappy',
+  'suicide',
+  'suicidal',
 ];
 
 // `obscenity: true` enables substring/transformer matching — English only.
 const LANG_CONFIG = {
-  english_american:  { ldnoobw: ['en'],      mature: EN_MATURE, obscenity: true,  hasSentences: true,  isCJK: false },
-  english_british:   { ldnoobw: ['en'],      mature: EN_MATURE, obscenity: true,  hasSentences: true,  isCJK: false },
-  english_200:       { ldnoobw: ['en'],      mature: EN_MATURE, obscenity: true,  hasSentences: false, isCJK: false },
-  programming:       { ldnoobw: [],          mature: [],        obscenity: false, hasSentences: false, isCJK: false },
-  arabic:            { ldnoobw: ['ar'],      mature: [],        obscenity: false, hasSentences: false, isCJK: false },
-  catalan:           { ldnoobw: ['ca'],      mature: [],        obscenity: false, hasSentences: true,  isCJK: false },
-  chinese:           { ldnoobw: ['zh'],      mature: [],        obscenity: false, hasSentences: true,  isCJK: true  },
-  dutch:             { ldnoobw: ['nl'],      mature: [],        obscenity: false, hasSentences: false, isCJK: false },
-  french:            { ldnoobw: ['fr'],      mature: [],        obscenity: false, hasSentences: true,  isCJK: false },
-  german:            { ldnoobw: ['de'],      mature: [],        obscenity: false, hasSentences: false, isCJK: false },
-  hindi:             { ldnoobw: ['hi'],      mature: [],        obscenity: false, hasSentences: false, isCJK: false },
-  hungarian:         { ldnoobw: ['hu'],      mature: [],        obscenity: false, hasSentences: false, isCJK: false },
-  indonesian:        { ldnoobw: ['id'],      mature: [],        obscenity: false, hasSentences: false, isCJK: false },
-  italian:           { ldnoobw: ['it'],      mature: [],        obscenity: false, hasSentences: true,  isCJK: false },
-  japanese:          { ldnoobw: ['ja'],      mature: [],        obscenity: false, hasSentences: false, isCJK: true  },
-  korean:            { ldnoobw: ['ko'],      mature: [],        obscenity: false, hasSentences: false, isCJK: true  },
-  portuguese:        { ldnoobw: ['pt'],      mature: [],        obscenity: false, hasSentences: true,  isCJK: false },
-  romanian:          { ldnoobw: ['ro'],      mature: [],        obscenity: false, hasSentences: false, isCJK: false },
-  russian:           { ldnoobw: ['ru'],      mature: [],        obscenity: false, hasSentences: true,  isCJK: false },
-  spanish:           { ldnoobw: ['es'],      mature: [],        obscenity: false, hasSentences: true,  isCJK: false },
-  uyghur:            { ldnoobw: [],          mature: [],        obscenity: false, hasSentences: true,  isCJK: false },
+  english_american: {
+    ldnoobw: ['en'],
+    mature: EN_MATURE,
+    obscenity: true,
+    hasSentences: true,
+    isCJK: false,
+  },
+  english_british: {
+    ldnoobw: ['en'],
+    mature: EN_MATURE,
+    obscenity: true,
+    hasSentences: true,
+    isCJK: false,
+  },
+  english_200: {
+    ldnoobw: ['en'],
+    mature: EN_MATURE,
+    obscenity: true,
+    hasSentences: false,
+    isCJK: false,
+  },
+  programming: {
+    ldnoobw: [],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: false,
+  },
+  arabic: {
+    ldnoobw: ['ar'],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: false,
+  },
+  catalan: {
+    ldnoobw: ['ca'],
+    mature: [],
+    obscenity: false,
+    hasSentences: true,
+    isCJK: false,
+  },
+  chinese: {
+    ldnoobw: ['zh'],
+    mature: [],
+    obscenity: false,
+    hasSentences: true,
+    isCJK: true,
+  },
+  dutch: {
+    ldnoobw: ['nl'],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: false,
+  },
+  french: {
+    ldnoobw: ['fr'],
+    mature: [],
+    obscenity: false,
+    hasSentences: true,
+    isCJK: false,
+  },
+  german: {
+    ldnoobw: ['de'],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: false,
+  },
+  hindi: {
+    ldnoobw: ['hi'],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: false,
+  },
+  hungarian: {
+    ldnoobw: ['hu'],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: false,
+  },
+  indonesian: {
+    ldnoobw: ['id'],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: false,
+  },
+  italian: {
+    ldnoobw: ['it'],
+    mature: [],
+    obscenity: false,
+    hasSentences: true,
+    isCJK: false,
+  },
+  japanese: {
+    ldnoobw: ['ja'],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: true,
+  },
+  korean: {
+    ldnoobw: ['ko'],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: true,
+  },
+  portuguese: {
+    ldnoobw: ['pt'],
+    mature: [],
+    obscenity: false,
+    hasSentences: true,
+    isCJK: false,
+  },
+  romanian: {
+    ldnoobw: ['ro'],
+    mature: [],
+    obscenity: false,
+    hasSentences: false,
+    isCJK: false,
+  },
+  russian: {
+    ldnoobw: ['ru'],
+    mature: [],
+    obscenity: false,
+    hasSentences: true,
+    isCJK: false,
+  },
+  spanish: {
+    ldnoobw: ['es'],
+    mature: [],
+    obscenity: false,
+    hasSentences: true,
+    isCJK: false,
+  },
+  uyghur: {
+    ldnoobw: [],
+    mature: [],
+    obscenity: false,
+    hasSentences: true,
+    isCJK: false,
+  },
 };
 
 const ENGLISH_MATCHER = new RegExpMatcher({
@@ -184,10 +355,11 @@ const ENGLISH_MATCHER = new RegExpMatcher({
 function loadLdnoobw(code) {
   const file = path.join(PROF_DIR, `${code}.txt`);
   if (!fs.existsSync(file)) return [];
-  return fs.readFileSync(file, 'utf8')
+  return fs
+    .readFileSync(file, 'utf8')
     .split('\n')
-    .map(l => l.trim())
-    .filter(l => l && !l.startsWith('#'));
+    .map((l) => l.trim())
+    .filter((l) => l && !l.startsWith('#'));
 }
 
 function buildLangChecker(name, cfg) {
@@ -195,10 +367,10 @@ function buildLangChecker(name, cfg) {
   for (const code of cfg.ldnoobw) {
     for (const t of loadLdnoobw(code)) ldnoobwTerms.add(t.toLowerCase());
   }
-  const matureTerms = new Set(cfg.mature.map(w => w.toLowerCase()));
+  const matureTerms = new Set(cfg.mature.map((w) => w.toLowerCase()));
   const useObscenity = !!cfg.obscenity;
   const allowlist = new Set(
-    [...(ALLOWLIST_BY_LANG[name] ?? new Set())].map(w => w.toLowerCase()),
+    [...(ALLOWLIST_BY_LANG[name] ?? new Set())].map((w) => w.toLowerCase()),
   );
 
   // Word-list check: exact match (case-insensitive).
@@ -217,11 +389,14 @@ function buildLangChecker(name, cfg) {
   // Sentence check: find which terms hit. CJK uses substring; others word-boundary regex.
   const buildPattern = (terms) => {
     if (cfg.isCJK) {
-      return terms.map(t => ({ term: t, re: new RegExp(escapeRe(t), 'i') }));
+      return terms.map((t) => ({ term: t, re: new RegExp(escapeRe(t), 'i') }));
     }
-    return terms.map(t => ({
+    return terms.map((t) => ({
       term: t,
-      re: new RegExp(`(?<![\\p{L}\\p{N}_])${escapeRe(t)}(?![\\p{L}\\p{N}_])`, 'iu'),
+      re: new RegExp(
+        `(?<![\\p{L}\\p{N}_])${escapeRe(t)}(?![\\p{L}\\p{N}_])`,
+        'iu',
+      ),
     }));
   };
   const ldnoobwPatterns = buildPattern([...ldnoobwTerms]);
@@ -231,7 +406,10 @@ function buildLangChecker(name, cfg) {
     if (!useObscenity) return sentence;
     let masked = sentence;
     for (const phrase of EN_PHRASE_ALLOWLIST) {
-      masked = masked.replace(new RegExp(escapeRe(phrase), 'gi'), ' '.repeat(phrase.length));
+      masked = masked.replace(
+        new RegExp(escapeRe(phrase), 'gi'),
+        ' '.repeat(phrase.length),
+      );
     }
     return masked;
   };
@@ -250,10 +428,12 @@ function buildLangChecker(name, cfg) {
     if (useObscenity) {
       const matches = ENGLISH_MATCHER.getAllMatches(masked, true);
       for (const m of matches) {
-        const meta = englishDataset.getPayloadWithPhraseMetadata(m).phraseMetadata;
+        const meta =
+          englishDataset.getPayloadWithPhraseMetadata(m).phraseMetadata;
         const word = meta?.originalWord;
         if (word && !allowlist.has(word.toLowerCase())) {
-          if (!hits.some(h => h.term === word)) hits.push({ term: word, kind: 'profanity' });
+          if (!hits.some((h) => h.term === word))
+            hits.push({ term: word, kind: 'profanity' });
         }
       }
     }
@@ -299,7 +479,8 @@ function reportLanguage(name, cfg) {
       const s = line.trim();
       if (!s) return;
       const hits = checker.checkSentence(s);
-      if (hits.length) flaggedSentences.push({ lineNumber: idx + 1, sentence: s, hits });
+      if (hits.length)
+        flaggedSentences.push({ lineNumber: idx + 1, sentence: s, hits });
     });
   }
 
@@ -348,7 +529,8 @@ function applyRewrites(inFile) {
   for (const [lang, items] of Object.entries(byLang)) {
     const file = path.join(LANG_DIR, lang, 'sentences.txt');
     const lines = readLines(file);
-    let dropped = 0, replaced = 0;
+    let dropped = 0,
+      replaced = 0;
     // Apply highest line numbers first to preserve indices when removing.
     items.sort((a, b) => b.lineNumber - a.lineNumber);
     for (const item of items) {
@@ -356,7 +538,10 @@ function applyRewrites(inFile) {
       if (item.action === 'drop') {
         lines.splice(idx, 1);
         dropped++;
-      } else if (item.action === 'replace' && typeof item.replacement === 'string') {
+      } else if (
+        item.action === 'replace' &&
+        typeof item.replacement === 'string'
+      ) {
         lines[idx] = item.replacement;
         replaced++;
       }
@@ -371,7 +556,8 @@ function main() {
   const cmd = args[0];
 
   if (cmd === '--report') {
-    let totalWords = 0, totalSentences = 0;
+    let totalWords = 0,
+      totalSentences = 0;
     for (const [name, cfg] of Object.entries(LANG_CONFIG)) {
       const { flaggedWords, flaggedSentences } = reportLanguage(name, cfg);
       if (!flaggedWords.length && !flaggedSentences.length) continue;
@@ -385,7 +571,7 @@ function main() {
       if (flaggedSentences.length) {
         console.log(`  Sentences to rewrite (${flaggedSentences.length}):`);
         for (const fs of flaggedSentences.slice(0, 5)) {
-          const terms = fs.hits.map(h => `${h.term}(${h.kind})`).join(', ');
+          const terms = fs.hits.map((h) => `${h.term}(${h.kind})`).join(', ');
           console.log(`    L${fs.lineNumber}: ${terms}`);
         }
         if (flaggedSentences.length > 5) {
@@ -412,14 +598,20 @@ function main() {
 
   if (cmd === '--flag-sentences') {
     const out = args[1];
-    if (!out) { console.error('--flag-sentences requires output path'); process.exit(1); }
+    if (!out) {
+      console.error('--flag-sentences requires output path');
+      process.exit(1);
+    }
     flagAllSentences(out);
     return;
   }
 
   if (cmd === '--apply-rewrites') {
     const inFile = args[1];
-    if (!inFile) { console.error('--apply-rewrites requires input path'); process.exit(1); }
+    if (!inFile) {
+      console.error('--apply-rewrites requires input path');
+      process.exit(1);
+    }
     applyRewrites(inFile);
     return;
   }

@@ -303,8 +303,12 @@ input:checked + .slider:before {
   animation-delay: 0s;
 }
 @keyframes spinner {
-  from   { opacity: 1;}
-  to  { opacity: 0;}
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
 }
 
 // tooltip
@@ -456,4 +460,3 @@ input:checked + .slider:before {
 .flag-icon-ug {
   background-image: url(assets/icons/flags/ug.svg);
 }
-

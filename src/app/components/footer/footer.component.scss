@@ -3,7 +3,7 @@
 
 :host {
   display: block;
-  transition: opacity var(--duration-slow) var(--ease);
+  @include m.fade-transition;
   flex-shrink: 0;
 }
 

@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import {
   Directive,
   ElementRef,
@@ -21,6 +22,7 @@ export class PopperDirective implements OnInit, OnDestroy {
   readonly placement = input<Placement>('right');
 
   private readonly el: ElementRef<HTMLElement> = inject(ElementRef);
+  private readonly document = inject(DOCUMENT);
 
   ngOnInit(): void {
     let tooltipEl =
@@ -28,7 +30,7 @@ export class PopperDirective implements OnInit, OnDestroy {
 
     const tooltipText = this.text();
     if (tooltipText) {
-      tooltipEl = document.createElement('div');
+      tooltipEl = this.document.createElement('div');
       tooltipEl.className = 'tooltip';
       tooltipEl.innerText = tooltipText;
       this.el.nativeElement.appendChild(tooltipEl);

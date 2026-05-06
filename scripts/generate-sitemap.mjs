@@ -1,4 +1,10 @@
-import { copyFileSync, existsSync, readdirSync, statSync, writeFileSync } from 'node:fs';
+import {
+  copyFileSync,
+  existsSync,
+  readdirSync,
+  statSync,
+  writeFileSync,
+} from 'node:fs';
 import { join, relative } from 'node:path';
 
 const ORIGIN = 'https://typefast.io';
@@ -30,7 +36,8 @@ function findIndexHtmlFiles(dir, root = dir) {
       out.push(...findIndexHtmlFiles(full, root));
     } else if (name === 'index.html') {
       const rel = relative(root, full);
-      const dirPath = rel === 'index.html' ? '/' : '/' + rel.slice(0, -'/index.html'.length);
+      const dirPath =
+        rel === 'index.html' ? '/' : '/' + rel.slice(0, -'/index.html'.length);
       out.push(dirPath);
     }
   }

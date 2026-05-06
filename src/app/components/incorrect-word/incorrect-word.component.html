@@ -2,14 +2,11 @@
   <div class="container">
     <span class="value">
       @for (character of valueLetters(); track $index) {
-        <span
-          [className]="character.class"
-          >{{ character.char }}</span
-          >
-        }
-      </span>
-      <span class="expected">
-        {{ expected() }}
-      </span>
-    </div>
+        <span [className]="character.class">{{ character.char }}</span>
+      }
+    </span>
+    <span class="expected">
+      {{ expected() }}
+    </span>
   </div>
+</div>

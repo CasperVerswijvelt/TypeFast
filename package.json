@@ -6,7 +6,11 @@
     "start": "ng serve",
     "build": "ng build && node scripts/generate-sitemap.mjs",
     "test": "ng test",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "typecheck": "tsc -b --noEmit",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "ci": "npm run typecheck && npm run lint && npm run test -- --watch=false --browsers=ChromeHeadless"
   },
   "private": true,
   "dependencies": {

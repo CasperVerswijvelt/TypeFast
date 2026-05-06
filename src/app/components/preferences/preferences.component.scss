@@ -29,24 +29,12 @@ $preferences-entry-main-height: 37px;
   color: var(--pref-fg);
   overflow: hidden;
 
-  // Fade in/out. allow-discrete + @starting-style let display/overlay
-  // participate so close also animates instead of disappearing instantly.
-  opacity: 0;
-  transition:
-    opacity var(--duration-fast) var(--ease),
-    overlay var(--duration-fast) allow-discrete,
-    display var(--duration-fast) allow-discrete;
-
-  &[open] {
-    opacity: 1;
-  }
+  // Fade in/out. The mixin pairs with @starting-style below to drive the
+  // transition on both open and close.
+  @include m.dialog-fade;
 
   &::backdrop {
-    background-color: transparent;
-    transition:
-      background-color var(--duration-fast) var(--ease),
-      overlay var(--duration-fast) allow-discrete,
-      display var(--duration-fast) allow-discrete;
+    @include m.dialog-backdrop-fade;
   }
 
   &[open]::backdrop {
@@ -83,7 +71,7 @@ $preferences-entry-main-height: 37px;
   display: flex;
   flex-direction: column;
   pointer-events: initial;
-  transition: opacity var(--duration-slow) var(--ease);
+  @include m.fade-transition;
 
   &.dimmed {
     opacity: 0.12;

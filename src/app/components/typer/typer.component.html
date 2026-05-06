@@ -3,11 +3,9 @@
   [class.type-test-started]="state.testStarted()"
   [class.type-test-reverse-scroll]="reverseScroll"
   [class.type-test-smooth-scroll]="smoothScroll && !reverseScroll"
-  [class.type-test-no-animation]="
-    !scrollingAnimation()
-  "
+  [class.type-test-no-animation]="!scrollingAnimation()"
   [ngClass]="textSizeClass"
-  >
+>
   <div class="type-test">
     <div class="word-container-wrapper">
       <div class="word-container" #wordContainer>
@@ -17,12 +15,7 @@
       </div>
     </div>
     <div class="word-copy" #wordCopy></div>
-    <input
-      type="text"
-      class="word-input-dummy"
-      tabindex="-1"
-      #wordInputDummy
-    />
+    <input type="text" class="word-input-dummy" tabindex="-1" #wordInputDummy />
     <input
       [(ngModel)]="wordInput"
       (input)="wordInputChanged($event.target.value)"
@@ -30,13 +23,12 @@
       type="text"
       spellcheck="false"
       placeholder="type here"
-
       autocomplete="off"
       autocapitalize="off"
       class="word-input"
       tabindex="0"
       #wordInputEl
-      />
+    />
   </div>
 
   <div class="type-test-controls">
@@ -46,7 +38,7 @@
         (click)="onDecreaseClicked()"
         tabindex="1"
         title="Decrease test duration"
-        >
+      >
         <svg
           aria-hidden="true"
           focusable="false"
@@ -56,7 +48,7 @@
           role="img"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 448 512"
-          >
+        >
           <path
             d="M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
           ></path>
@@ -64,10 +56,8 @@
       </button>
       <div
         class="type-test-timer-time"
-        [class.is-hidden]="
-          state.testIsRunning() && hideTimer()
-        "
-        >
+        [class.is-hidden]="state.testIsRunning() && hideTimer()"
+      >
         {{ state.testTimeLeft() | time }}
       </div>
       <button
@@ -75,7 +65,7 @@
         (click)="onIncreaseClicked()"
         tabindex="1"
         title="Increase test duration"
-        >
+      >
         <svg
           aria-hidden="true"
           focusable="false"
@@ -84,7 +74,7 @@
           role="img"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 448 512"
-          >
+        >
           <path
             d="M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z"
           ></path>
@@ -98,7 +88,7 @@
         tabindex="0"
         (click)="onRestartClicked()"
         title="Reset test"
-        >
+      >
         <svg
           aria-hidden="true"
           focusable="false"
@@ -107,7 +97,7 @@
           role="img"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 512 512"
-          >
+        >
           <path
             d="M370.72 133.28C339.458 104.008 298.888 87.962 255.848 88c-77.458.068-144.328 53.178-162.791 126.85-1.344 5.363-6.122 9.15-11.651 9.15H24.103c-7.498 0-13.194-6.807-11.807-14.176C33.933 94.924 134.813 8 256 8c66.448 0 126.791 26.136 171.315 68.685L463.03 40.97C478.149 25.851 504 36.559 504 57.941V192c0 13.255-10.745 24-24 24H345.941c-21.382 0-32.09-25.851-16.971-40.971l41.75-41.749zM32 296h134.059c21.382 0 32.09 25.851 16.971 40.971l-41.75 41.75c31.262 29.273 71.835 45.319 114.876 45.28 77.418-.07 144.315-53.144 162.787-126.849 1.344-5.363 6.122-9.15 11.651-9.15h57.304c7.498 0 13.194 6.807 11.807 14.176C478.067 417.076 377.187 504 256 504c-66.448 0-126.791-26.136-171.315-68.685L48.97 471.03C33.851 486.149 8 475.441 8 454.059V320c0-13.255 10.745-24 24-24z"
           ></path>
@@ -136,14 +126,12 @@
       cellspacing="0"
       cellpadding="0"
       class="type-test-results"
-      [class.is-hidden]="
-        state.testIsRunning() && hideLiveStats()
-      "
-      >
-    <tr class="type-test-results-wpm">
-      <th colspan="2">
-        <span class="type-test-results-wpm-value">{{
-          state.stats().wpm | number: '1.0-0'
+      [class.is-hidden]="state.testIsRunning() && hideLiveStats()"
+    >
+      <tr class="type-test-results-wpm">
+        <th colspan="2">
+          <span class="type-test-results-wpm-value">{{
+            state.stats().wpm | number: '1.0-0'
           }}</span
           >WPM
           <div popper class="info-icon-tooltip-container info-icon-tooltip-wpm">
@@ -169,9 +157,8 @@
         divided by the sum of correct characters and incorrect characters.
         <br />
         <br />
-        Characters that were placed at the right position, but in an
-        incorrect word, will still be counted as correct for calculating
-        this value.
+        Characters that were placed at the right position, but in an incorrect
+        word, will still be counted as correct for calculating this value.
       </tr>
       <tr
         app-stat-row
@@ -188,11 +175,13 @@
         [value]="wordListName"
         [titleHover]="true"
       >
-        Change the word list in the preferences menu in the upper right
-        corner, or load your own text file.
+        Change the word list in the preferences menu in the upper right corner,
+        or load your own text file.
         <br />
         <br />
-        {{ 'Loaded list: ' + wordListName }}
+        {{
+          'Loaded list: ' + wordListName
+        }}
       </tr>
       <tr
         app-stat-row
@@ -207,12 +196,12 @@
           <li>Sentence mode: actual sentences</li>
         </ul>
       </tr>
-      @if (ignoreResultsString.length) {
-        <tr app-stat-row label="Ignore" [value]="ignoreResultsString">
+      @if (ignoreResultsString().length) {
+        <tr app-stat-row label="Ignore" [value]="ignoreResultsString()">
           Ignore accents: Typing an unaccented character when an accented
           character is expected will be counted as correct. This is language
-          sensitive. For example, in French, the letter 'á' can be typed as
-          'a' and still be counted as correct when this setting is enabled.
+          sensitive. For example, in French, the letter 'á' can be typed as 'a'
+          and still be counted as correct when this setting is enabled.
           <br />
           <br />
           Ignore casing: Validation of characters is case insensitive.
@@ -220,15 +209,21 @@
       }
       <tr
         class="type-test-results-incorrect-words"
+        role="button"
+        tabindex="0"
+        aria-label="View incorrect words"
         (click)="onIncorrectWordCountClicked()"
-        >
+        (keydown.enter)="onIncorrectWordCountClicked()"
+        (keydown.space)="$event.preventDefault(); onIncorrectWordCountClicked()"
+      >
         <th>Incorrect words</th>
         <td>
           <span>{{ state.results().incorrectWordCount }}</span>
           <div popper class="info-icon-tooltip-container">
             <div class="info-icon"></div>
             <div class="tooltip">
-              To see which words you got wrong, click on this row.
+              To see which words you got wrong, click or press Enter on this
+              row.
             </div>
           </div>
         </td>
@@ -250,55 +245,51 @@
   </div>
 </div>
 
-    <dialog
-      #incorrectWordsDialog
-      class="incorrect-words-dialog"
-      (click)="onDialogBackdropClick($event, incorrectWordsDialog)"
+<dialog
+  #incorrectWordsDialog
+  class="incorrect-words-dialog"
+  (click)="onDialogBackdropClick($event, incorrectWordsDialog)"
+>
+  <div class="incorrect-words-dialog-inner">
+    <h2 class="incorrect-words-dialog-title">
+      Incorrect words
+      <div
+        popper
+        class="info-icon-tooltip-container info-icon-tooltip-incorrect-words"
       >
-      <div class="incorrect-words-dialog-inner">
-        <h2 class="incorrect-words-dialog-title">
-          Incorrect words
-          <div
-            popper
-            class="info-icon-tooltip-container info-icon-tooltip-incorrect-words"
-            >
-            <div class="info-icon"></div>
-            <div class="tooltip">
-              Characters marked red do not match the expected character.<br />
-              Greyed out characters were not typed at all.
-              <br />
-              <br />
-              Hover over the word to see the expected word.
-            </div>
-          </div>
-        </h2>
-        @if (state.results().incorrectWords.length === 0) {
-          <p
-            class="incorrect-words-placeholder"
-            >
-            No incorrect words have been registered yet.
-          </p>
-        }
-        <div class="incorrect-words-dialog-list">
-          @for (word of state.results().incorrectWords; track word) {
-            <div
-              class="incorrect-words-dialog-entry"
-              >
-              <app-incorrect-word
-                [expected]="word.expected"
-                [value]="word.value"
-                [language]="language"
-                [ignoreAccentedCharacters]="ignoreAccentedCharacters"
-                [ignoreCasing]="ignoreCasing"
-              ></app-incorrect-word>
-            </div>
-          }
+        <div class="info-icon"></div>
+        <div class="tooltip">
+          Characters marked red do not match the expected character.<br />
+          Greyed out characters were not typed at all.
+          <br />
+          <br />
+          Hover over the word to see the expected word.
         </div>
-        <button
-          class="incorrect-words-dialog-close"
-          (click)="incorrectWordsDialog.close()"
-          >
-          Close
-        </button>
       </div>
-    </dialog>
+    </h2>
+    @if (state.results().incorrectWords.length === 0) {
+      <p class="incorrect-words-placeholder">
+        No incorrect words have been registered yet.
+      </p>
+    }
+    <div class="incorrect-words-dialog-list">
+      @for (word of state.results().incorrectWords; track $index) {
+        <div class="incorrect-words-dialog-entry">
+          <app-incorrect-word
+            [expected]="word.expected"
+            [value]="word.value"
+            [language]="language"
+            [ignoreAccentedCharacters]="ignoreAccentedCharacters"
+            [ignoreCasing]="ignoreCasing"
+          ></app-incorrect-word>
+        </div>
+      }
+    </div>
+    <button
+      class="incorrect-words-dialog-close"
+      (click)="incorrectWordsDialog.close()"
+    >
+      Close
+    </button>
+  </div>
+</dialog>

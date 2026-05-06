@@ -49,6 +49,36 @@
   outline-offset: var(--focus-ring-offset);
 }
 
+// Smooth opacity transition. Default duration follows --duration-slow / --ease
+// — the values used for layout fades (header/footer/preferences icon column).
+@mixin fade-transition($duration: var(--duration-slow)) {
+  transition: opacity $duration var(--ease);
+}
+
+// Open/close fade for native <dialog>. Pair with @include dialog-backdrop-fade
+// on the &::backdrop selector and a corresponding @starting-style block to
+// drive the transition both ways. allow-discrete on overlay/display lets
+// the close animation play instead of disappearing instantly.
+@mixin dialog-fade($duration: var(--duration-fast)) {
+  opacity: 0;
+  transition:
+    opacity $duration var(--ease),
+    overlay $duration allow-discrete,
+    display $duration allow-discrete;
+
+  &[open] {
+    opacity: 1;
+  }
+}
+
+@mixin dialog-backdrop-fade($duration: var(--duration-fast)) {
+  background-color: transparent;
+  transition:
+    background-color $duration var(--ease),
+    overlay $duration allow-discrete,
+    display $duration allow-discrete;
+}
+
 // Responsive breakpoint helpers. Pair with @use 'breakpoints' as bp:
 //   @include m.above(bp.$bp-md) { ... }
 @mixin above($bp) {

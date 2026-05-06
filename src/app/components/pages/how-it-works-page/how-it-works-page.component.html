@@ -2,35 +2,34 @@
   <h1>How TypeFast.io works</h1>
 
   <p>
-    This page describes exactly what the test does, and how each number on
-    the results screen is computed. If you want to interpret your scores
-    rather than just chase a higher WPM, the formulas below are the source
-    of truth.
+    This page describes exactly what the test does, and how each number on the
+    results screen is computed. If you want to interpret your scores rather than
+    just chase a higher WPM, the formulas below are the source of truth.
   </p>
 
   <h2>The test loop</h2>
 
   <p>
     When the page opens, a stream of words is generated from the active word
-    list. The first word is centered under your cursor. As soon as you type
-    your first character the timer starts. Each space (or Enter) you press
-    submits the current word, marks it correct or incorrect, and advances to
-    the next word. The stream auto-extends, so you never run out of words
-    before the timer ends.
+    list. The first word is centered under your cursor. As soon as you type your
+    first character the timer starts. Each space (or Enter) you press submits
+    the current word, marks it correct or incorrect, and advances to the next
+    word. The stream auto-extends, so you never run out of words before the
+    timer ends.
   </p>
 
   <p>
-    When time is up, the input is disabled, your final stats are shown, and
-    you can click the reload icon (or press <code>Tab</code> + <code>Enter</code>)
+    When time is up, the input is disabled, your final stats are shown, and you
+    can click the reload icon (or press <code>Tab</code> + <code>Enter</code>)
     to start a fresh test with a freshly generated word stream.
   </p>
 
   <h2>Words per minute (WPM)</h2>
 
   <p>
-    The standard typing-test convention defines one "word" as five
-    characters, including spaces and punctuation. TypeFast.io uses that
-    convention so your scores are comparable to other tests:
+    The standard typing-test convention defines one "word" as five characters,
+    including spaces and punctuation. TypeFast.io uses that convention so your
+    scores are comparable to other tests:
   </p>
 
   <p>
@@ -38,22 +37,22 @@
   </p>
 
   <p>
-    Only correct characters count. A character is "correct" if it matches
-    the expected character at its position in the expected word. A character
-    that appeared in the right position but inside an otherwise-incorrect
-    word is still counted as correct, so you get partial credit for typos
-    you noticed too late. The trailing space that completes a fully-correct
-    word counts as one extra correct character. The trailing space of an
-    incorrect word does not.
+    Only correct characters count. A character is "correct" if it matches the
+    expected character at its position in the expected word. A character that
+    appeared in the right position but inside an otherwise-incorrect word is
+    still counted as correct, so you get partial credit for typos you noticed
+    too late. The trailing space that completes a fully-correct word counts as
+    one extra correct character. The trailing space of an incorrect word does
+    not.
   </p>
 
   <h2>Characters per minute (CPM)</h2>
 
   <p>
     CPM is the same idea without the divide-by-five step:
-    <code>CPM = correct characters / (elapsed seconds / 60)</code>. WPM is
-    just CPM divided by 5. CPM is more useful when comparing performance
-    across languages with different average word lengths.
+    <code>CPM = correct characters / (elapsed seconds / 60)</code>. WPM is just
+    CPM divided by 5. CPM is more useful when comparing performance across
+    languages with different average word lengths.
   </p>
 
   <h2>Character accuracy and word accuracy</h2>
@@ -61,30 +60,30 @@
   <p>
     <strong>Character accuracy</strong> is
     <code>correct characters / (correct + incorrect characters)</code>. This
-    rewards careful typing per-keystroke. Mistyping then correcting still
-    counts the wrong character against you. Backspaces don't erase history.
+    rewards careful typing per-keystroke. Mistyping then correcting still counts
+    the wrong character against you. Backspaces don't erase history.
   </p>
 
   <p>
     <strong>Word accuracy</strong> is
-    <code>fully correct words / total submitted words</code>. This is
-    harsher: one stray character makes the whole word incorrect.
-    Backspacing to fix a word before submitting it does help word accuracy,
-    because the final submitted word is what's checked.
+    <code>fully correct words / total submitted words</code>. This is harsher:
+    one stray character makes the whole word incorrect. Backspacing to fix a
+    word before submitting it does help word accuracy, because the final
+    submitted word is what's checked.
   </p>
 
   <h2>Word mode vs sentence mode</h2>
 
   <p>
-    Word mode (the default) generates random words from the active word
-    list. Use it to drill raw speed without punctuation getting in the way.
+    Word mode (the default) generates random words from the active word list.
+    Use it to drill raw speed without punctuation getting in the way.
   </p>
 
   <p>
     Sentence mode pulls real sentences from a separate sentence list, with
-    capitalisation and punctuation intact. Use it to practice realistic
-    typing rhythm: capital letters, commas, periods, apostrophes, the way
-    you'd actually write an email or report.
+    capitalisation and punctuation intact. Use it to practice realistic typing
+    rhythm: capital letters, commas, periods, apostrophes, the way you'd
+    actually write an email or report.
   </p>
 
   <h2>Languages and custom word lists</h2>
@@ -93,16 +92,14 @@
     TypeFast.io ships with built-in word and sentence lists for several
     languages. You can also load your own text file (any plain
     <code>.txt</code>) via the preferences menu. Custom files are processed
-    locally in your browser and cached for the session; the file never
-    leaves your device. See the <a routerLink="/privacy">privacy page</a>
+    locally in your browser and cached for the session; the file never leaves
+    your device. See the <a routerLink="/privacy">privacy page</a>
     for the full picture.
   </p>
 
   <h2>Ignore accents and ignore casing</h2>
 
-  <p>
-    Two optional rules in preferences relax what counts as "correct":
-  </p>
+  <p>Two optional rules in preferences relax what counts as "correct":</p>
 
   <ul>
     <li>
@@ -118,10 +115,10 @@
   </ul>
 
   <p>
-    Both rules apply to the live colour feedback as you type and to the
-    final accuracy calculation. If you enable them, your "ignore" settings
-    appear next to your results so you don't accidentally compare a relaxed
-    score to a strict one later.
+    Both rules apply to the live colour feedback as you type and to the final
+    accuracy calculation. If you enable them, your "ignore" settings appear next
+    to your results so you don't accidentally compare a relaxed score to a
+    strict one later.
   </p>
 
   <p>

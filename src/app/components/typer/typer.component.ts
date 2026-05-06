@@ -1,20 +1,21 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DestroyRef,
   ElementRef,
   OnDestroy,
-  OnInit,
-  ViewChild,
+  Signal,
   afterNextRender,
+  computed,
   effect,
   inject,
+  viewChild,
 } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { skip } from 'rxjs/operators';
 
 import { WordService } from '../../services/word.service';
 import { PreferencesService } from '../../services/preferences.service';
@@ -42,7 +43,7 @@ import { StatRowComponent } from '../shared/stat-row/stat-row.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TyperComponent implements OnInit, OnDestroy {
+export class TyperComponent implements AfterViewInit, OnDestroy {
   private readonly wordService = inject(WordService);
   private readonly cdRef = inject(ChangeDetectorRef);
   private readonly prefs = inject(PreferencesService);
@@ -52,21 +53,18 @@ export class TyperComponent implements OnInit, OnDestroy {
   // View / DOM
   wordInput = '';
   currentWordElement: HTMLElement | undefined;
-  containerElement!: HTMLElement;
-  inputElement!: HTMLInputElement;
-  inputWordCopy!: HTMLElement;
-  dummyInputElement!: HTMLElement;
 
-  @ViewChild('wordContainer', { static: true })
-  private wordContainerRef!: ElementRef<HTMLElement>;
-  @ViewChild('wordInputEl', { static: true })
-  private wordInputRef!: ElementRef<HTMLInputElement>;
-  @ViewChild('wordInputDummy', { static: true })
-  private wordInputDummyRef!: ElementRef<HTMLElement>;
-  @ViewChild('wordCopy', { static: true })
-  private wordCopyRef!: ElementRef<HTMLElement>;
-  @ViewChild('incorrectWordsDialog', { static: true })
-  private incorrectWordsDialogRef!: ElementRef<HTMLDialogElement>;
+  private readonly wordContainerRef =
+    viewChild.required<ElementRef<HTMLElement>>('wordContainer');
+  private readonly wordInputRef =
+    viewChild.required<ElementRef<HTMLInputElement>>('wordInputEl');
+  private readonly wordInputDummyRef =
+    viewChild.required<ElementRef<HTMLElement>>('wordInputDummy');
+  private readonly wordCopyRef =
+    viewChild.required<ElementRef<HTMLElement>>('wordCopy');
+  private readonly incorrectWordsDialogRef = viewChild.required<
+    ElementRef<HTMLDialogElement>
+  >('incorrectWordsDialog');
 
   // Derived display state.
   wordListName = 'Loading ...';
@@ -77,12 +75,22 @@ export class TyperComponent implements OnInit, OnDestroy {
   ignoreAccentedCharacters = false;
   ignoreCasing = false;
   textSizeClass = '';
-  ignoreResultsString = '';
 
   // Typed pref signals exposed to the template.
   protected readonly hideTimer = this.prefs.hideTimer;
   protected readonly hideLiveStats = this.prefs.hideLiveStats;
   protected readonly scrollingAnimation = this.prefs.scrollingAnimation;
+
+  // Human-readable summary of which scoring rules are relaxed. Empty string
+  // means strict scoring (rendered as a hidden row in the results table).
+  protected readonly ignoreResultsString = computed(() => {
+    const parts: string[] = [];
+    if (this.prefs.ignoreDiacritics()) parts.push('accents');
+    if (this.prefs.ignoreCasing()) parts.push('casing');
+    if (parts.length === 0) return '';
+    const joined = parts.join(', ');
+    return joined.charAt(0).toUpperCase() + joined.slice(1);
+  });
 
   private leftWordOffset = 0;
   private rightWordOffset = 0;
@@ -97,43 +105,29 @@ export class TyperComponent implements OnInit, OnDestroy {
     this.ignoreCasing = this.prefs.ignoreCasing();
     this.wordMode = this.prefs.wordMode();
 
-    this.updateIgnoreResultString();
-
-    // React to preference changes that need imperative DOM follow-up. skip(1)
-    // avoids re-firing on the seeded current value (which we already applied
-    // above); takeUntilDestroyed cleans up subscriptions automatically.
-    toObservable(this.prefs.reverseScroll)
-      .pipe(skip(1), takeUntilDestroyed())
-      .subscribe(() => {
-        this.syncReverseScroll();
-        this.syncOffset();
-      });
-    toObservable(this.prefs.textSize)
-      .pipe(skip(1), takeUntilDestroyed())
-      .subscribe(() => {
-        this.syncTextSizeClass();
-        this.setupTest();
-      });
-    toObservable(this.prefs.smoothScrolling)
-      .pipe(skip(1), takeUntilDestroyed())
-      .subscribe((value) => {
-        this.smoothScroll = value;
-        this.syncOffset();
-      });
-    toObservable(this.prefs.ignoreDiacritics)
-      .pipe(skip(1), takeUntilDestroyed())
-      .subscribe((value) => {
-        this.ignoreAccentedCharacters = value;
-        this.setupTest();
-        this.updateIgnoreResultString();
-      });
-    toObservable(this.prefs.ignoreCasing)
-      .pipe(skip(1), takeUntilDestroyed())
-      .subscribe((value) => {
-        this.ignoreCasing = value;
-        this.setupTest();
-        this.updateIgnoreResultString();
-      });
+    // React to preference changes that need imperative DOM follow-up. The
+    // current value is already applied via the seed assignments above, so
+    // each effect skips its own first run.
+    this.onChange(this.prefs.reverseScroll, () => {
+      this.syncReverseScroll();
+      this.syncOffset();
+    });
+    this.onChange(this.prefs.textSize, () => {
+      this.syncTextSizeClass();
+      this.setupTest();
+    });
+    this.onChange(this.prefs.smoothScrolling, (value) => {
+      this.smoothScroll = value;
+      this.syncOffset();
+    });
+    this.onChange(this.prefs.ignoreDiacritics, (value) => {
+      this.ignoreAccentedCharacters = value;
+      this.setupTest();
+    });
+    this.onChange(this.prefs.ignoreCasing, (value) => {
+      this.ignoreCasing = value;
+      this.setupTest();
+    });
 
     // When the test ends (timer hits 0), score the partial in-progress word
     // and shift focus off the input so the results stay visible. Done here
@@ -142,38 +136,23 @@ export class TyperComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed())
       .subscribe(() => this.onTestEnded());
 
-    // OnPush + signal reads in the template means we need to nudge CD when
-    // we mutate signals from a non-template synchronous path (e.g. after
-    // setupTest, before measuring DOM rectangles). The cdRef.detectChanges
-    // calls below take care of that locally; this effect is only used for
-    // host-class-style bindings if they ever appear.
-    effect(() => {
-      // Read these signals so the template re-renders when they change.
-      // (No body needed — the read itself is the dependency.)
-      void this.state.testStarted();
-      void this.state.running();
-    });
-
     afterNextRender(() => {
-      this.inputElement.onpaste = (e) => e.preventDefault();
+      this.wordInputRef().nativeElement.onpaste = (e) => e.preventDefault();
       this.focusInput();
     });
   }
 
-  ngOnInit(): void {
-    this.containerElement = this.wordContainerRef.nativeElement;
-    this.inputElement = this.wordInputRef.nativeElement;
-    this.dummyInputElement = this.wordInputDummyRef.nativeElement;
-    this.inputWordCopy = this.wordCopyRef.nativeElement;
-
+  ngAfterViewInit(): void {
     this.syncTextSizeClass();
 
     this.boundFocus = this.focusInput.bind(this);
     this.state.register(this.boundFocus);
 
     // wordListLoaded$ is a ReplaySubject(1) so this fires immediately if the
-    // list has already loaded by the time we subscribe. Has to run after
-    // ngOnInit so DOM refs are populated before setupTest reads them.
+    // list has already loaded by the time we subscribe. Reacting via
+    // subscribe (rather than effect) keeps the DOM-mutating setupTest() path
+    // out of the effect-flush phase of change detection, which would cause
+    // recursive CD when setupTest calls cdRef.detectChanges().
     this.wordService.wordListLoaded
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((update) => {
@@ -192,6 +171,20 @@ export class TyperComponent implements OnInit, OnDestroy {
     this.state.running.set(false);
   }
 
+  // Subscribe to a signal and run `onChange` on subsequent values only — the
+  // initial seed is assumed to be applied imperatively at construction time.
+  private onChange<T>(source: Signal<T>, onChange: (value: T) => void): void {
+    let firstRun = true;
+    effect(() => {
+      const value = source();
+      if (firstRun) {
+        firstRun = false;
+        return;
+      }
+      onChange(value);
+    });
+  }
+
   // Resets test state and view-layer offsets, then measures the new layout.
   private setupTest(): void {
     this.wordInput = '';
@@ -205,12 +198,13 @@ export class TyperComponent implements OnInit, OnDestroy {
     // means DOM nodes are reused across tests. Per-word classes were added
     // imperatively (.word-correct / .word-incorrect) and don't get cleared
     // by re-binding, so wipe them explicitly on the freshly-seeded nodes.
-    this.containerElement
-      .querySelectorAll('.word-correct, .word-incorrect')
+    this.wordContainerRef()
+      .nativeElement.querySelectorAll('.word-correct, .word-incorrect')
       .forEach((el) => el.classList.remove('word-correct', 'word-incorrect'));
-    this.inputElement.disabled = false;
+    const input = this.wordInputRef().nativeElement;
+    input.disabled = false;
     // Mid-word red colouring on the input also lingers across resets.
-    this.inputElement.classList.remove('input-incorrect');
+    input.classList.remove('input-incorrect');
     this.syncCurrentWordElement();
     if (this.currentWordElement) {
       this.rightWordOffset =
@@ -220,14 +214,17 @@ export class TyperComponent implements OnInit, OnDestroy {
   }
 
   focusInput(): void {
-    this.inputElement.focus();
-    this.inputElement.select();
+    const input = this.wordInputRef().nativeElement;
+    input.focus();
+    input.select();
   }
 
   // Public API for the template / event handlers below.
   wordInputChanged(word: string): void {
+    const input = this.wordInputRef().nativeElement;
+
     if (this.state.words().length === 0) {
-      this.inputElement.value = '';
+      input.value = '';
       return;
     }
 
@@ -242,7 +239,7 @@ export class TyperComponent implements OnInit, OnDestroy {
       this.leftCharacterOffset = 0;
       if (word.length === 1) {
         // Lone space — silently swallow, don't advance.
-        this.inputElement.value = '';
+        input.value = '';
         this.syncOffset();
       } else {
         const expected = this.state.currentWord() ?? '';
@@ -265,20 +262,20 @@ export class TyperComponent implements OnInit, OnDestroy {
       if (
         this.state.compareWord(wordInput, current.slice(0, wordInput.length))
       ) {
-        this.inputElement.classList.remove('input-incorrect');
-        this.inputWordCopy.innerText = wordInput;
-        this.leftCharacterOffset =
-          this.inputWordCopy.getBoundingClientRect().width;
+        input.classList.remove('input-incorrect');
+        const wordCopy = this.wordCopyRef().nativeElement;
+        wordCopy.innerText = wordInput;
+        this.leftCharacterOffset = wordCopy.getBoundingClientRect().width;
         this.syncOffset();
       } else {
-        this.inputElement.classList.add('input-incorrect');
+        input.classList.add('input-incorrect');
       }
     }
   }
 
   private advanceWord(): void {
     this.wordInput = '';
-    this.inputElement.value = '';
+    this.wordInputRef().nativeElement.value = '';
 
     if (this.currentWordElement) {
       this.leftWordOffset +=
@@ -298,8 +295,8 @@ export class TyperComponent implements OnInit, OnDestroy {
   }
 
   private onTestEnded(): void {
-    this.inputElement.disabled = true;
-    this.dummyInputElement.focus();
+    this.wordInputRef().nativeElement.disabled = true;
+    this.wordInputDummyRef().nativeElement.focus();
 
     // Score whatever partial word the user had in flight. Only the matched
     // prefix counts toward correct characters; the rest stays unscored.
@@ -310,27 +307,6 @@ export class TyperComponent implements OnInit, OnDestroy {
         currentWord.slice(0, this.wordInput.length),
         false,
       );
-    }
-  }
-
-  private updateIgnoreResultString() {
-    this.ignoreResultsString = '';
-
-    if (this.ignoreAccentedCharacters) {
-      this.ignoreResultsString += 'accents';
-      if (this.ignoreCasing) {
-        this.ignoreResultsString += ', ';
-      }
-    }
-
-    if (this.ignoreCasing) {
-      this.ignoreResultsString += 'casing';
-    }
-
-    if (this.ignoreResultsString.length) {
-      this.ignoreResultsString =
-        this.ignoreResultsString.charAt(0).toUpperCase() +
-        this.ignoreResultsString.slice(1);
     }
   }
 
@@ -355,13 +331,14 @@ export class TyperComponent implements OnInit, OnDestroy {
   }
 
   private syncCurrentWordElement(): void {
-    this.currentWordElement = this.containerElement.children[
+    this.currentWordElement = this.wordContainerRef().nativeElement.children[
       this.state.currentIndex()
     ] as HTMLElement | undefined;
   }
 
   private syncOffset(disableTransition = false): void {
-    if (!this.containerElement) return;
+    const container = this.wordContainerRef().nativeElement;
+    const input = this.wordInputRef().nativeElement;
 
     let leftOffset: number;
     let rightOffset: number;
@@ -370,24 +347,24 @@ export class TyperComponent implements OnInit, OnDestroy {
       leftOffset = this.leftWordOffset + this.leftCharacterOffset;
       rightOffset = this.rightWordOffset + this.rightCharacterOffset;
 
-      if (disableTransition) this.inputElement.style.transition = 'none';
+      if (disableTransition) input.style.transition = 'none';
 
-      this.inputElement.style.paddingLeft =
+      input.style.paddingLeft =
         'calc(50% - ' + this.leftCharacterOffset + 'px)';
-      this.inputElement.getClientRects(); // Trigger css reflow
-      this.inputElement.style.removeProperty('transition');
+      input.getClientRects(); // Trigger css reflow
+      input.style.removeProperty('transition');
     } else {
       leftOffset = 80 + this.leftWordOffset;
       rightOffset = 80 - this.rightWordOffset;
-      this.inputElement.style.removeProperty('padding-left');
+      input.style.removeProperty('padding-left');
     }
 
     if (this.reverseScroll) {
-      this.containerElement.style.marginLeft = '';
-      this.containerElement.style.marginRight = `calc(50% + ${rightOffset}px)`;
+      container.style.marginLeft = '';
+      container.style.marginRight = `calc(50% + ${rightOffset}px)`;
     } else {
-      this.containerElement.style.marginRight = '';
-      this.containerElement.style.marginLeft = `calc(50% - ${leftOffset}px)`;
+      container.style.marginRight = '';
+      container.style.marginLeft = `calc(50% - ${leftOffset}px)`;
     }
   }
 
@@ -407,7 +384,7 @@ export class TyperComponent implements OnInit, OnDestroy {
   }
 
   onIncorrectWordCountClicked(): void {
-    this.incorrectWordsDialogRef.nativeElement.showModal();
+    this.incorrectWordsDialogRef().nativeElement.showModal();
   }
 
   // Native <dialog> doesn't auto-close when the user clicks the backdrop;

@@ -1,5 +1,13 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Injectable, PLATFORM_ID, effect, inject } from '@angular/core';
+import {
+  Injectable,
+  PLATFORM_ID,
+  Signal,
+  WritableSignal,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { PreferencesService } from './preferences.service';
 import { Language, WordMode } from '../models/Preference';
@@ -40,6 +48,16 @@ export class WordService {
   private lastLoadedListLanguage: Language | undefined;
   private lastLoadedListMode: WordMode | undefined;
   private currentSource: string | undefined;
+
+  // Latest loaded word list. null while no list has finished loading yet.
+  // The signal is the canonical source; the Observable is a thin replay
+  // wrapper for callers that want event-style coordination (e.g. the typer
+  // component, where reacting via subscribe avoids running DOM-mutating code
+  // inside an Angular effect callback).
+  private readonly loadedListSignal: WritableSignal<WordListLoaded | null> =
+    signal(null);
+  readonly loadedList: Signal<WordListLoaded | null> =
+    this.loadedListSignal.asReadonly();
 
   private readonly wordListLoaded$ = new ReplaySubject<WordListLoaded>(1);
   readonly wordListLoaded: Observable<WordListLoaded> =
@@ -90,12 +108,14 @@ export class WordService {
         this.lastLoadedListLanguage = language;
         this.lastLoadedListMode = wordMode;
         this.currentSource = langString;
-        this.wordListLoaded$.next({
+        const update: WordListLoaded = {
           language,
           wordMode,
           wordListName: langString,
           shouldReverseScroll: this.shouldReverseScroll(language),
-        });
+        };
+        this.loadedListSignal.set(update);
+        this.wordListLoaded$.next(update);
         return undefined;
       })
       .catch((e) => {

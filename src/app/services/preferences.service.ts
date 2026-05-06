@@ -6,7 +6,6 @@ import {
   Signal,
   WritableSignal,
   inject,
-  signal,
 } from '@angular/core';
 import {
   Preference,
@@ -17,8 +16,10 @@ import {
   WordMode,
   TextSize,
 } from '../models/Preference';
+import { readJSON, signalsFromDefaults, writeJSON } from './storage-signal';
 
 type SignalMap = { [K in Preference]: WritableSignal<PreferenceValueMap[K]> };
+const STORAGE_KEY = 'preferences';
 
 @Injectable({
   providedIn: 'root',
@@ -56,35 +57,7 @@ export class PreferencesService {
     [Preference.HIDE_LIVE_STATS]: 'boolean',
   };
 
-  private readonly signals: SignalMap = {
-    [Preference.THEME]: signal(this.defaults[Preference.THEME]),
-    [Preference.LANGUAGE]: signal(this.defaults[Preference.LANGUAGE]),
-    [Preference.FOLLOW_SYSTEM_THEME]: signal(
-      this.defaults[Preference.FOLLOW_SYSTEM_THEME],
-    ),
-    [Preference.WORD_MODE]: signal(this.defaults[Preference.WORD_MODE]),
-    [Preference.REVERSE_SCROLL]: signal(
-      this.defaults[Preference.REVERSE_SCROLL],
-    ),
-    [Preference.DEFAULT_TEST_DURATION]: signal(
-      this.defaults[Preference.DEFAULT_TEST_DURATION],
-    ),
-    [Preference.TEXT_SIZE]: signal(this.defaults[Preference.TEXT_SIZE]),
-    [Preference.SMOOTH_SCROLLING]: signal(
-      this.defaults[Preference.SMOOTH_SCROLLING],
-    ),
-    [Preference.SCROLLING_ANIMATION]: signal(
-      this.defaults[Preference.SCROLLING_ANIMATION],
-    ),
-    [Preference.IGNORE_DIACRITICS]: signal(
-      this.defaults[Preference.IGNORE_DIACRITICS],
-    ),
-    [Preference.IGNORE_CASING]: signal(this.defaults[Preference.IGNORE_CASING]),
-    [Preference.HIDE_TIMER]: signal(this.defaults[Preference.HIDE_TIMER]),
-    [Preference.HIDE_LIVE_STATS]: signal(
-      this.defaults[Preference.HIDE_LIVE_STATS],
-    ),
-  };
+  private readonly signals: SignalMap = signalsFromDefaults(this.defaults);
 
   // Typed read-only signal accessors. Templates and effects bind to these
   // directly: prefs.theme(), prefs.ignoreCasing(), etc.
@@ -130,24 +103,18 @@ export class PreferencesService {
   }
 
   private retrievePreferences() {
-    try {
-      const stored = JSON.parse(
-        localStorage.getItem('preferences') ?? 'null',
-      ) as Preferences | null;
-      if (!stored) return;
+    const stored = readJSON<Preferences>(STORAGE_KEY);
+    if (!stored) return;
 
-      for (const key of Object.keys(stored) as Preference[]) {
-        const value = stored[key];
-        if (
-          value !== undefined &&
-          this.validatePreferenceType(key, value) &&
-          !this.isTemporaryPreference(key, value)
-        ) {
-          (this.signals[key] as WritableSignal<unknown>).set(value);
-        }
+    for (const key of Object.keys(stored) as Preference[]) {
+      const value = stored[key];
+      if (
+        value !== undefined &&
+        this.validatePreferenceType(key, value) &&
+        !this.isTemporaryPreference(key, value)
+      ) {
+        (this.signals[key] as WritableSignal<unknown>).set(value);
       }
-    } catch {
-      // localStorage parse failed — fall back to defaults
     }
   }
 
@@ -180,25 +147,17 @@ export class PreferencesService {
     if (!this.validatePreferenceType(key, value)) return;
 
     if (this.isBrowser && !this.isTemporaryPreference(key, value)) {
-      let pref: Preferences;
-      try {
-        pref =
-          (JSON.parse(
-            localStorage.getItem('preferences') ?? 'null',
-          ) as Preferences | null) ?? {};
-      } catch {
-        pref = {};
-      }
+      const pref = readJSON<Preferences>(STORAGE_KEY) ?? {};
       (pref as Record<string, unknown>)[key] = value;
-      localStorage.setItem('preferences', JSON.stringify(pref));
+      writeJSON(STORAGE_KEY, pref);
     }
 
     (this.signals[key] as WritableSignal<unknown>).set(value);
   }
 
   clearPreferences(): void {
-    if (this.isBrowser && localStorage.getItem('preferences') !== null) {
-      localStorage.removeItem('preferences');
+    if (this.isBrowser && localStorage.getItem(STORAGE_KEY) !== null) {
+      localStorage.removeItem(STORAGE_KEY);
       for (const key of Object.keys(this.defaults) as Preference[]) {
         (this.signals[key] as WritableSignal<unknown>).set(this.defaults[key]);
       }
@@ -206,25 +165,29 @@ export class PreferencesService {
   }
 
   private onStorage(event: StorageEvent) {
-    if (event.key !== 'preferences') return;
-    try {
-      const oldObj = JSON.parse(event.oldValue ?? 'null') as Preferences | null;
-      const newObj = JSON.parse(event.newValue ?? 'null') as Preferences | null;
-      if (!newObj) return;
+    if (event.key !== STORAGE_KEY) return;
 
-      for (const key of Object.keys(this.defaults) as Preference[]) {
-        const newVal = newObj[key];
-        if (
-          newVal !== undefined &&
-          oldObj?.[key] !== newVal &&
-          this.validatePreferenceType(key, newVal) &&
-          !this.isTemporaryPreference(key, newVal)
-        ) {
-          (this.signals[key] as WritableSignal<unknown>).set(newVal);
-        }
+    const parse = (raw: string | null): Preferences | null => {
+      try {
+        return JSON.parse(raw ?? 'null') as Preferences | null;
+      } catch {
+        return null;
       }
-    } catch {
-      // Empty
+    };
+    const oldObj = parse(event.oldValue);
+    const newObj = parse(event.newValue);
+    if (!newObj) return;
+
+    for (const key of Object.keys(this.defaults) as Preference[]) {
+      const newVal = newObj[key];
+      if (
+        newVal !== undefined &&
+        oldObj?.[key] !== newVal &&
+        this.validatePreferenceType(key, newVal) &&
+        !this.isTemporaryPreference(key, newVal)
+      ) {
+        (this.signals[key] as WritableSignal<unknown>).set(newVal);
+      }
     }
   }
 }

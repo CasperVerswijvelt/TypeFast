@@ -1,9 +1,9 @@
 import {
   Component,
   ElementRef,
-  ViewChild,
   inject,
   output,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { PreferencesService } from '../../services/preferences.service';
@@ -16,7 +16,7 @@ import {
 } from '../../models/Preference';
 import { WordService } from '../../services/word.service';
 import { LanguageService } from 'src/app/services/language.service';
-import { NgClass, KeyValuePipe } from '@angular/common';
+import { DOCUMENT, NgClass, KeyValuePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DISCORD_URL, GITHUB_URL } from '../../constants';
 import { PopperDirective } from '../../directives/popper.directive';
@@ -40,12 +40,13 @@ import { PreferenceToggleComponent } from '../shared/preference-toggle/preferenc
 export class PreferencesComponent {
   readonly preferencesToggled = output<boolean>();
 
-  @ViewChild('preferencesDialog')
-  private preferencesDialogRef!: ElementRef<HTMLDialogElement>;
+  private readonly preferencesDialogRef =
+    viewChild.required<ElementRef<HTMLDialogElement>>('preferencesDialog');
 
   readonly state = inject(TyperStateService);
   readonly prefs = inject(PreferencesService);
   private readonly wordService = inject(WordService);
+  private readonly document = inject(DOCUMENT);
 
   Language = Language;
   Theme = Theme;
@@ -77,7 +78,7 @@ export class PreferencesComponent {
   }
 
   onPreferencesIconClicked(): void {
-    const dialog = this.preferencesDialogRef.nativeElement;
+    const dialog = this.preferencesDialogRef().nativeElement;
     if (dialog.open) {
       dialog.close();
     } else {
@@ -106,7 +107,7 @@ export class PreferencesComponent {
   onPreferencesDialogClosed(): void {
     this.openedPreferencesGroup = '';
     this.preferencesToggled.emit(false);
-    this.preferencesDialogRef.nativeElement.classList.remove(
+    this.preferencesDialogRef().nativeElement.classList.remove(
       'preferences-dialog--ready',
     );
   }
@@ -178,7 +179,7 @@ export class PreferencesComponent {
 
   selectFile(): Promise<File> {
     return new Promise((resolve, reject) => {
-      const input: HTMLInputElement = document.createElement('input');
+      const input: HTMLInputElement = this.document.createElement('input');
       input.setAttribute('accept', '.txt');
       input.type = 'file';
 
