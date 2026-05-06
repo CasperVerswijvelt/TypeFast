@@ -1,4 +1,11 @@
-import { Component, HostListener, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TyperStateService } from '../../services/typer-state.service';
@@ -16,6 +23,7 @@ interface NavLink {
   host: {
     '[class.dimmed]': 'state.running()',
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavComponent {
   state = inject(TyperStateService);

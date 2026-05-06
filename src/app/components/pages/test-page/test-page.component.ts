@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { TyperComponent } from '../../typer/typer.component';
 
 @Component({
@@ -6,5 +6,6 @@ import { TyperComponent } from '../../typer/typer.component';
   templateUrl: './test-page.component.html',
   styleUrls: ['./test-page.component.scss'],
   imports: [TyperComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TestPageComponent {}

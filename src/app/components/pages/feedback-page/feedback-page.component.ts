@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import {
   CONTACT_EMAIL,
   DISCORD_URL,
@@ -11,6 +11,7 @@ import { PROSE_PAGE_IMPORTS } from '../prose-page/prose-page.imports';
   selector: 'app-feedback-page',
   templateUrl: './feedback-page.component.html',
   imports: PROSE_PAGE_IMPORTS,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeedbackPageComponent {
   readonly contactEmail = CONTACT_EMAIL;

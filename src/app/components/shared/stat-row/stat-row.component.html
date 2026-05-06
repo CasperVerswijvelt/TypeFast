@@ -1,0 +1,17 @@
+<th>{{ label() }}</th>
+<td
+  [class.capitalize]="valueCapitalize()"
+  [attr.title]="titleHover() ? value() : null"
+>
+  @if (hasTooltip()) {
+    <span>{{ value() }}</span>
+    <div popper class="info-icon-tooltip-container">
+      <div class="info-icon"></div>
+      <div class="tooltip">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  } @else {
+    {{ value() }}
+  }
+</td>

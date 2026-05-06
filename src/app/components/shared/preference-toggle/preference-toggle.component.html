@@ -1,0 +1,10 @@
+<label class="preferences-toggle-label" [for]="inputId">{{ label() }}</label>
+<label class="preferences-toggle-switch switch">
+  <input
+    type="checkbox"
+    [ngModel]="value()"
+    (change)="onChange($event)"
+    [id]="inputId"
+  />
+  <span class="slider round"></span>
+</label>

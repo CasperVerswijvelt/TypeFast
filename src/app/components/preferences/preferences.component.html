@@ -6,517 +6,245 @@
   >
   <div class="preferences-list">
     <!-- Theme preferences group -->
-      <div
-        class="preferences-group"
-        [class.preferences-group-opened]="
-          openedPreferencesGroup === Preference.THEME
-        "
-        >
-        <div
-          class="preferences-group-title"
-          (click)="togglePreferencesGroup(Preference.THEME)"
-          >
-          <div class="preferences-group-title-key">Theme</div>
-          <div class="preferences-group-title-value capitalize">
-            {{ preferences.get(Preference.THEME).value }}
+      <app-preference-group
+        [groupKey]="Preference.THEME"
+        [currentOpen]="openedPreferencesGroup"
+        title="Theme"
+        [valueText]="prefs.theme()"
+        [valueCapitalize]="true"
+        entriesClass="preferences-group-entries-theme"
+        (toggled)="togglePreferencesGroup($event)"
+      >
+        @for (them of Theme | keyvalue; track them) {
+          <div
+            class="preferences-entry preferences-select-option capitalize"
+          [class.selected]="
+            prefs.theme() === them.value
+          "
+            (click)="onThemeChanged(them.value)"
+            >
+            <div class="label">{{ them.value }}</div>
+            <span class="checkmark"></span>
           </div>
-          <div class="preferences-group-title-arrow">
-            <svg
-              version="1.1"
-              id="Layer_1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 330.002 330.002"
-              style="enable-background: new 0 0 330.002 330.002"
-              xml:space="preserve"
-              >
-              <path
-                id="XMLID_105_"
-                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
-	c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
-	C331.972,223.623,330.628,214.221,324.001,209.25z"
-                />
-            </svg>
-          </div>
-        </div>
-        <div class="preferences-group-entries preferences-group-entries-theme">
-          <div class="preferences-group-entries-inner">
-          @for (them of Theme | keyvalue; track them) {
-            <div
-              class="preferences-entry preferences-select-option capitalize"
-            [class.selected]="
-              preferences.get(Preference.THEME).value === them.value
-            "
-              (click)="onThemeChanged(them.value)"
-              >
-              <div class="label">{{ them.value }}</div>
-              <span class="checkmark"></span>
-            </div>
-          }
+        }
 
-          <div class="preferences-entry preferences-toggle-entry">
-            <label class="preferences-toggle-label" for="follow-system">
-              Follow system
-            </label>
-            <label class="preferences-toggle-switch switch">
-              <input
-                type="checkbox"
-                [ngModel]="
-                  preferences.get(Preference.FOLLOW_SYSTEM_THEME).value
-                "
-                (change)="onFollowSystemThemeChanged($event)"
-                id="follow-system"
-                />
-              <span class="slider round"></span>
-            </label>
-          </div>
-          </div>
-        </div>
-      </div>
+        <app-preference-toggle
+          label="Follow system"
+          [value]="prefs.followSystemTheme()"
+          [mainEntry]="false"
+          (toggled)="prefs.setPreference(Preference.FOLLOW_SYSTEM_THEME, $event)"
+        />
+      </app-preference-group>
 
       <!-- Default word mode preferences group -->
-      <div
-        class="preferences-group"
-        [class.preferences-group-opened]="
-          openedPreferencesGroup === Preference.WORD_MODE
-        "
-        >
-        <div
-          class="preferences-group-title"
-          (click)="togglePreferencesGroup(Preference.WORD_MODE)"
-          >
-          <div class="preferences-group-title-key">Word mode</div>
-          <div class="preferences-group-title-value capitalize">
-            {{ preferences.get(Preference.WORD_MODE).value }}
-          </div>
-          <div class="preferences-group-title-arrow">
-            <svg
-              version="1.1"
-              id="Layer_1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 330.002 330.002"
-              style="enable-background: new 0 0 330.002 330.002"
-              xml:space="preserve"
-              >
-              <path
-                id="XMLID_105_"
-                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
- c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
- C331.972,223.623,330.628,214.221,324.001,209.25z"
-                />
-            </svg>
-          </div>
-        </div>
-        <div
-          class="preferences-group-entries preferences-group-entries-word-mode"
-          >
-          <div class="preferences-group-entries-inner">
-          @for (mode of WordMode | keyvalue; track mode) {
-            <div
-              class="preferences-entry preferences-select-option capitalize"
-            [class.selected]="
-              preferences.get(Preference.WORD_MODE).value === mode.value
+      <app-preference-group
+        [groupKey]="Preference.WORD_MODE"
+        [currentOpen]="openedPreferencesGroup"
+        title="Word mode"
+        [valueText]="prefs.wordMode()"
+        [valueCapitalize]="true"
+        entriesClass="preferences-group-entries-word-mode"
+        (toggled)="togglePreferencesGroup($event)"
+      >
+        @for (mode of WordMode | keyvalue; track mode) {
+          <div
+            class="preferences-entry preferences-select-option capitalize"
+          [class.selected]="
+            prefs.wordMode() === mode.value
+          "
+            (click)="onDefaultWordModeChanged(mode.value)"
+            >
+            <span
+              class="checkmark"
+            [class.checkmark-loading]="
+              currentlyLoadingWordMode === mode.value
             "
-              (click)="onDefaultWordModeChanged(mode.value)"
               >
-              <span
-                class="checkmark"
-              [class.checkmark-loading]="
-                currentlyLoadingWordMode === mode.value
-              "
-                >
-                <div class="spinner">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
-              </span>
-              <div class="label">
-                {{ mode.value }}
+              <div class="spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
               </div>
+            </span>
+            <div class="label">
+              {{ mode.value }}
             </div>
-          }
           </div>
-        </div>
-      </div>
+        }
+      </app-preference-group>
 
       <!-- Language preferences group -->
-      <div
-        class="preferences-group"
-        [class.preferences-group-opened]="openedPreferencesGroup === 'language'"
-        >
-        <div
-          class="preferences-group-title"
-          (click)="togglePreferencesGroup('language')"
-          >
-          <div class="preferences-group-title-key">Language</div>
-          <div class="preferences-group-title-value">
-            {{ getNameForLanguage($any(preferences.get(Preference.LANGUAGE).value)) }}
-          </div>
-          <div class="preferences-group-title-arrow">
-            <svg
-              version="1.1"
-              id="Layer_1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 330.002 330.002"
-              style="enable-background: new 0 0 330.002 330.002"
-              xml:space="preserve"
-              >
-              <path
-                id="XMLID_105_"
-                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
-	c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
-	C331.972,223.623,330.628,214.221,324.001,209.25z"
-                />
-            </svg>
-          </div>
-        </div>
-        <div
-          class="preferences-group-entries preferences-group-entries-language"
-          >
-          <div class="preferences-group-entries-inner">
-          @for (lang of Language | keyvalue: originalOrder; track lang) {
+      <app-preference-group
+        groupKey="language"
+        [currentOpen]="openedPreferencesGroup"
+        title="Language"
+        [valueText]="getNameForLanguage(prefs.language())"
+        entriesClass="preferences-group-entries-language"
+        (toggled)="togglePreferencesGroup($event)"
+      >
+        @for (lang of Language | keyvalue: originalOrder; track lang) {
+          <div
+            class="preferences-entry preferences-select-option"
+          [class.selected]="
+            prefs.language() === lang.value
+          "
+            (click)="onLanguageChanged(lang.value)"
+            >
             <div
-              class="preferences-entry preferences-select-option"
-            [class.selected]="
-              preferences.get(Preference.LANGUAGE).value === lang.value
+              class="flag-icon"
+              [ngClass]="'flag-icon-' + getISOForLangauge(lang.value)"
+            ></div>
+            <span
+              class="checkmark"
+            [class.checkmark-loading]="
+              currentlyLoadingLanguage === lang.value
             "
-              (click)="onLanguageChanged(lang.value)"
               >
-              <div
-                class="flag-icon"
-                [ngClass]="'flag-icon-' + getISOForLangauge(lang.value)"
-              ></div>
-              <span
-                class="checkmark"
-              [class.checkmark-loading]="
-                currentlyLoadingLanguage === lang.value
-              "
-                >
-                <div class="spinner">
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                  <div></div>
-                </div>
-              </span>
-              <div
-                class="label"
-                [class.underline]="lang.value === Language.CUSTOM"
-                >
-                <!--
-                -->{{
-                lang.value === Language.CUSTOM
-                ? getCachedFileName() || getNameForLanguage(lang.value)
-                : getNameForLanguage(lang.value)
-                }}
+              <div class="spinner">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
               </div>
-            </div>
-          }
-
-          <!-- Ignore diacritics / accented characters -->
-          <div
-            class="preferences-entry preferences-entry-main preferences-toggle-entry preferences-entry-ignore-accented-characters"
-            >
-            <label
-              class="preferences-toggle-label"
-              for="ignore-accented-characters"
+            </span>
+            <div
+              class="label"
+              [class.underline]="lang.value === Language.CUSTOM"
               >
-              Ignore accents
-            </label>
-            <label class="preferences-toggle-switch switch">
-              <input
-                type="checkbox"
-                [ngModel]="preferences.get(Preference.IGNORE_DIACRITICS).value"
-                (change)="onIgnoreAccentedCharactersChanged($event)"
-                id="ignore-accented-characters"
-                />
-              <span class="slider round"></span>
-            </label>
+              <!--
+              -->{{
+              lang.value === Language.CUSTOM
+              ? getCachedFileName() || getNameForLanguage(lang.value)
+              : getNameForLanguage(lang.value)
+              }}
+            </div>
           </div>
+        }
 
-          <!-- Ignore casing -->
-          <div
-            class="preferences-entry preferences-entry-main preferences-toggle-entry preferences-entry-ignore-diacritics"
-            >
-            <label class="preferences-toggle-label" for="ignore-casing">
-              Ignore casing
-            </label>
-            <label class="preferences-toggle-switch switch">
-              <input
-                type="checkbox"
-                [ngModel]="preferences.get(Preference.IGNORE_CASING).value"
-                (change)="onIgnoreCasingChanged($event)"
-                id="ignore-casing"
-                />
-              <span class="slider round"></span>
-            </label>
-          </div>
-          </div>
-        </div>
-      </div>
+        <!-- Ignore diacritics / accented characters -->
+        <app-preference-toggle
+          label="Ignore accents"
+          [value]="prefs.ignoreDiacritics()"
+          extraClass="preferences-entry-ignore-accented-characters"
+          (toggled)="prefs.setPreference(Preference.IGNORE_DIACRITICS, $event)"
+        />
+
+        <!-- Ignore casing -->
+        <app-preference-toggle
+          label="Ignore casing"
+          [value]="prefs.ignoreCasing()"
+          extraClass="preferences-entry-ignore-diacritics"
+          (toggled)="prefs.setPreference(Preference.IGNORE_CASING, $event)"
+        />
+      </app-preference-group>
 
       <!-- Text size preferences group -->
-      <div
-        class="preferences-group"
-        [class.preferences-group-opened]="
-          openedPreferencesGroup === Preference.TEXT_SIZE
-        "
-        >
-        <div
-          class="preferences-group-title"
-          (click)="togglePreferencesGroup(Preference.TEXT_SIZE)"
-          >
-          <div class="preferences-group-title-key">Text size</div>
-          <div class="preferences-group-title-value capitalize">
-            {{ preferences.get(Preference.TEXT_SIZE).value }}
-          </div>
-          <div class="preferences-group-title-arrow">
-            <svg
-              version="1.1"
-              id="Layer_1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 330.002 330.002"
-              style="enable-background: new 0 0 330.002 330.002"
-              xml:space="preserve"
-              >
-              <path
-                id="XMLID_105_"
-                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
- c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
- C331.972,223.623,330.628,214.221,324.001,209.25z"
-                />
-            </svg>
-          </div>
-        </div>
-        <div
-          class="preferences-group-entries preferences-group-entries-text-size"
-          >
-          <div class="preferences-group-entries-inner">
-          @for (size of TextSize | keyvalue; track size) {
-            <label
-              class="preferences-entry preferences-select-option"
-            [class.selected]="
-              preferences.get(Preference.TEXT_SIZE).value === size.value
-            "
-              (click)="onTextSizeChanged(size.value)"
-              >
-              <span class="checkmark"></span>
-              <div class="label">
-                {{ size.value }}
-              </div>
-            </label>
-          }
-          </div>
-        </div>
-      </div>
+      <app-preference-group
+        [groupKey]="Preference.TEXT_SIZE"
+        [currentOpen]="openedPreferencesGroup"
+        title="Text size"
+        [valueText]="prefs.textSize()"
+        [valueCapitalize]="true"
+        entriesClass="preferences-group-entries-text-size"
+        (toggled)="togglePreferencesGroup($event)"
+      >
+        @for (size of TextSize | keyvalue; track size) {
+          <label
+            class="preferences-entry preferences-select-option"
+          [class.selected]="
+            prefs.textSize() === size.value
+          "
+            (click)="onTextSizeChanged(size.value)"
+            >
+            <span class="checkmark"></span>
+            <div class="label">
+              {{ size.value }}
+            </div>
+          </label>
+        }
+      </app-preference-group>
 
       <!-- Scrolling preferences group -->
-      <div
-        class="preferences-group"
-        [class.preferences-group-opened]="
-          openedPreferencesGroup === 'scrolling'
-        "
-        >
-        <div
-          class="preferences-group-title"
-          (click)="togglePreferencesGroup('scrolling')"
-          >
-          <div class="preferences-group-title-key">Scrolling options</div>
-          <div class="preferences-group-title-arrow">
-            <svg
-              version="1.1"
-              id="Layer_1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 330.002 330.002"
-              style="enable-background: new 0 0 330.002 330.002"
-              xml:space="preserve"
-              >
-              <path
-                id="XMLID_105_"
-                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
-	c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
-	C331.972,223.623,330.628,214.221,324.001,209.25z"
-                />
-            </svg>
-          </div>
-        </div>
-        <div
-          class="preferences-group-entries preferences-group-entries-scrolling"
-          >
-          <div class="preferences-group-entries-inner">
-          <!-- Reverse scroll -->
-          <div
-            class="preferences-entry preferences-entry-main preferences-toggle-entry"
-            >
-            <label class="preferences-toggle-label" for="smooth-scrolling">
-              Smooth scrolling
-            </label>
-            <label class="preferences-toggle-switch switch">
-              <input
-                type="checkbox"
-                [ngModel]="preferences.get(Preference.SMOOTH_SCROLLING).value"
-                (change)="onSmoothScrollingChanged($event)"
-                id="smooth-scrolling"
-                />
-              <span class="slider round"></span>
-            </label>
-          </div>
+      <app-preference-group
+        groupKey="scrolling"
+        [currentOpen]="openedPreferencesGroup"
+        title="Scrolling options"
+        entriesClass="preferences-group-entries-scrolling"
+        (toggled)="togglePreferencesGroup($event)"
+      >
+        <!-- Smooth scrolling -->
+        <app-preference-toggle
+          label="Smooth scrolling"
+          [value]="prefs.smoothScrolling()"
+          (toggled)="prefs.setPreference(Preference.SMOOTH_SCROLLING, $event)"
+        />
 
-          <!-- Reverse scroll -->
-          <div
-            class="preferences-entry preferences-entry-main preferences-toggle-entry"
-            >
-            <label class="preferences-toggle-label" for="reverse-scroll">
-              Reverse scroll
-            </label>
-            <label class="preferences-toggle-switch switch">
-              <input
-                type="checkbox"
-                [ngModel]="preferences.get(Preference.REVERSE_SCROLL).value"
-                (change)="onReverseScrollChanged($event)"
-                id="reverse-scroll"
-                />
-              <span class="slider round"></span>
-            </label>
-          </div>
+        <!-- Reverse scroll -->
+        <app-preference-toggle
+          label="Reverse scroll"
+          [value]="prefs.reverseScroll()"
+          (toggled)="prefs.setPreference(Preference.REVERSE_SCROLL, $event)"
+        />
 
-          <!-- Scrolling animation -->
-          <div
-            class="preferences-entry preferences-entry-main preferences-toggle-entry"
-            >
-            <label class="preferences-toggle-label" for="scrolling-animation">
-              Scrolling animation
-            </label>
-            <label class="preferences-toggle-switch switch">
-              <input
-                type="checkbox"
-                [ngModel]="
-                  preferences.get(Preference.SCROLLING_ANIMATION).value
-                "
-                (change)="onScrollingAnimationChanged($event)"
-                id="scrolling-animation"
-                />
-              <span class="slider round"></span>
-            </label>
-          </div>
-          </div>
-        </div>
-      </div>
+        <!-- Scrolling animation -->
+        <app-preference-toggle
+          label="Scrolling animation"
+          [value]="prefs.scrollingAnimation()"
+          (toggled)="prefs.setPreference(Preference.SCROLLING_ANIMATION, $event)"
+        />
+      </app-preference-group>
 
       <!-- Display preferences group -->
-      <div
-        class="preferences-group"
-        [class.preferences-group-opened]="
-          openedPreferencesGroup === 'display'
-        "
-        >
-        <div
-          class="preferences-group-title"
-          (click)="togglePreferencesGroup('display')"
-          >
-          <div class="preferences-group-title-key">Display options</div>
-          <div class="preferences-group-title-arrow">
-            <svg
-              version="1.1"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink"
-              x="0px"
-              y="0px"
-              viewBox="0 0 330.002 330.002"
-              style="enable-background: new 0 0 330.002 330.002"
-              xml:space="preserve"
-              >
-              <path
-                d="M324.001,209.25L173.997,96.75c-5.334-4-12.667-4-18,0L6.001,209.25c-6.627,4.971-7.971,14.373-3,21
-	c2.947,3.93,7.451,6.001,12.012,6.001c3.131,0,6.29-0.978,8.988-3.001L164.998,127.5l141.003,105.75c6.629,4.972,16.03,3.627,21-3
-	C331.972,223.623,330.628,214.221,324.001,209.25z"
-                />
-            </svg>
-          </div>
-        </div>
-        <div class="preferences-group-entries">
-          <div class="preferences-group-entries-inner">
-          <!-- Hide timer during test -->
-          <div
-            class="preferences-entry preferences-entry-main preferences-toggle-entry"
-            >
-            <label class="preferences-toggle-label" for="hide-timer">
-              Hide timer
-            </label>
-            <label class="preferences-toggle-switch switch">
-              <input
-                type="checkbox"
-                [ngModel]="preferences.get(Preference.HIDE_TIMER).value"
-                (change)="onHideTimerChanged($event)"
-                id="hide-timer"
-                />
-              <span class="slider round"></span>
-            </label>
-          </div>
+      <app-preference-group
+        groupKey="display"
+        [currentOpen]="openedPreferencesGroup"
+        title="Display options"
+        (toggled)="togglePreferencesGroup($event)"
+      >
+        <!-- Hide timer during test -->
+        <app-preference-toggle
+          label="Hide timer"
+          [value]="prefs.hideTimer()"
+          (toggled)="prefs.setPreference(Preference.HIDE_TIMER, $event)"
+        />
 
-          <!-- Hide live stats during test -->
-          <div
-            class="preferences-entry preferences-entry-main preferences-toggle-entry"
-            >
-            <label class="preferences-toggle-label" for="hide-live-stats">
-              Hide live stats
-            </label>
-            <label class="preferences-toggle-switch switch">
-              <input
-                type="checkbox"
-                [ngModel]="preferences.get(Preference.HIDE_LIVE_STATS).value"
-                (change)="onHideLiveStatsChanged($event)"
-                id="hide-live-stats"
-                />
-              <span class="slider round"></span>
-            </label>
-          </div>
-          </div>
-        </div>
-      </div>
+        <!-- Hide live stats during test -->
+        <app-preference-toggle
+          label="Hide live stats"
+          [value]="prefs.hideLiveStats()"
+          (toggled)="prefs.setPreference(Preference.HIDE_LIVE_STATS, $event)"
+        />
+      </app-preference-group>
 
       <!-- Reset preferences -->
-      <div class="preferences-entry preferences-entry-main">
-        <div class="preferences-padding" (click)="onClickResetPreferences()">
-          Reset preferences
-          <div popper class="info-icon-tooltip-container">
-            <div class="info-icon"></div>
-            <div class="tooltip">Clears the preferences from the browser.</div>
-          </div>
+      <button
+        type="button"
+        class="preferences-entry preferences-entry-main preferences-reset-button"
+        (click)="onClickResetPreferences()"
+      >
+        Reset preferences
+        <div popper class="info-icon-tooltip-container">
+          <div class="info-icon"></div>
+          <div class="tooltip">Clears the preferences from the browser.</div>
         </div>
-      </div>
+      </button>
   </div>
 </dialog>
 

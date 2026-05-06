@@ -1,8 +1,14 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import {
+  DestroyRef,
+  Injectable,
+  PLATFORM_ID,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { PreferencesService } from './preferences.service';
-import { Preference, Theme } from '../models/Preference';
-import { BehaviorSubject } from 'rxjs';
+import { Theme } from '../models/Preference';
 
 @Injectable({
   providedIn: 'root',
@@ -10,79 +16,46 @@ import { BehaviorSubject } from 'rxjs';
 export class ThemeService {
   private readonly document = inject(DOCUMENT);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
-  private preferences: Map<string, BehaviorSubject<unknown>>;
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly prefs = inject(PreferencesService);
 
-  constructor(private preferencesService: PreferencesService) {
-    this.preferences = this.preferencesService.getPreferences();
+  private readonly systemPrefersDark = signal(false);
 
-    this.preferences
-      .get(Preference.THEME)
-      .subscribe(this.onThemePreferenceUpdated.bind(this));
-    this.preferences
-      .get(Preference.FOLLOW_SYSTEM_THEME)
-      .subscribe(this.onFollowSystemPreferenceUpdated.bind(this));
+  constructor() {
+    if (this.isBrowser) {
+      const mql = window.matchMedia('(prefers-color-scheme: dark)');
+      this.systemPrefersDark.set(mql.matches);
 
-    if (!this.isBrowser) return;
+      const handler = (event: MediaQueryListEvent) =>
+        this.systemPrefersDark.set(event.matches);
 
-    const mediaQueryList = window.matchMedia('(prefers-color-scheme: dark)');
-
-    if (mediaQueryList.addEventListener) {
-      mediaQueryList.addEventListener(
-        'change',
-        this.onSystemThemeUpdated.bind(this),
-      );
-
-      // Safari compatibility, it uses deprecated method
-    } else if (mediaQueryList.addListener) {
-      mediaQueryList.addListener(this.onSystemThemeUpdated.bind(this));
+      // Safari pre-14 still requires the deprecated addListener API.
+      if (mql.addEventListener) {
+        mql.addEventListener('change', handler);
+        this.destroyRef.onDestroy(() =>
+          mql.removeEventListener('change', handler),
+        );
+      } else if (mql.addListener) {
+        mql.addListener(handler);
+        this.destroyRef.onDestroy(() => mql.removeListener(handler));
+      }
     }
-  }
 
-  private onThemePreferenceUpdated(value: unknown) {
-    this.updateTheme(
-      this.prefersDark(),
-      value as Theme,
-      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value as boolean,
-    );
-  }
-
-  private onFollowSystemPreferenceUpdated(value: unknown) {
-    this.updateTheme(
-      this.prefersDark(),
-      this.preferences.get(Preference.THEME).value as Theme,
-      value as boolean,
-    );
-  }
-
-  private onSystemThemeUpdated(event: MediaQueryListEvent) {
-    this.updateTheme(
-      event.matches,
-      this.preferences.get(Preference.THEME).value as Theme,
-      this.preferences.get(Preference.FOLLOW_SYSTEM_THEME).value as boolean,
-    );
-  }
-
-  private prefersDark(): boolean {
-    return this.isBrowser
-      ? window.matchMedia('(prefers-color-scheme: dark)').matches
-      : false;
-  }
-
-  private updateTheme(
-    matchesPreferkDark: boolean,
-    themePreference: Theme,
-    followSystemThemePreference: boolean,
-  ) {
-    this.setTheme(
-      followSystemThemePreference
-        ? matchesPreferkDark
-          ? Theme.DARK
-          : themePreference
-        : themePreference,
-    );
+    effect(() => {
+      const themePref = this.prefs.theme();
+      const followSystem = this.prefs.followSystemTheme();
+      const systemDark = this.systemPrefersDark();
+      this.applyTheme(
+        followSystem ? (systemDark ? Theme.DARK : themePref) : themePref,
+      );
+    });
   }
 
   setTheme(theme: Theme): void {
+    this.applyTheme(theme);
+  }
+
+  private applyTheme(theme: Theme): void {
     if (this.document.body) {
       this.document.body.className = `theme--${theme as string}`;
     }

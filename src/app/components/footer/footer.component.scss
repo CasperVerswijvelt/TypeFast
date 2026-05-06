@@ -40,7 +40,7 @@
   display: none;
 }
 
-@media (max-width: bp.$bp-md) {
+@include m.below(bp.$bp-md) {
   .copy-full,
   .email-full {
     display: none;

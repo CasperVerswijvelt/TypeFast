@@ -1,0 +1,46 @@
+// `<th>` and `<td>` live in this component's template, so they carry the
+// child's emulated encapsulation attribute. The parent's
+// `.type-test-results th/td/span` rules wouldn't match them. Mirror the
+// relevant rules here so the rendered cells look identical.
+
+th,
+td {
+  padding: 6px;
+}
+
+th {
+  text-align: right;
+  padding-right: var(--space-3);
+  padding-left: 18px;
+  width: 170px;
+  min-width: 170px;
+}
+
+td {
+  text-align: left;
+  padding-right: 10px;
+  width: 155px;
+  max-width: 155px;
+  display: flex;
+
+  span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+  }
+
+  .info-icon-tooltip-container {
+    flex: 0;
+    float: initial;
+  }
+}
+
+// Last row of the table loses extra bottom padding. The host `<tr>` is in
+// the parent's template, so :host(:last-child) matches it correctly.
+:host(:last-child) {
+  th,
+  td {
+    padding-bottom: var(--space-3);
+  }
+}

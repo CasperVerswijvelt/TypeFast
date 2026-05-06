@@ -70,3 +70,21 @@ export interface Preferences {
   [Preference.HIDE_TIMER]?: boolean;
   [Preference.HIDE_LIVE_STATS]?: boolean;
 }
+
+export interface PreferenceValueMap {
+  [Preference.LANGUAGE]: Language;
+  [Preference.THEME]: Theme;
+  [Preference.FOLLOW_SYSTEM_THEME]: boolean;
+  [Preference.WORD_MODE]: WordMode;
+  [Preference.REVERSE_SCROLL]: boolean;
+  [Preference.DEFAULT_TEST_DURATION]: number;
+  [Preference.TEXT_SIZE]: TextSize;
+  [Preference.SMOOTH_SCROLLING]: boolean;
+  [Preference.SCROLLING_ANIMATION]: boolean;
+  [Preference.IGNORE_DIACRITICS]: boolean;
+  [Preference.IGNORE_CASING]: boolean;
+  [Preference.HIDE_TIMER]: boolean;
+  [Preference.HIDE_LIVE_STATS]: boolean;
+}
+
+export type PreferenceValue<K extends Preference> = PreferenceValueMap[K];

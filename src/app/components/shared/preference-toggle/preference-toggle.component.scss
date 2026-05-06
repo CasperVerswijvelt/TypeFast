@@ -1,0 +1,53 @@
+// Layout-only locals (matches preferences.component.scss).
+$preferences-entry-padding-side: 16px;
+$preferences-entry-padding-vertical: 9px;
+
+// The host element receives `.preferences-entry`,
+// `.preferences-toggle-entry`, optional `.preferences-entry-main`, and any
+// caller-supplied extra class via a host [class] binding. The base
+// `.preferences-entry` rules (height, hover) live in the parent and reach
+// the host through parent emulation since the host tag itself is written
+// in the parent template. The rules below style elements that live INSIDE
+// this component's template (label, switch) and so cannot be matched by
+// parent-scoped selectors — they are duplicated here.
+
+:host {
+  // .preferences-toggle-entry { display: flex } from the parent already
+  // matches the host because `.preferences-toggle-entry` is one of the
+  // host classes, but mirror it here for clarity / robustness.
+  display: flex;
+}
+
+:host(.preferences-toggle-entry) {
+  .preferences-toggle-label {
+    flex: 1;
+    font-weight: bold;
+    margin-right: -60px;
+    padding: 7px 50px 7px $preferences-entry-padding-side;
+    cursor: pointer;
+  }
+
+  .preferences-toggle-switch {
+    margin: 6px $preferences-entry-padding-side;
+  }
+}
+
+:host(.preferences-entry-main.preferences-toggle-entry) {
+  .preferences-toggle-label {
+    padding: $preferences-entry-padding-vertical 50px
+      $preferences-entry-padding-vertical $preferences-entry-padding-side;
+  }
+
+  .preferences-toggle-switch {
+    margin: 9px $preferences-entry-padding-side 9px 8px;
+  }
+}
+
+// Inside an expanded preferences group the toggle label drops its bold
+// weight. The previous rule lived in the parent and matched the projected
+// label by class; now that the label lives in this component's template
+// we mirror the override here.
+:host-context(.preferences-group .preferences-group-entries)
+  .preferences-toggle-label {
+  font-weight: normal;
+}

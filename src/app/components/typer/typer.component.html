@@ -1,17 +1,17 @@
 <div
   class="type-test-container"
-  [class.type-test-started]="testStarted"
+  [class.type-test-started]="state.testStarted()"
   [class.type-test-reverse-scroll]="reverseScroll"
   [class.type-test-smooth-scroll]="smoothScroll && !reverseScroll"
   [class.type-test-no-animation]="
-    !preferences.get(Preference.SCROLLING_ANIMATION).value
+    !scrollingAnimation()
   "
   [ngClass]="textSizeClass"
   >
   <div class="type-test">
     <div class="word-container-wrapper">
       <div class="word-container" #wordContainer>
-        @for (word of words; track word) {
+        @for (word of state.words(); track $index) {
           <div class="word">{{ word }}</div>
         }
       </div>
@@ -65,10 +65,10 @@
       <div
         class="type-test-timer-time"
         [class.is-hidden]="
-          testIsRunning && preferences.get(Preference.HIDE_TIMER).value
+          state.testIsRunning() && hideTimer()
         "
         >
-        {{ testTimeLeft | time }}
+        {{ state.testTimeLeft() | time }}
       </div>
       <button
         class="type-test-timer-increase"
@@ -116,18 +116,18 @@
     </div>
   </div>
 
-  @if (hasCompletedFirstTest) {
+  @if (state.hasCompletedFirstTest()) {
     <app-ad-placeholder
       size="banner-slim"
       label="Ad placeholder · post-test"
-      [class.is-hidden]="!testIsCompleted"
+      [class.is-hidden]="!state.testIsCompleted()"
     />
   }
 
   <div class="results-row">
     <app-ad-placeholder
       class="results-rail"
-      [class.is-hidden]="testIsRunning"
+      [class.is-hidden]="state.testIsRunning()"
       size="rectangle"
       label="Ad placeholder · stats-left"
     />
@@ -137,13 +137,13 @@
       cellpadding="0"
       class="type-test-results"
       [class.is-hidden]="
-        testIsRunning && preferences.get(Preference.HIDE_LIVE_STATS).value
+        state.testIsRunning() && hideLiveStats()
       "
       >
     <tr class="type-test-results-wpm">
       <th colspan="2">
         <span class="type-test-results-wpm-value">{{
-          testResults?.stats?.wpm * 1 | number: '1.0-0'
+          state.stats().wpm | number: '1.0-0'
           }}</span
           >WPM
           <div popper class="info-icon-tooltip-container info-icon-tooltip-wpm">
@@ -158,124 +158,92 @@
           </div>
         </th>
       </tr>
-      <tr>
-        <th>Character accuracy</th>
+      <tr
+        app-stat-row
+        label="Character accuracy"
+        [value]="
+          (state.stats().characterAccuracy * 100 | number: '1.2-2') + '%'
+        "
+      >
+        Character accuracy is the amount of characters you typed correct,
+        divided by the sum of correct characters and incorrect characters.
+        <br />
+        <br />
+        Characters that were placed at the right position, but in an
+        incorrect word, will still be counted as correct for calculating
+        this value.
+      </tr>
+      <tr
+        app-stat-row
+        label="Word accuracy"
+        [value]="(state.stats().wordAccuracy * 100 | number: '1.2-2') + '%'"
+      >
+        Word accuracy is the amount of words you typed completely correct,
+        divided by the total number of words typed. Correcting your mistakes
+        will boost this value!
+      </tr>
+      <tr
+        app-stat-row
+        label="Word list"
+        [value]="wordListName"
+        [titleHover]="true"
+      >
+        Change the word list in the preferences menu in the upper right
+        corner, or load your own text file.
+        <br />
+        <br />
+        {{ 'Loaded list: ' + wordListName }}
+      </tr>
+      <tr
+        app-stat-row
+        label="Word mode"
+        [value]="wordMode"
+        [valueCapitalize]="true"
+      >
+        Change your preferred word mode in the preferences menu in the upper
+        right corner:
+        <ul>
+          <li>Word mode: random words</li>
+          <li>Sentence mode: actual sentences</li>
+        </ul>
+      </tr>
+      @if (ignoreResultsString.length) {
+        <tr app-stat-row label="Ignore" [value]="ignoreResultsString">
+          Ignore accents: Typing an unaccented character when an accented
+          character is expected will be counted as correct. This is language
+          sensitive. For example, in French, the letter 'á' can be typed as
+          'a' and still be counted as correct when this setting is enabled.
+          <br />
+          <br />
+          Ignore casing: Validation of characters is case insensitive.
+        </tr>
+      }
+      <tr
+        class="type-test-results-incorrect-words"
+        (click)="onIncorrectWordCountClicked()"
+        >
+        <th>Incorrect words</th>
         <td>
-          <span>
-            {{
-            (testResults?.stats?.characterAccuracy * 100 | number: '1.2-2') +
-            '%'
-            }}</span
-            >
-            <div popper class="info-icon-tooltip-container">
-              <div class="info-icon"></div>
-              <div class="tooltip">
-                Character accuracy is the amount of characters you typed correct,
-                divided by the sum of correct characters and incorrect characters.
-                <br />
-                <br />
-                Characters that were placed at the right position, but in an
-                incorrect word, will still be counted as correct for calculating
-                this value.
-              </div>
+          <span>{{ state.results().incorrectWordCount }}</span>
+          <div popper class="info-icon-tooltip-container">
+            <div class="info-icon"></div>
+            <div class="tooltip">
+              To see which words you got wrong, click on this row.
             </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Word accuracy</th>
-          <td>
-            <span>{{
-              (testResults?.stats?.wordAccuracy * 100 | number: '1.2-2') + '%'
-            }}</span>
-            <div popper class="info-icon-tooltip-container">
-              <div class="info-icon"></div>
-              <div class="tooltip">
-                Word accuracy is the amount of words you typed completely correct,
-                divided by the total number of words typed. Correcting your mistakes
-                will boost this value!
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Word list</th>
-          <td title="{{ wordListName }}">
-            <span>{{ wordListName }}</span>
-            <div popper class="info-icon-tooltip-container">
-              <div class="info-icon"></div>
-              <div class="tooltip">
-                Change the word list in the preferences menu in the upper right
-                corner, or load your own text file.
-                <br />
-                <br />
-                {{ 'Loaded list: ' + wordListName }}
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Word mode</th>
-          <td class="capitalize">
-            <span>{{ wordMode }}</span>
-            <div popper class="info-icon-tooltip-container">
-              <div class="info-icon"></div>
-              <div class="tooltip">
-                Change your preferred word mode in the preferences menu in the upper
-                right corner:
-                <ul>
-                  <li>Word mode: random words</li>
-                  <li>Sentence mode: actual sentences</li>
-                </ul>
-              </div>
-            </div>
-          </td>
-        </tr>
-        @if (ignoreResultsString.length) {
-          <tr>
-            <th>Ignore</th>
-            <td>
-              <span>{{ ignoreResultsString }}</span>
-              <div popper class="info-icon-tooltip-container">
-                <div class="info-icon"></div>
-                <div class="tooltip">
-                  Ignore accents: Typing an unaccented character when an accented
-                  character is expected will be counted as correct. This is language
-                  sensitive. For example, in French, the letter 'á' can be typed as
-                  'a' and still be counted as correct when this setting is enabled.
-                  <br />
-                  <br />
-                  Ignore casing: Validation of characters is case insensitive.
-                </div>
-              </div>
-            </td>
-          </tr>
-        }
-        <tr
-          class="type-test-results-incorrect-words"
-          (click)="onIncorrectWordCountClicked()"
-          >
-          <th>Incorrect words</th>
-          <td>
-            <span>{{ testResults?.incorrectWordCount * 1 }}</span>
-            <div popper class="info-icon-tooltip-container">
-              <div class="info-icon"></div>
-              <div class="tooltip">
-                To see which words you got wrong, click on this row.
-              </div>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th>Time elapsed</th>
-          <td>
-            {{ testResults?.timeElapsed * 1 | time }}
-          </td>
-        </tr>
-      </table>
+          </div>
+        </td>
+      </tr>
+      <tr
+        app-stat-row
+        label="Time elapsed"
+        [value]="state.results().timeElapsed | time"
+        [hasTooltip]="false"
+      ></tr>
+    </table>
 
     <app-ad-placeholder
       class="results-rail"
-      [class.is-hidden]="testIsRunning"
+      [class.is-hidden]="state.testIsRunning()"
       size="rectangle"
       label="Ad placeholder · stats-right"
     />
@@ -304,7 +272,7 @@
             </div>
           </div>
         </h2>
-        @if (testResults?.incorrectWords.length === 0) {
+        @if (state.results().incorrectWords.length === 0) {
           <p
             class="incorrect-words-placeholder"
             >
@@ -312,7 +280,7 @@
           </p>
         }
         <div class="incorrect-words-dialog-list">
-          @for (word of testResults?.incorrectWords; track word) {
+          @for (word of state.results().incorrectWords; track word) {
             <div
               class="incorrect-words-dialog-entry"
               >
@@ -321,7 +289,7 @@
                 [value]="word.value"
                 [language]="language"
                 [ignoreAccentedCharacters]="ignoreAccentedCharacters"
-                [ignoreCasing]="ignoreAccentedCharacters"
+                [ignoreCasing]="ignoreCasing"
               ></app-incorrect-word>
             </div>
           }

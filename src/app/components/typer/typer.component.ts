@@ -1,31 +1,30 @@
 import {
-  afterNextRender,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  DestroyRef,
   ElementRef,
   OnDestroy,
   OnInit,
   ViewChild,
+  afterNextRender,
+  effect,
+  inject,
 } from '@angular/core';
-import { WordService } from '../../services/word.service';
-import { TestResults, TestResultsStats } from '../../models/TestResults';
-import { timer, Subscription, BehaviorSubject } from 'rxjs';
-import { PreferencesService } from '../../services/preferences.service';
-import { TyperStateService } from '../../services/typer-state.service';
-import {
-  Preference,
-  WordMode,
-  Language,
-  TextSize,
-} from '../../models/Preference';
-import { skip } from 'rxjs/operators';
-import { LanguageService } from 'src/app/services/language.service';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { skip } from 'rxjs/operators';
+
+import { WordService } from '../../services/word.service';
+import { PreferencesService } from '../../services/preferences.service';
+import { TyperStateService } from '../../services/typer-state.service';
+import { Language, TextSize, WordMode } from '../../models/Preference';
 import { PopperDirective } from '../../directives/popper.directive';
 import { IncorrectWordComponent } from '../incorrect-word/incorrect-word.component';
 import { TimePipe } from '../../pipes/time.pipe';
 import { AdPlaceholderComponent } from '../ad-placeholder/ad-placeholder.component';
+import { StatRowComponent } from '../shared/stat-row/stat-row.component';
 
 @Component({
   selector: 'app-typer',
@@ -39,19 +38,24 @@ import { AdPlaceholderComponent } from '../ad-placeholder/ad-placeholder.compone
     DecimalPipe,
     AdPlaceholderComponent,
     TimePipe,
+    StatRowComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TyperComponent implements OnInit, OnDestroy {
-  words: string[] = ['Loading...'];
+  private readonly wordService = inject(WordService);
+  private readonly cdRef = inject(ChangeDetectorRef);
+  private readonly prefs = inject(PreferencesService);
+  protected readonly state = inject(TyperStateService);
+  private readonly destroyRef = inject(DestroyRef);
 
-  wordInput: string;
-  wordMode: WordMode;
-
-  currentWordElement: HTMLElement;
-  containerElement: HTMLElement;
-  inputElement: HTMLInputElement;
-  inputWordCopy: HTMLElement;
-  dummyInputElement: HTMLElement;
+  // View / DOM
+  wordInput = '';
+  currentWordElement: HTMLElement | undefined;
+  containerElement!: HTMLElement;
+  inputElement!: HTMLInputElement;
+  inputWordCopy!: HTMLElement;
+  dummyInputElement!: HTMLElement;
 
   @ViewChild('wordContainer', { static: true })
   private wordContainerRef!: ElementRef<HTMLElement>;
@@ -64,71 +68,91 @@ export class TyperComponent implements OnInit, OnDestroy {
   @ViewChild('incorrectWordsDialog', { static: true })
   private incorrectWordsDialogRef!: ElementRef<HTMLDialogElement>;
 
-  testResults: TestResults;
-
-  testTime: number;
-  testTimeLeft: number;
-
-  testStarted: boolean;
-  hasCompletedFirstTest = false;
-
-  get testIsRunning(): boolean {
-    return this.testStarted && this.testTimeLeft > 0;
-  }
-
-  get testIsCompleted(): boolean {
-    return this.testStarted && this.testTimeLeft === 0;
-  }
-
+  // Derived display state.
   wordListName = 'Loading ...';
-  language: Language;
+  language!: Language;
+  wordMode: WordMode;
   reverseScroll = false;
   smoothScroll = true;
-  ignoreAccentedCharacters: boolean;
-  ignoreCasing: boolean;
+  ignoreAccentedCharacters = false;
+  ignoreCasing = false;
   textSizeClass = '';
   ignoreResultsString = '';
 
-  Preference = Preference;
-
-  preferences: Map<string, BehaviorSubject<unknown>>;
+  // Typed pref signals exposed to the template.
+  protected readonly hideTimer = this.prefs.hideTimer;
+  protected readonly hideLiveStats = this.prefs.hideLiveStats;
+  protected readonly scrollingAnimation = this.prefs.scrollingAnimation;
 
   private leftWordOffset = 0;
   private rightWordOffset = 0;
   private leftCharacterOffset = 0;
   private rightCharacterOffset = 0;
-  private currentIndex: number;
-  private reverseScrollWordList: boolean;
-  private secondTimer: Subscription;
-  private boundFocus: () => void;
-  private boundWordListListener: (
-    language: Language,
-    wordMode: WordMode,
-    wordListName: string,
-    shouldReverseScroll: boolean,
-  ) => void;
+  private reverseScrollWordList = false;
+  private boundFocus: (() => void) | undefined;
 
-  constructor(
-    private wordService: WordService,
-    private cdRef: ChangeDetectorRef,
-    private preferencesService: PreferencesService,
-    private typerState: TyperStateService,
-  ) {
-    this.preferences = preferencesService.getPreferences();
-
-    this.testTime = this.preferences.get(Preference.DEFAULT_TEST_DURATION)
-      .value as number;
-    this.smoothScroll = this.preferences.get(Preference.SMOOTH_SCROLLING)
-      .value as boolean;
-    this.ignoreAccentedCharacters = this.preferences.get(
-      Preference.IGNORE_DIACRITICS,
-    ).value as boolean;
-    this.ignoreCasing = this.preferences.get(Preference.IGNORE_CASING)
-      .value as boolean;
-    this.wordMode = this.preferences.get(Preference.WORD_MODE)
-      .value as WordMode;
+  constructor() {
+    this.smoothScroll = this.prefs.smoothScrolling();
+    this.ignoreAccentedCharacters = this.prefs.ignoreDiacritics();
+    this.ignoreCasing = this.prefs.ignoreCasing();
+    this.wordMode = this.prefs.wordMode();
 
     this.updateIgnoreResultString();
+
+    // React to preference changes that need imperative DOM follow-up. skip(1)
+    // avoids re-firing on the seeded current value (which we already applied
+    // above); takeUntilDestroyed cleans up subscriptions automatically.
+    toObservable(this.prefs.reverseScroll)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe(() => {
+        this.syncReverseScroll();
+        this.syncOffset();
+      });
+    toObservable(this.prefs.textSize)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe(() => {
+        this.syncTextSizeClass();
+        this.setupTest();
+      });
+    toObservable(this.prefs.smoothScrolling)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe((value) => {
+        this.smoothScroll = value;
+        this.syncOffset();
+      });
+    toObservable(this.prefs.ignoreDiacritics)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe((value) => {
+        this.ignoreAccentedCharacters = value;
+        this.setupTest();
+        this.updateIgnoreResultString();
+      });
+    toObservable(this.prefs.ignoreCasing)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe((value) => {
+        this.ignoreCasing = value;
+        this.setupTest();
+        this.updateIgnoreResultString();
+      });
+
+    // When the test ends (timer hits 0), score the partial in-progress word
+    // and shift focus off the input so the results stay visible. Done here
+    // because the partial input lives in the view layer.
+    this.state.testEnded$
+      .pipe(takeUntilDestroyed())
+      .subscribe(() => this.onTestEnded());
+
+    // OnPush + signal reads in the template means we need to nudge CD when
+    // we mutate signals from a non-template synchronous path (e.g. after
+    // setupTest, before measuring DOM rectangles). The cdRef.detectChanges
+    // calls below take care of that locally; this effect is only used for
+    // host-class-style bindings if they ever appear.
+    effect(() => {
+      // Read these signals so the template re-renders when they change.
+      // (No body needed — the read itself is the dependency.)
+      void this.state.testStarted();
+      void this.state.running();
+    });
 
     afterNextRender(() => {
       this.inputElement.onpaste = (e) => e.preventDefault();
@@ -137,81 +161,61 @@ export class TyperComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.preferences
-      .get(Preference.REVERSE_SCROLL)
-      .pipe(skip(1))
-      .subscribe(this.onReverseScrollPreferenceUpdated.bind(this));
-    this.preferences
-      .get(Preference.TEXT_SIZE)
-      .pipe(skip(1))
-      .subscribe(this.onTextSizePreferenceUpdated.bind(this));
-    this.preferences
-      .get(Preference.SMOOTH_SCROLLING)
-      .pipe(skip(1))
-      .subscribe(this.onSmoothScrollingPreferenceUpdated.bind(this));
-    this.preferences
-      .get(Preference.IGNORE_DIACRITICS)
-      .pipe(skip(1))
-      .subscribe(this.onIgnoreAccentedCharactersPreferenceUpdated.bind(this));
-    this.preferences
-      .get(Preference.IGNORE_CASING)
-      .pipe(skip(1))
-      .subscribe(this.onIgnoreCasingPreferenceUpdated.bind(this));
-
     this.containerElement = this.wordContainerRef.nativeElement;
     this.inputElement = this.wordInputRef.nativeElement;
     this.dummyInputElement = this.wordInputDummyRef.nativeElement;
     this.inputWordCopy = this.wordCopyRef.nativeElement;
 
-    this.updateTimer(0);
     this.syncTextSizeClass();
 
     this.boundFocus = this.focusInput.bind(this);
-    this.typerState.register(this.boundFocus);
+    this.state.register(this.boundFocus);
 
-    this.boundWordListListener = this.onUpdatedWordList.bind(this);
-    this.wordService.addWordListListener(this.boundWordListListener);
+    // wordListLoaded$ is a ReplaySubject(1) so this fires immediately if the
+    // list has already loaded by the time we subscribe. Has to run after
+    // ngOnInit so DOM refs are populated before setupTest reads them.
+    this.wordService.wordListLoaded
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((update) => {
+        this.reverseScrollWordList = update.shouldReverseScroll;
+        this.wordListName = update.wordListName;
+        this.wordMode = update.wordMode;
+        this.language = update.language;
+        this.state.syncLoadedLanguage(update.language);
+        this.syncReverseScroll();
+        this.setupTest();
+      });
   }
 
   ngOnDestroy(): void {
-    if (this.boundFocus) this.typerState.unregister(this.boundFocus);
-    if (this.boundWordListListener)
-      this.wordService.removeWordListListener(this.boundWordListListener);
-    this.typerState.running.set(false);
-    this.secondTimer?.unsubscribe();
+    if (this.boundFocus) this.state.unregister(this.boundFocus);
+    this.state.running.set(false);
   }
 
-  setupTest(): void {
-    this.updateTimer(0);
-    this.secondTimer?.unsubscribe();
-    this.secondTimer = undefined;
-
+  // Resets test state and view-layer offsets, then measures the new layout.
+  private setupTest(): void {
     this.wordInput = '';
-    this.currentIndex = 0;
     this.leftWordOffset = 0;
     this.rightWordOffset = 0;
     this.leftCharacterOffset = 0;
     this.rightCharacterOffset = 0;
-    this.words = [];
+    this.state.setupTest();
     this.cdRef.detectChanges();
-    this.fillWordList();
-    this.cdRef.detectChanges();
-    this.testResults = {
-      correctCharacterCount: 0,
-      incorrectCharacterCount: 0,
-      correctWordCount: 0,
-      incorrectWordCount: 0,
-      incorrectWords: [],
-      timeElapsed: 0,
-    };
-
+    // The @for tracks by $index for stable diffing on duplicate words, which
+    // means DOM nodes are reused across tests. Per-word classes were added
+    // imperatively (.word-correct / .word-incorrect) and don't get cleared
+    // by re-binding, so wipe them explicitly on the freshly-seeded nodes.
+    this.containerElement
+      .querySelectorAll('.word-correct, .word-incorrect')
+      .forEach((el) => el.classList.remove('word-correct', 'word-incorrect'));
     this.inputElement.disabled = false;
-
-    this.testStarted = false;
-    this.typerState.running.set(false);
+    // Mid-word red colouring on the input also lingers across resets.
+    this.inputElement.classList.remove('input-incorrect');
     this.syncCurrentWordElement();
-    this.rightWordOffset =
-      this.currentWordElement.getBoundingClientRect().width;
+    if (this.currentWordElement) {
+      this.rightWordOffset =
+        this.currentWordElement.getBoundingClientRect().width;
+    }
     this.syncOffset();
   }
 
@@ -220,43 +224,48 @@ export class TyperComponent implements OnInit, OnDestroy {
     this.inputElement.select();
   }
 
+  // Public API for the template / event handlers below.
   wordInputChanged(word: string): void {
-    if (!this.words) {
+    if (this.state.words().length === 0) {
       this.inputElement.value = '';
       return;
     }
 
-    // Start timer if not already started
-    if (!this.testStarted) {
-      this.startTest();
+    if (!this.state.testStarted()) {
+      this.state.startTest();
     }
 
-    const regexEndWhitespace = /\s$/;
-    const matchesEndWhitespace = regexEndWhitespace.test(word);
-
+    const endsWithWhitespace = /\s$/.test(word);
     this.wordInput = this.wordInput.trim();
 
-    if (matchesEndWhitespace) {
-      // Text input ends with whitespace character
+    if (endsWithWhitespace) {
       this.leftCharacterOffset = 0;
       if (word.length === 1) {
-        // Space is the only character typed, reset value to nothing
+        // Lone space — silently swallow, don't advance.
         this.inputElement.value = '';
         this.syncOffset();
       } else {
-        // Space typed, validate word
-        this.registerWord(this.wordInput, this.words[this.currentIndex]);
-        this.nextWord();
+        const expected = this.state.currentWord() ?? '';
+        const { wordIsCorrect } = this.state.recordWord(
+          this.wordInput,
+          expected,
+          true,
+        );
+        if (this.currentWordElement) {
+          this.currentWordElement.classList.add(
+            wordIsCorrect ? 'word-correct' : 'word-incorrect',
+          );
+        }
+        this.advanceWord();
       }
     } else {
-      // Text input doesn't end with whitespace character, update input color
-      const curentWord = this.words[this.currentIndex]
-        ? this.words[this.currentIndex]
-        : '';
-      const wordInput = this.wordInput ? this.wordInput : '';
-      if (this.compare(wordInput, curentWord?.slice(0, wordInput.length))) {
+      // Mid-word: update input colouring based on prefix match.
+      const current = this.state.currentWord() ?? '';
+      const wordInput = this.wordInput ?? '';
+      if (
+        this.state.compareWord(wordInput, current.slice(0, wordInput.length))
+      ) {
         this.inputElement.classList.remove('input-incorrect');
-
         this.inputWordCopy.innerText = wordInput;
         this.leftCharacterOffset =
           this.inputWordCopy.getBoundingClientRect().width;
@@ -267,42 +276,41 @@ export class TyperComponent implements OnInit, OnDestroy {
     }
   }
 
-  private compare(actual: string, expected: string): boolean {
-    return LanguageService.compare(
-      this.ignoreCasing ? actual.toLowerCase() : actual,
-      this.ignoreCasing ? expected.toLowerCase() : expected,
-      this.language,
-      this.preferencesService.getPreference<boolean>(
-        Preference.IGNORE_DIACRITICS,
-      ),
-    );
+  private advanceWord(): void {
+    this.wordInput = '';
+    this.inputElement.value = '';
+
+    if (this.currentWordElement) {
+      this.leftWordOffset +=
+        this.currentWordElement.getBoundingClientRect().width;
+    }
+    this.state.advanceIndex();
+    // Need DOM to reflect the new currentIndex (used by ngClass) and any
+    // freshly-appended words before we measure the next word's width.
+    this.cdRef.detectChanges();
+    this.syncCurrentWordElement();
+    if (this.currentWordElement) {
+      this.rightWordOffset =
+        this.leftWordOffset +
+        this.currentWordElement.getBoundingClientRect().width;
+    }
+    this.syncOffset(true);
   }
 
-  private onReverseScrollPreferenceUpdated(_value: unknown) {
-    this.syncReverseScroll();
-    this.syncOffset();
-  }
+  private onTestEnded(): void {
+    this.inputElement.disabled = true;
+    this.dummyInputElement.focus();
 
-  private onTextSizePreferenceUpdated(_value: unknown) {
-    this.syncTextSizeClass();
-    this.setupTest();
-  }
-
-  private onSmoothScrollingPreferenceUpdated(value: unknown) {
-    this.smoothScroll = value as boolean;
-    this.syncOffset();
-  }
-
-  private onIgnoreAccentedCharactersPreferenceUpdated(value: unknown) {
-    this.ignoreAccentedCharacters = value as boolean;
-    this.setupTest();
-    this.updateIgnoreResultString();
-  }
-
-  private onIgnoreCasingPreferenceUpdated(value: unknown) {
-    this.ignoreCasing = value as boolean;
-    this.setupTest();
-    this.updateIgnoreResultString();
+    // Score whatever partial word the user had in flight. Only the matched
+    // prefix counts toward correct characters; the rest stays unscored.
+    const currentWord = this.state.currentWord();
+    if (currentWord !== undefined) {
+      this.state.recordWord(
+        this.wordInput.trim(),
+        currentWord.slice(0, this.wordInput.length),
+        false,
+      );
+    }
   }
 
   private updateIgnoreResultString() {
@@ -310,7 +318,6 @@ export class TyperComponent implements OnInit, OnDestroy {
 
     if (this.ignoreAccentedCharacters) {
       this.ignoreResultsString += 'accents';
-
       if (this.ignoreCasing) {
         this.ignoreResultsString += ', ';
       }
@@ -320,65 +327,20 @@ export class TyperComponent implements OnInit, OnDestroy {
       this.ignoreResultsString += 'casing';
     }
 
-    if (this.ignoreResultsString?.length) {
+    if (this.ignoreResultsString.length) {
       this.ignoreResultsString =
         this.ignoreResultsString.charAt(0).toUpperCase() +
         this.ignoreResultsString.slice(1);
     }
   }
 
-  onUpdatedWordList(
-    language: Language,
-    wordMode: WordMode,
-    wordListName: string,
-    shouldReverseScroll: boolean,
-  ): void {
-    this.reverseScrollWordList = shouldReverseScroll;
-    this.wordListName = wordListName;
-    this.wordMode = wordMode;
-    this.language = language;
-    this.syncReverseScroll();
-    this.setupTest();
-  }
-
-  startTest(): void {
-    this.secondTimer = timer(0, 1000).subscribe(this.onSecond.bind(this));
-    this.testStarted = true;
-    this.typerState.running.set(true);
-    this.testResults.timeElapsed = 0;
-  }
-
-  nextWord(): void {
-    this.currentIndex++;
-    this.wordInput = '';
-    this.inputElement.value = '';
-
-    this.leftWordOffset =
-      this.leftWordOffset +
-      this.currentWordElement.getBoundingClientRect().width;
-    this.syncCurrentWordElement();
-    this.rightWordOffset =
-      this.leftWordOffset +
-      this.currentWordElement.getBoundingClientRect().width;
-    this.syncOffset(true);
-
-    this.fillWordList();
-  }
-
-  private fillWordList() {
-    while (this.currentIndex > this.words.length - 20) {
-      this.words = this.words.concat(this.wordService.getWords());
-    }
-  }
-
   private syncReverseScroll() {
     this.reverseScroll =
-      (this.preferences.get(Preference.REVERSE_SCROLL).value as boolean) !==
-      this.reverseScrollWordList;
+      this.prefs.reverseScroll() !== this.reverseScrollWordList;
   }
 
   private syncTextSizeClass() {
-    switch (this.preferences.get(Preference.TEXT_SIZE).value as TextSize) {
+    switch (this.prefs.textSize()) {
       case TextSize.SMALL:
         this.textSizeClass = 'text-size--small';
         break;
@@ -392,95 +354,13 @@ export class TyperComponent implements OnInit, OnDestroy {
     }
   }
 
-  registerWord(value: string, expected: string, wordCompleted = true): void {
-    const wordIsCorrect = this.compare(value, expected);
-    if (wordCompleted) {
-      if (wordIsCorrect) {
-        this.currentWordElement.classList.add('word-correct');
-        this.testResults.correctWordCount++;
-      } else {
-        this.testResults.incorrectWords.push({
-          expected: expected,
-          value: value,
-        });
-        this.currentWordElement.classList.add('word-incorrect');
-        this.testResults.incorrectWordCount++;
-      }
-    }
-
-    // Only add correct character for end space if word was completed and completely correct
-    let correctCharacters = wordCompleted && wordIsCorrect ? 1 : 0;
-    let incorrectCharacters = 0;
-
-    const length = Math.min(value.length, expected.length);
-
-    incorrectCharacters += Math.abs(value.length - expected.length);
-
-    for (let i = 0; i < length; i++) {
-      if (value[i] === expected[i]) {
-        correctCharacters++;
-      } else {
-        incorrectCharacters++;
-      }
-    }
-
-    this.testResults.correctCharacterCount += correctCharacters;
-    this.testResults.incorrectCharacterCount += incorrectCharacters;
-  }
-
-  onSecond(seconds: number): void {
-    this.updateTimer(seconds);
-
-    if (seconds === this.testTime) {
-      this.onTimeRunsOut();
-    }
-
-    this.testResults.timeElapsed = seconds;
-    this.calculateStats();
-  }
-
-  updateTimer(seconds: number): void {
-    this.testTimeLeft = this.testTime - seconds;
-  }
-
-  calculateStats(): void {
-    const stats = {} as TestResultsStats;
-
-    const totalCharacterCount =
-      this.testResults.correctCharacterCount +
-      this.testResults.incorrectCharacterCount;
-
-    const totalWordCount =
-      this.testResults.correctWordCount + this.testResults.incorrectWordCount;
-
-    stats.characterAccuracy = totalCharacterCount
-      ? this.testResults.correctCharacterCount / totalCharacterCount
-      : 0;
-    stats.wordAccuracy = totalWordCount
-      ? this.testResults.correctWordCount / totalWordCount
-      : 0;
-    stats.cpm = this.testResults.timeElapsed
-      ? (this.testResults.correctCharacterCount /
-          this.testResults.timeElapsed) *
-        60
-      : 0;
-    stats.wpm = this.testResults.timeElapsed
-      ? (this.testResults.correctCharacterCount /
-          5 /
-          this.testResults.timeElapsed) *
-        60
-      : 0;
-
-    this.testResults.stats = stats;
-  }
-
-  syncCurrentWordElement(): void {
+  private syncCurrentWordElement(): void {
     this.currentWordElement = this.containerElement.children[
-      this.currentIndex
-    ] as HTMLElement;
+      this.state.currentIndex()
+    ] as HTMLElement | undefined;
   }
 
-  syncOffset(disableTransition = false): void {
+  private syncOffset(disableTransition = false): void {
     if (!this.containerElement) return;
 
     let leftOffset: number;
@@ -503,119 +383,21 @@ export class TyperComponent implements OnInit, OnDestroy {
     }
 
     if (this.reverseScroll) {
-      this.containerElement.style.marginLeft = null;
+      this.containerElement.style.marginLeft = '';
       this.containerElement.style.marginRight = `calc(50% + ${rightOffset}px)`;
     } else {
-      this.containerElement.style.marginRight = null;
+      this.containerElement.style.marginRight = '';
       this.containerElement.style.marginLeft = `calc(50% - ${leftOffset}px)`;
     }
   }
 
-  onTimeRunsOut(): void {
-    this.secondTimer.unsubscribe();
-    this.secondTimer = undefined;
-    this.inputElement.disabled = true;
-    this.typerState.running.set(false);
-    this.dummyInputElement.focus();
-
-    // Add right/wrong characters for current word
-    this.registerWord(
-      this.wordInput.trim(),
-      this.words[this.currentIndex].slice(0, this.wordInput.length),
-      false,
-    );
-
-    this.hasCompletedFirstTest = true;
-  }
-
-  private breakPoints = [
-    {
-      seconds: 1,
-      delta: 0,
-    },
-    {
-      seconds: 5,
-      delta: 1,
-    },
-    {
-      seconds: 30,
-      delta: 5,
-    },
-    {
-      seconds: 120,
-      delta: 15,
-    },
-    {
-      seconds: 300,
-      delta: 30,
-    },
-    {
-      seconds: 600,
-      delta: 60,
-    },
-    {
-      seconds: 1800,
-      delta: 300,
-    },
-    {
-      seconds: 3600,
-      delta: 600,
-    },
-    {
-      seconds: 86400,
-      delta: 3600,
-    },
-    {
-      seconds: -1,
-      delta: 7200,
-    },
-  ];
-
   onDecreaseClicked(): void {
-    if (this.testStarted) return;
-
-    let decrease = 0;
-
-    this.breakPoints.every((breakpoint) => {
-      if (this.testTime <= breakpoint.seconds || breakpoint.seconds == -1) {
-        decrease = breakpoint.delta;
-        return false;
-      }
-      return true;
-    });
-
-    this.testTime -= decrease;
-
-    this.preferencesService.setPreference(
-      Preference.DEFAULT_TEST_DURATION,
-      this.testTime,
-    );
-
-    this.updateTimer(0);
+    this.state.decreaseDuration();
     this.focusInput();
   }
 
   onIncreaseClicked(): void {
-    if (this.testStarted) return;
-
-    let increase = 0;
-
-    this.breakPoints.every((breakpoint) => {
-      if (this.testTime < breakpoint.seconds || breakpoint.seconds == -1) {
-        increase = breakpoint.delta;
-        return false;
-      }
-      return true;
-    });
-
-    this.testTime += increase;
-
-    this.preferencesService.setPreference(
-      Preference.DEFAULT_TEST_DURATION,
-      this.testTime,
-    );
-
-    this.updateTimer(0);
+    this.state.increaseDuration();
     this.focusInput();
   }
 

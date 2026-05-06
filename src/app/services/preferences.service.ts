@@ -1,20 +1,30 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import {
+  DestroyRef,
+  Injectable,
+  PLATFORM_ID,
+  Signal,
+  WritableSignal,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   Preference,
+  PreferenceValueMap,
   Preferences,
   Language,
   Theme,
   WordMode,
   TextSize,
 } from '../models/Preference';
-import { BehaviorSubject } from 'rxjs';
+
+type SignalMap = { [K in Preference]: WritableSignal<PreferenceValueMap[K]> };
 
 @Injectable({
   providedIn: 'root',
 })
 export class PreferencesService {
-  private defaults: Preferences = {
+  private readonly defaults: PreferenceValueMap = {
     [Preference.THEME]: Theme.DARK,
     [Preference.LANGUAGE]: Language.ENGLISH_AMERICAN,
     [Preference.FOLLOW_SYSTEM_THEME]: false,
@@ -30,7 +40,7 @@ export class PreferencesService {
     [Preference.HIDE_LIVE_STATS]: false,
   };
 
-  private preferenceTypes: Record<string, unknown> = {
+  private readonly preferenceTypes: Record<Preference, unknown> = {
     [Preference.THEME]: Theme,
     [Preference.LANGUAGE]: Language,
     [Preference.FOLLOW_SYSTEM_THEME]: 'boolean',
@@ -46,126 +56,175 @@ export class PreferencesService {
     [Preference.HIDE_LIVE_STATS]: 'boolean',
   };
 
-  private preferencesSubjects = new Map<string, BehaviorSubject<unknown>>();
+  private readonly signals: SignalMap = {
+    [Preference.THEME]: signal(this.defaults[Preference.THEME]),
+    [Preference.LANGUAGE]: signal(this.defaults[Preference.LANGUAGE]),
+    [Preference.FOLLOW_SYSTEM_THEME]: signal(
+      this.defaults[Preference.FOLLOW_SYSTEM_THEME],
+    ),
+    [Preference.WORD_MODE]: signal(this.defaults[Preference.WORD_MODE]),
+    [Preference.REVERSE_SCROLL]: signal(
+      this.defaults[Preference.REVERSE_SCROLL],
+    ),
+    [Preference.DEFAULT_TEST_DURATION]: signal(
+      this.defaults[Preference.DEFAULT_TEST_DURATION],
+    ),
+    [Preference.TEXT_SIZE]: signal(this.defaults[Preference.TEXT_SIZE]),
+    [Preference.SMOOTH_SCROLLING]: signal(
+      this.defaults[Preference.SMOOTH_SCROLLING],
+    ),
+    [Preference.SCROLLING_ANIMATION]: signal(
+      this.defaults[Preference.SCROLLING_ANIMATION],
+    ),
+    [Preference.IGNORE_DIACRITICS]: signal(
+      this.defaults[Preference.IGNORE_DIACRITICS],
+    ),
+    [Preference.IGNORE_CASING]: signal(this.defaults[Preference.IGNORE_CASING]),
+    [Preference.HIDE_TIMER]: signal(this.defaults[Preference.HIDE_TIMER]),
+    [Preference.HIDE_LIVE_STATS]: signal(
+      this.defaults[Preference.HIDE_LIVE_STATS],
+    ),
+  };
+
+  // Typed read-only signal accessors. Templates and effects bind to these
+  // directly: prefs.theme(), prefs.ignoreCasing(), etc.
+  readonly theme: Signal<Theme> = this.signals[Preference.THEME].asReadonly();
+  readonly language: Signal<Language> =
+    this.signals[Preference.LANGUAGE].asReadonly();
+  readonly followSystemTheme: Signal<boolean> =
+    this.signals[Preference.FOLLOW_SYSTEM_THEME].asReadonly();
+  readonly wordMode: Signal<WordMode> =
+    this.signals[Preference.WORD_MODE].asReadonly();
+  readonly reverseScroll: Signal<boolean> =
+    this.signals[Preference.REVERSE_SCROLL].asReadonly();
+  readonly defaultTestDuration: Signal<number> =
+    this.signals[Preference.DEFAULT_TEST_DURATION].asReadonly();
+  readonly textSize: Signal<TextSize> =
+    this.signals[Preference.TEXT_SIZE].asReadonly();
+  readonly smoothScrolling: Signal<boolean> =
+    this.signals[Preference.SMOOTH_SCROLLING].asReadonly();
+  readonly scrollingAnimation: Signal<boolean> =
+    this.signals[Preference.SCROLLING_ANIMATION].asReadonly();
+  readonly ignoreDiacritics: Signal<boolean> =
+    this.signals[Preference.IGNORE_DIACRITICS].asReadonly();
+  readonly ignoreCasing: Signal<boolean> =
+    this.signals[Preference.IGNORE_CASING].asReadonly();
+  readonly hideTimer: Signal<boolean> =
+    this.signals[Preference.HIDE_TIMER].asReadonly();
+  readonly hideLiveStats: Signal<boolean> =
+    this.signals[Preference.HIDE_LIVE_STATS].asReadonly();
+
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly storageHandler = (event: StorageEvent) =>
+    this.onStorage(event);
 
   constructor() {
-    this.initDefaults();
-
     if (this.isBrowser) {
-      window.addEventListener('storage', this.onStorage.bind(this), false);
+      window.addEventListener('storage', this.storageHandler, false);
+      this.destroyRef.onDestroy(() => {
+        window.removeEventListener('storage', this.storageHandler, false);
+      });
       this.retrievePreferences();
-    }
-  }
-
-  private initDefaults() {
-    for (const defaultPreference in this.defaults) {
-      this.preferencesSubjects.set(
-        defaultPreference,
-        new BehaviorSubject(this.defaults[defaultPreference]),
-      );
     }
   }
 
   private retrievePreferences() {
     try {
-      const preferences = JSON.parse(localStorage.getItem('preferences'));
-      if (typeof preferences === 'undefined') throw null;
+      const stored = JSON.parse(
+        localStorage.getItem('preferences') ?? 'null',
+      ) as Preferences | null;
+      if (!stored) return;
 
-      for (const preference in preferences) {
-        const preferenceKey = preference;
-        const preferenceValue = preferences[preference];
-
+      for (const key of Object.keys(stored) as Preference[]) {
+        const value = stored[key];
         if (
-          this.validatePreferenceType(preferenceKey, preferenceValue) &&
-          !this.isTemporaryPreference(preferenceKey, preferenceValue)
-        )
-          this.preferencesSubjects.get(preference)?.next(preferenceValue);
+          value !== undefined &&
+          this.validatePreferenceType(key, value) &&
+          !this.isTemporaryPreference(key, value)
+        ) {
+          (this.signals[key] as WritableSignal<unknown>).set(value);
+        }
       }
-    } catch (e) {
-      // Empty
+    } catch {
+      // localStorage parse failed — fall back to defaults
     }
   }
 
-  private validatePreferenceType(key: string, value: unknown) {
+  private validatePreferenceType(key: Preference, value: unknown): boolean {
     const type = this.preferenceTypes[key];
-
     return (
       typeof type === 'undefined' ||
       (typeof type === 'string'
         ? typeof value === type
-        : Object.values(type).includes(value))
+        : Object.values(type as Record<string, unknown>).includes(value))
     );
   }
 
-  private isTemporaryPreference(key: string, value: unknown) {
-    return key === Preference.LANGUAGE && value == Language.CUSTOM;
+  private isTemporaryPreference(key: Preference, value: unknown): boolean {
+    return key === Preference.LANGUAGE && value === Language.CUSTOM;
   }
 
-  getPreferences(): Map<string, BehaviorSubject<unknown>> {
-    return new Map(this.preferencesSubjects);
+  preference<K extends Preference>(key: K): Signal<PreferenceValueMap[K]> {
+    return this.signals[key].asReadonly() as Signal<PreferenceValueMap[K]>;
   }
 
-  // Generic to let callers narrow the value type at the call site, e.g.
-  // getPreference<Language>(Preference.LANGUAGE). Storage is heterogeneous
-  // so the underlying subject is BehaviorSubject<unknown>.
-  getPreference<T = unknown>(key: Preference): T | undefined {
-    const subject = this.preferencesSubjects.get(key);
-    return subject?.value as T | undefined;
+  getPreference<K extends Preference>(key: K): PreferenceValueMap[K] {
+    return this.signals[key]() as PreferenceValueMap[K];
   }
 
-  setPreference(key: Preference, value: unknown): void {
+  setPreference<K extends Preference>(
+    key: K,
+    value: PreferenceValueMap[K],
+  ): void {
     if (!this.validatePreferenceType(key, value)) return;
 
     if (this.isBrowser && !this.isTemporaryPreference(key, value)) {
-      // Retrieve preferences object
       let pref: Preferences;
-
       try {
-        pref = JSON.parse(localStorage.getItem('preferences'));
-        if (pref == null || typeof pref === 'undefined') throw null;
-      } catch (e) {
+        pref =
+          (JSON.parse(
+            localStorage.getItem('preferences') ?? 'null',
+          ) as Preferences | null) ?? {};
+      } catch {
         pref = {};
       }
-
-      pref[key as string] = value;
-
+      (pref as Record<string, unknown>)[key] = value;
       localStorage.setItem('preferences', JSON.stringify(pref));
     }
 
-    this.preferencesSubjects.get(key).next(value);
+    (this.signals[key] as WritableSignal<unknown>).set(value);
   }
 
   clearPreferences(): void {
     if (this.isBrowser && localStorage.getItem('preferences') !== null) {
       localStorage.removeItem('preferences');
-      for (const defaultPreference in this.defaults) {
-        this.preferencesSubjects
-          .get(defaultPreference)
-          .next(this.defaults[defaultPreference]);
+      for (const key of Object.keys(this.defaults) as Preference[]) {
+        (this.signals[key] as WritableSignal<unknown>).set(this.defaults[key]);
       }
     }
   }
 
   private onStorage(event: StorageEvent) {
-    if (event.key == 'preferences') {
-      try {
-        const oldObj: Preferences = JSON.parse(event.oldValue);
-        const newObj: Preferences = JSON.parse(event.newValue);
+    if (event.key !== 'preferences') return;
+    try {
+      const oldObj = JSON.parse(event.oldValue ?? 'null') as Preferences | null;
+      const newObj = JSON.parse(event.newValue ?? 'null') as Preferences | null;
+      if (!newObj) return;
 
-        Object.keys(this.defaults).forEach((key) => {
-          const newVal = newObj[key];
-          if (
-            oldObj[key] !== newVal &&
-            this.validatePreferenceType(key, newVal) &&
-            !this.isTemporaryPreference(key, newVal)
-          ) {
-            this.preferencesSubjects.get(key).next(newObj[key]);
-          }
-        });
-      } catch (e) {
-        // Empty
+      for (const key of Object.keys(this.defaults) as Preference[]) {
+        const newVal = newObj[key];
+        if (
+          newVal !== undefined &&
+          oldObj?.[key] !== newVal &&
+          this.validatePreferenceType(key, newVal) &&
+          !this.isTemporaryPreference(key, newVal)
+        ) {
+          (this.signals[key] as WritableSignal<unknown>).set(newVal);
+        }
       }
+    } catch {
+      // Empty
     }
   }
 }

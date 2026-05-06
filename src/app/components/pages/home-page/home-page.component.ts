@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { FAQS, FaqEntry } from './home-page.faqs';
 
@@ -7,6 +7,7 @@ import { FAQS, FaqEntry } from './home-page.faqs';
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.scss'],
   imports: [RouterLink],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomePageComponent {
   readonly faqs: FaqEntry[] = FAQS;

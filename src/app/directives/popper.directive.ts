@@ -1,4 +1,11 @@
-import { Directive, Input, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  inject,
+  input,
+} from '@angular/core';
 import { createPopper, Instance, Placement } from '@popperjs/core';
 
 @Directive({
@@ -10,19 +17,20 @@ export class PopperDirective implements OnInit, OnDestroy {
   private tooltipEl: HTMLElement | null = null;
   private ownsTooltip = false;
 
-  @Input() text: string;
-  @Input() placement: Placement = 'right';
+  readonly text = input<string>();
+  readonly placement = input<Placement>('right');
 
-  constructor(private readonly el: ElementRef<HTMLElement>) {}
+  private readonly el: ElementRef<HTMLElement> = inject(ElementRef);
 
   ngOnInit(): void {
     let tooltipEl =
       this.el.nativeElement.querySelector<HTMLElement>('.tooltip');
 
-    if (this.text) {
+    const tooltipText = this.text();
+    if (tooltipText) {
       tooltipEl = document.createElement('div');
       tooltipEl.className = 'tooltip';
-      tooltipEl.innerText = this.text;
+      tooltipEl.innerText = tooltipText;
       this.el.nativeElement.appendChild(tooltipEl);
       this.ownsTooltip = true;
     }
@@ -33,6 +41,7 @@ export class PopperDirective implements OnInit, OnDestroy {
     // so it escapes any ancestor's overflow/clip context (including a
     // <dialog> opened with showModal()).
     tooltipEl.setAttribute('popover', 'manual');
+    tooltipEl.setAttribute('role', 'tooltip');
     this.tooltipEl = tooltipEl;
 
     const host = this.el.nativeElement;
@@ -57,7 +66,7 @@ export class PopperDirective implements OnInit, OnDestroy {
     if (!this.tooltipEl) return;
     this.tooltipEl.showPopover();
     this.popper = createPopper(this.el.nativeElement, this.tooltipEl, {
-      placement: this.placement,
+      placement: this.placement(),
       strategy: 'fixed',
       modifiers: [
         { name: 'preventOverflow', options: { padding: 8 } },

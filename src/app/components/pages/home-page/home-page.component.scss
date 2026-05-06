@@ -1,4 +1,5 @@
 @use '../../../../styles/breakpoints' as bp;
+@use '../../../../styles/mixins' as m;
 
 :host {
   display: flex;
@@ -136,7 +137,7 @@
   }
 }
 
-@media (max-width: bp.$bp-md) {
+@include m.below(bp.$bp-md) {
   .landing {
     padding: var(--space-24) var(--page-pad-x-sm) var(--space-8);
   }

@@ -1,77 +1,67 @@
-import { Component, OnInit, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+} from '@angular/core';
 import { Language } from 'src/app/models/Preference';
 import { LanguageService } from 'src/app/services/language.service';
+
+interface Letter {
+  char: string;
+  class: 'character-correct' | 'character-incorrect' | 'character-missing';
+}
 
 @Component({
   selector: 'app-incorrect-word',
   templateUrl: './incorrect-word.component.html',
   styleUrls: ['./incorrect-word.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [],
 })
-export class IncorrectWordComponent implements OnInit {
-  @Input() value: string;
-  @Input() expected: string;
-  @Input() language: Language;
-  @Input() ignoreAccentedCharacters: boolean;
-  @Input() ignoreCasing: boolean;
+export class IncorrectWordComponent {
+  readonly value = input.required<string>();
+  readonly expected = input.required<string>();
+  readonly language = input.required<Language>();
+  readonly ignoreAccentedCharacters = input.required<boolean>();
+  readonly ignoreCasing = input.required<boolean>();
 
-  valueLetters = [];
+  readonly valueLetters = computed<Letter[]>(() => {
+    const value = this.ignoreCasing()
+      ? this.value().toLowerCase()
+      : this.value();
+    const expected = this.ignoreCasing()
+      ? this.expected().toLowerCase()
+      : this.expected();
 
-  ngOnInit(): void {
-    const value = this.ignoreCasing ? this.value.toLowerCase() : this.value;
-    const expected = this.ignoreCasing
-      ? this.expected.toLowerCase()
-      : this.expected;
-    for (
-      let i = 0;
-      i < Math.min(this.value.length, this.expected.length);
-      i++
-    ) {
-      const entry = {
+    const letters: Letter[] = [];
+
+    const sharedLength = Math.min(value.length, expected.length);
+    for (let i = 0; i < sharedLength; i++) {
+      const correct = LanguageService.compare(
+        value[i],
+        expected[i],
+        this.language(),
+        this.ignoreAccentedCharacters(),
+      );
+      letters.push({
         char: value[i],
-        class: 'character-incorrect',
-      };
+        class: correct ? 'character-correct' : 'character-incorrect',
+      });
+    }
 
-      if (
-        LanguageService.compare(
-          value[i],
-          expected[i],
-          this.language,
-          this.ignoreAccentedCharacters,
-        )
-      ) {
-        entry.class = 'character-correct';
+    if (value.length > expected.length) {
+      // Extra characters typed beyond the expected word — mark incorrect.
+      for (const ch of value.slice(expected.length)) {
+        letters.push({ char: ch, class: 'character-incorrect' });
       }
-
-      this.valueLetters.push(entry);
+    } else if (value.length < expected.length) {
+      // Characters the user never typed — show as missing.
+      for (const ch of expected.slice(value.length)) {
+        letters.push({ char: ch, class: 'character-missing' });
+      }
     }
 
-    if (this.value.length > this.expected.length) {
-      // append last letters of value, marked incorrect
-      this.valueLetters = this.valueLetters.concat(
-        this.value
-          .slice(this.expected.length, this.value.length)
-          .split('')
-          .map((el) => {
-            return {
-              char: el,
-              class: 'character-incorrect',
-            };
-          }),
-      );
-    } else if (this.value.length < this.expected.length) {
-      // append last letters of expected value, marked missing
-      this.valueLetters = this.valueLetters.concat(
-        this.expected
-          .slice(this.value.length, this.expected.length)
-          .split('')
-          .map((el) => {
-            return {
-              char: el,
-              class: 'character-missing',
-            };
-          }),
-      );
-    }
-  }
+    return letters;
+  });
 }

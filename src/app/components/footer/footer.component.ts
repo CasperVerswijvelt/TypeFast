@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CONTACT_EMAIL, MAILTO_HREF } from '../../constants';
 import { TyperStateService } from '../../services/typer-state.service';
@@ -11,6 +11,7 @@ import { TyperStateService } from '../../services/typer-state.service';
   host: {
     '[class.dimmed]': 'state.running()',
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {
   state = inject(TyperStateService);

@@ -1,6 +1,6 @@
 @if (visible) {
-  <div class="ad-placeholder ad-placeholder--{{ size }}" role="complementary" aria-label="Advertisement placeholder">
-    <span class="ad-placeholder__label">{{ label }}</span>
-    <span class="ad-placeholder__hint">{{ size }}</span>
+  <div class="ad-placeholder ad-placeholder--{{ size() }}" role="complementary" aria-label="Advertisement placeholder">
+    <span class="ad-placeholder__label">{{ label() }}</span>
+    <span class="ad-placeholder__hint">{{ size() }}</span>
   </div>
 }

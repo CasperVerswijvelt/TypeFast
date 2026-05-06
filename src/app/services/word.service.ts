@@ -1,82 +1,68 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { Injectable, PLATFORM_ID, effect, inject } from '@angular/core';
+import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { PreferencesService } from './preferences.service';
-import { Preference, Language, WordMode } from '../models/Preference';
-import { skip } from 'rxjs/operators';
+import { Language, WordMode } from '../models/Preference';
 import { LanguageService } from './language.service';
+
+export interface WordListLoaded {
+  language: Language;
+  wordMode: WordMode;
+  wordListName: string;
+  shouldReverseScroll: boolean;
+}
+
+export interface LanguageFetchStarted {
+  language: Language;
+  wordMode: WordMode;
+  promise: Promise<void>;
+}
+
+const DEFAULT_WORD_AMOUNT = 100;
+const LANGUAGE_PREFERENCE_CHANGED =
+  'Language preference changed during loading, cancelling.';
 
 @Injectable({
   providedIn: 'root',
 })
 export class WordService {
   private words: string[] = ['Word', 'list', 'not', 'initialized', 'yet.'];
-  private sentenes: string[][] = [
+  private sentences: string[][] = [
     ['This', 'language', "doesn't", 'have', 'any', 'sentences.'],
   ];
 
-  private cachedFileText: string;
-  private cachedFileName: string;
+  private cachedFileText: string | undefined;
+  private cachedFileName: string | undefined;
 
   private wordsCopy: string[] = [];
   private sentencesCopy: string[][] = [];
 
-  private lastLoadedListLanguage: Language = undefined;
-  private lastLoadedListMode: WordMode = undefined;
-  private currentSource: string;
-  private wordListListeners: ((
-    language: Language,
-    wordMode: WordMode,
-    wordListName: string,
-    shouldReverseScroll: boolean,
-  ) => void)[] = [];
-  private languageFetchListeners: ((
-    language: Language,
-    wordMode: WordMode,
-    promise: Promise<void>,
-  ) => void)[] = [];
+  private lastLoadedListLanguage: Language | undefined;
+  private lastLoadedListMode: WordMode | undefined;
+  private currentSource: string | undefined;
 
-  private DEFAULT_WORD_AMOUNT = 100;
+  private readonly wordListLoaded$ = new ReplaySubject<WordListLoaded>(1);
+  readonly wordListLoaded: Observable<WordListLoaded> =
+    this.wordListLoaded$.asObservable();
 
-  private LANGUAGE_PREFERENCE_CHANGED =
-    'Language preference changed during loading, cancelling.';
+  private readonly languageFetchStarted$ = new Subject<LanguageFetchStarted>();
+  readonly languageFetchStarted: Observable<LanguageFetchStarted> =
+    this.languageFetchStarted$.asObservable();
 
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly prefs = inject(PreferencesService);
 
-  constructor(private preferencesService: PreferencesService) {
-    const preferences = this.preferencesService.getPreferences();
-
-    preferences
-      .get(Preference.LANGUAGE)
-      .pipe(skip(1))
-      .subscribe(this.onLanguagePreferenceUpdated.bind(this));
-    preferences
-      .get(Preference.WORD_MODE)
-      .pipe(skip(1))
-      .subscribe(this.onWordModePreferenceUpdated.bind(this));
-
-    if (this.isBrowser) {
-      this.loadLanguage(
-        this.preferencesService.getPreference<Language>(Preference.LANGUAGE),
-        this.preferencesService.getPreference<WordMode>(Preference.WORD_MODE),
-      );
-    }
-  }
-
-  private onLanguagePreferenceUpdated(value: unknown): void {
-    this.loadLanguage(
-      value as Language,
-      this.preferencesService.getPreference(Preference.WORD_MODE) ===
-        WordMode.WORDS
-        ? WordMode.WORDS
-        : WordMode.SENTENCES,
-    );
-  }
-
-  private onWordModePreferenceUpdated(value: unknown): void {
-    this.loadLanguage(
-      this.preferencesService.getPreference<Language>(Preference.LANGUAGE),
-      value as WordMode,
-    );
+  constructor() {
+    // Effect re-runs whenever language or word-mode preferences change. It
+    // also fires once on construction with the seeded defaults; we only
+    // network-fetch in the browser to keep SSR rendering clean.
+    effect(() => {
+      const language = this.prefs.language();
+      const wordMode = this.prefs.wordMode();
+      if (this.isBrowser) {
+        this.loadLanguage(language, wordMode);
+      }
+    });
   }
 
   loadFile(file: File): Promise<void> {
@@ -90,36 +76,35 @@ export class WordService {
     const langString = this.getLanguageString(language);
     const getTextPromise =
       language === Language.CUSTOM
-        ? Promise.resolve(this.cachedFileText)
+        ? Promise.resolve(this.cachedFileText ?? '')
         : this.getTextViaUrl(`assets/languages/${language}/${wordMode}.txt`);
 
     const promise = getTextPromise
       .then((text: string) => {
-        // Only parse text if this language is still the preferred language, otherwise reject
-        if (
-          this.preferencesService.getPreference(Preference.LANGUAGE) ===
-          language
-        ) {
-          this.parseText(wordMode, text);
-        } else {
-          return Promise.reject(this.LANGUAGE_PREFERENCE_CHANGED);
+        // Drop late-arriving fetches when the user has switched language
+        // mid-flight; the promise from the newer fetch will succeed instead.
+        if (this.prefs.language() !== language) {
+          return Promise.reject(LANGUAGE_PREFERENCE_CHANGED);
         }
+        this.parseText(wordMode, text);
         this.lastLoadedListLanguage = language;
         this.lastLoadedListMode = wordMode;
         this.currentSource = langString;
-        this.notifyWordListSubscribers(
+        this.wordListLoaded$.next({
           language,
           wordMode,
-          langString,
-          this.shouldReverseScroll(language),
-        );
+          wordListName: langString,
+          shouldReverseScroll: this.shouldReverseScroll(language),
+        });
+        return undefined;
       })
       .catch((e) => {
-        if (e !== this.LANGUAGE_PREFERENCE_CHANGED)
+        if (e !== LANGUAGE_PREFERENCE_CHANGED) {
           this.loadDefaultList(WordMode.WORDS);
+        }
       });
 
-    this.notifyLanguageFetchSubscribers(language, wordMode, promise);
+    this.languageFetchStarted$.next({ language, wordMode, promise });
 
     return promise;
   }
@@ -134,74 +119,36 @@ export class WordService {
     }
   }
 
-  getCachedFileName(): string {
+  getCachedFileName(): string | undefined {
     return this.cachedFileName;
   }
 
   getLanguageString(language: Language): string {
     let langString = LanguageService.getLanguageString(language);
-    if (language === Language.CUSTOM && this.cachedFileName)
+    if (language === Language.CUSTOM && this.cachedFileName) {
       langString = `'${this.cachedFileName}'`;
-    return langString;
-  }
-
-  addWordListListener(
-    listenerFunction: (
-      language: Language,
-      wordMode: WordMode,
-      wordListName: string,
-      shouldReverseScroll: boolean,
-    ) => void,
-  ): void {
-    this.wordListListeners.push(listenerFunction);
-
-    if (this.lastLoadedListMode) {
-      listenerFunction(
-        this.lastLoadedListLanguage,
-        this.lastLoadedListMode,
-        this.currentSource,
-        false,
-      );
     }
-  }
-
-  removeWordListListener(
-    listenerFunction: (
-      language: Language,
-      wordMode: WordMode,
-      wordListName: string,
-      shouldReverseScroll: boolean,
-    ) => void,
-  ): void {
-    const idx = this.wordListListeners.indexOf(listenerFunction);
-    if (idx >= 0) this.wordListListeners.splice(idx, 1);
-  }
-
-  addLanguageFetchListener(
-    onLanguageFetch: (
-      language: Language,
-      wordMode: WordMode,
-      promise: Promise<void>,
-    ) => void,
-  ): void {
-    this.languageFetchListeners.push(onLanguageFetch);
+    return langString;
   }
 
   private getTextViaFile(file: File): Promise<string> {
     return new Promise((resolve, reject) => {
-      if (file.type !== 'text/plain') reject('File is not a text file');
+      if (file.type !== 'text/plain') {
+        reject(new Error('File is not a text file'));
+        return;
+      }
       const fr = new FileReader();
-      fr.onload = () => {
-        resolve(fr.result as string);
-      };
+      fr.onload = () => resolve(fr.result as string);
+      fr.onerror = () => reject(fr.error ?? new Error('FileReader failed'));
       fr.readAsText(file);
     });
   }
 
   private getTextViaUrl(url: string): Promise<string> {
     return fetch(url).then((response) => {
-      if (response.status !== 200)
-        return Promise.reject("Text file couldn't be fetched");
+      if (response.status !== 200) {
+        return Promise.reject(new Error("Text file couldn't be fetched"));
+      }
       return response.text();
     });
   }
@@ -210,17 +157,13 @@ export class WordService {
     // Normalize to NFC so word lengths and per-character comparisons match
     // user keyboard input (which is virtually always NFC) regardless of the
     // source file's encoding.
-    text = text.normalize('NFC');
+    const normalized = text.normalize('NFC');
     if (wordMode === WordMode.WORDS) {
-      this.words = text.split(/\s+/);
+      this.words = normalized.split(/\s+/);
       this.wordsCopy = [];
     } else if (wordMode === WordMode.SENTENCES) {
-      const tempSentences = [];
-      const lines = text.match(/[^\r\n]+/g);
-      lines.forEach((line) => {
-        tempSentences.push(line.split(/\s+/));
-      });
-      this.sentenes = tempSentences;
+      const lines = normalized.match(/[^\r\n]+/g) ?? [];
+      this.sentences = lines.map((line) => line.split(/\s+/));
       this.sentencesCopy = [];
     }
   }
@@ -230,66 +173,41 @@ export class WordService {
       this.words = ['This', 'list', "doesn't", 'have', 'any', 'words.'];
       this.wordsCopy = [];
     } else if (format === WordMode.SENTENCES) {
-      this.sentenes = [
+      this.sentences = [
         ['This', 'list', "doesn't", 'have', 'any', 'sentences.'],
       ];
       this.sentencesCopy = [];
     }
+    // Mark the loaded mode so getWords() routes to the fallback list rather
+    // than the "not initialized" placeholder.
+    this.lastLoadedListMode = format;
   }
 
   private getRandomWords(wordCount?: number): string[] {
+    const count = wordCount ?? DEFAULT_WORD_AMOUNT;
     const res: string[] = [];
-
-    wordCount = wordCount !== undefined ? wordCount : this.DEFAULT_WORD_AMOUNT;
-
-    while (res.length < wordCount) {
+    while (res.length < count) {
       if (this.wordsCopy.length === 0) {
         this.wordsCopy = this.words.slice();
       }
-      res.push(
-        this.wordsCopy.splice(
-          Math.floor(Math.random() * this.wordsCopy.length),
-          1,
-        )[0],
-      );
+      const idx = Math.floor(Math.random() * this.wordsCopy.length);
+      res.push(this.wordsCopy[idx]);
+      this.wordsCopy.splice(idx, 1);
     }
-
     return res;
   }
 
   private getSentence(): string[] {
     if (this.sentencesCopy.length === 0) {
-      this.sentencesCopy = this.sentenes.slice();
+      this.sentencesCopy = this.sentences.slice();
     }
-
-    return this.sentencesCopy.splice(
-      Math.floor(Math.random() * this.sentencesCopy.length),
-      1,
-    )[0];
+    const idx = Math.floor(Math.random() * this.sentencesCopy.length);
+    const sentence = this.sentencesCopy[idx];
+    this.sentencesCopy.splice(idx, 1);
+    return sentence;
   }
 
-  private notifyWordListSubscribers(
-    language: Language,
-    wordMode: WordMode,
-    wordListName: string,
-    shouldReverseScroll: boolean,
-  ) {
-    this.wordListListeners.forEach((listener) =>
-      listener(language, wordMode, wordListName, shouldReverseScroll),
-    );
-  }
-
-  private notifyLanguageFetchSubscribers(
-    language: Language,
-    wordMode: WordMode,
-    promise: Promise<void>,
-  ) {
-    this.languageFetchListeners.forEach((listener) =>
-      listener(language, wordMode, promise),
-    );
-  }
-
-  private shouldReverseScroll(language: Language) {
+  private shouldReverseScroll(language: Language): boolean {
     return language === Language.ARABIC || language === Language.UYGHUR;
   }
 }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CONTACT_EMAIL, MAILTO_HREF } from '../../../constants';
 import { PROSE_PAGE_IMPORTS } from '../prose-page/prose-page.imports';
 
@@ -6,6 +6,7 @@ import { PROSE_PAGE_IMPORTS } from '../prose-page/prose-page.imports';
   selector: 'app-terms-page',
   templateUrl: './terms-page.component.html',
   imports: PROSE_PAGE_IMPORTS,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TermsPageComponent {
   readonly contactEmail = CONTACT_EMAIL;

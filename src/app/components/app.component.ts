@@ -1,4 +1,10 @@
-import { Component, ElementRef, PLATFORM_ID, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  PLATFORM_ID,
+  inject,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import {
   NavigationEnd,
@@ -6,6 +12,7 @@ import {
   RouterOutlet,
   TitleStrategy,
 } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter, skip } from 'rxjs/operators';
 import { SITE_NAME } from '../constants';
 import { NavComponent } from './nav/nav.component';
@@ -19,19 +26,23 @@ import { TyperStateService } from '../services/typer-state.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   imports: [RouterOutlet, NavComponent, FooterComponent, PreferencesComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   private readonly titleStrategy = inject(TitleStrategy);
+  private readonly router = inject(Router);
+  private readonly host: ElementRef<HTMLElement> = inject(ElementRef);
+  private readonly typerState = inject(TyperStateService);
 
-  constructor(
-    private readonly themeService: ThemeService,
-    private readonly typerState: TyperStateService,
-    private readonly router: Router,
-    private readonly host: ElementRef<HTMLElement>,
-  ) {
+  // ThemeService is instantiated for its side effects (applying the theme
+  // class to <body>); the reference itself is unused.
+  private readonly _themeService = inject(ThemeService);
+
+  constructor() {
     if (isPlatformBrowser(inject(PLATFORM_ID))) {
       const navEnd$ = this.router.events.pipe(
         filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(),
       );
 
       // app-root is the scroll container (see styles.scss), so Angular's

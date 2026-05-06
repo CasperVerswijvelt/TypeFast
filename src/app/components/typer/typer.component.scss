@@ -71,7 +71,7 @@
 }
 
 .word-copy {
-  font-size: 3em;
+  font-size: var(--typer-word-font-size);
   display: inline-block;
   height: 0;
   position: absolute;
@@ -96,7 +96,7 @@ $word-center-offset: 80px;
 $word-spacing: 20px;
 .word {
   color: var(--word-color);
-  font-size: 3em;
+  font-size: var(--typer-word-font-size);
   text-align: center;
   transition:
     color 1s,
@@ -124,7 +124,7 @@ $word-spacing: 20px;
 .word-input {
   background: transparent;
   color: var(--word-color);
-  font-size: 3em;
+  font-size: var(--typer-word-font-size);
   height: auto;
   border: none;
   outline: none;
@@ -201,7 +201,7 @@ $word-spacing: 20px;
 .results-rail {
   display: none;
 
-  @media (min-width: bp.$bp-xl) {
+  @include m.above(bp.$bp-xl) {
     display: block;
     flex: 0 0 var(--rail-width);
     transition: opacity var(--duration-slower) var(--ease);
@@ -496,14 +496,14 @@ $word-spacing: 20px;
   }
 }
 
-@media (max-width: bp.$bp-sm) {
+@include m.below(bp.$bp-sm) {
   .word-input,
   .word {
-    font-size: 2em;
+    font-size: var(--typer-word-font-size-sm);
     padding-right: 10px;
   }
 
   .word-copy {
-    font-size: 2em;
+    font-size: var(--typer-word-font-size-sm);
   }
 }

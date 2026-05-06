@@ -54,15 +54,6 @@ $preferences-entry-main-height: 37px;
   }
 }
 
-// Disable the in-dialog group-collapse transition during the dialog's
-// own opening fade. If the user clicks a group title before the dialog
-// finishes fading in, the parent's opacity would otherwise visually
-// compose onto the expanding group and look like a slide-in.
-.preferences-dialog:not(.preferences-dialog--ready)
-  .preferences-group-entries {
-  transition: none;
-}
-
 @starting-style {
   .preferences-dialog[open] {
     opacity: 0;
@@ -122,7 +113,7 @@ $preferences-entry-main-height: 37px;
   }
 }
 
-@media (min-width: bp.$bp-lg) {
+@include m.above(bp.$bp-lg) {
   .preferences-icon {
     width: 23px;
     height: 23px;
@@ -142,6 +133,22 @@ $preferences-entry-main-height: 37px;
 
 .preferences-padding {
   padding: $preferences-entry-padding-vertical $preferences-entry-padding-side;
+}
+
+// Reset-preferences row: native <button> reset so it looks like the
+// surrounding entries; the .preferences-entry-main rule above still applies
+// for height + font-weight, this just neutralises browser button defaults.
+.preferences-reset-button {
+  display: block;
+  width: 100%;
+  padding: $preferences-entry-padding-vertical $preferences-entry-padding-side;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font: inherit;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
 }
 
 .preferences-select-option {
@@ -263,79 +270,11 @@ $preferences-entry-main-height: 37px;
   }
 }
 
-.preferences-group {
-  // Collapse animation: grid-template-rows transitions between 0fr (closed)
-  // and 1fr (open). The inner wrapper takes its content's natural height
-  // and the outer grid container interpolates the row track. No magic
-  // max-height numbers required.
-  .preferences-group-entries {
-    display: grid;
-    grid-template-rows: 0fr;
-    transition: grid-template-rows var(--duration-slow);
-    background-color: var(--pref-entries-bg);
-
-    .preferences-group-entries-inner {
-      min-height: 0;
-      overflow: hidden;
-    }
-
-    .preferences-toggle-label {
-      font-weight: normal;
-    }
-  }
-
-  .preferences-group-title {
-    padding: $preferences-entry-padding-vertical $preferences-entry-padding-side;
-    cursor: pointer;
-    display: flex;
-    transition: background-color var(--duration-fast);
-
-    &:hover {
-      background-color: var(--pref-group-hover);
-    }
-
-    .preferences-group-title-value {
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      padding-left: $preferences-entry-padding-side;
-      opacity: 0.7;
-    }
-
-    .preferences-group-title-key {
-      flex: 1;
-      font-weight: bold;
-    }
-  }
-
-  .preferences-group-title-arrow {
-    margin-left: 6px;
-    height: 18px;
-    width: 18px;
-    min-width: 18px;
-    position: relative;
-
-    svg {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate3d(-50%, -50%, 0) rotate(-90deg);
-      fill: var(--pref-arrow-svg);
-      width: 80%;
-      transition: transform var(--duration-slow);
-      transform-origin: center;
-    }
-  }
-
-  &.preferences-group-opened {
-    .preferences-group-entries {
-      grid-template-rows: 1fr;
-    }
-
-    .preferences-group-title-arrow {
-      svg {
-        transform: translate3d(-50%, -50%, 0) rotate(-180deg);
-      }
-    }
-  }
+// Collapse-animation override applied to entries projected inside
+// <app-preference-group>. The toggle label inside an expanded group
+// renders un-bolded; the entries' container element lives in the child
+// component, but the projected toggle label retains the parent's
+// encapsulation attribute, so this descendant rule still matches.
+.preferences-group .preferences-group-entries .preferences-toggle-label {
+  font-weight: normal;
 }

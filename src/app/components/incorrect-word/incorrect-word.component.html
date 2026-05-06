@@ -1,7 +1,7 @@
 <div class="wrapper">
   <div class="container">
     <span class="value">
-      @for (character of valueLetters; track character) {
+      @for (character of valueLetters(); track $index) {
         <span
           [className]="character.class"
           >{{ character.char }}</span
@@ -9,7 +9,7 @@
         }
       </span>
       <span class="expected">
-        {{ expected }}
+        {{ expected() }}
       </span>
     </div>
   </div>

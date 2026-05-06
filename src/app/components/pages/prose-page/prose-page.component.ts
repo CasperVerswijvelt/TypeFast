@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AdPlaceholderComponent } from '../../ad-placeholder/ad-placeholder.component';
 
 @Component({
@@ -6,5 +6,6 @@ import { AdPlaceholderComponent } from '../../ad-placeholder/ad-placeholder.comp
   templateUrl: './prose-page.component.html',
   styleUrls: ['./prose-page.component.scss'],
   imports: [AdPlaceholderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProsePageComponent {}

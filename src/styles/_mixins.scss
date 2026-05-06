@@ -48,3 +48,17 @@
   outline: var(--focus-ring-width) solid var(--focus-ring-color);
   outline-offset: var(--focus-ring-offset);
 }
+
+// Responsive breakpoint helpers. Pair with @use 'breakpoints' as bp:
+//   @include m.above(bp.$bp-md) { ... }
+@mixin above($bp) {
+  @media (min-width: $bp) {
+    @content;
+  }
+}
+
+@mixin below($bp) {
+  @media (max-width: ($bp - 1px)) {
+    @content;
+  }
+}

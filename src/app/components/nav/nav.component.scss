@@ -203,7 +203,7 @@
   }
 }
 
-@media (max-width: bp.$bp-nav) {
+@include m.below(bp.$bp-nav) {
   .desktop-links {
     display: none;
   }
