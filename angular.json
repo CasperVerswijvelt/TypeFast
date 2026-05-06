@@ -33,7 +33,6 @@
               "src/og-image.png",
               "src/site.webmanifest",
               "src/assets",
-              { "glob": "CHANGELOG.md", "input": "./", "output": "./" },
               { "glob": "ads.txt", "input": "src", "output": "/" },
               { "glob": "robots.txt", "input": "src", "output": "/" },
               { "glob": "_redirects", "input": "src", "output": "/" }
@@ -55,7 +54,7 @@
                 "scripts": true,
                 "styles": {
                   "minify": true,
-                  "inlineCritical": false
+                  "inlineCritical": true
                 },
                 "fonts": true
               },
@@ -74,7 +73,8 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
-              ]
+              ],
+              "serviceWorker": "ngsw-config.json"
             }
           }
         },

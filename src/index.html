@@ -1,30 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <!-- Google Analytics (GA4) -->
-    <script
-      async
-      src="https://www.googletagmanager.com/gtag/js?id=G-RJT2W8D2R8"
-    ></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-
-      function gtag() {
-        dataLayer.push(arguments);
-      }
-      gtag('js', new Date());
-      gtag('config', 'G-RJT2W8D2R8');
-    </script>
-    <!-- End Google Analytics -->
-
-    <!-- Google AdSense (also loads Privacy & messaging CMP) -->
     <meta name="google-adsense-account" content="ca-pub-3922544046545700" />
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3922544046545700"
-      crossorigin="anonymous"
-    ></script>
-    <!-- End Google AdSense -->
 
     <meta charset="utf-8" />
     <title>TypeFast.io – Free typing speed test online</title>
@@ -63,32 +40,118 @@
     />
     <meta name="twitter:image" content="https://typefast.io/og-image.png" />
 
+    <link rel="dns-prefetch" href="https://analytics.casperverswijvelt.be" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/assets/fonts/roboto-mono-latin.woff2"
+      crossorigin=""
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
-      rel="stylesheet"
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/assets/fonts/roboto-latin.woff2"
+      crossorigin=""
     />
   </head>
 
   <body id="body">
+    <script>
+      // Pre-bootstrap theme application. Prevents flash-of-incorrect-theme by
+      // syncing the body class to the saved preference before Angular hydrates.
+      // Mirrors PreferencesService defaults (dark, follow_system_theme=false).
+      (function () {
+        try {
+          var raw = localStorage.getItem('preferences');
+          var prefs = raw ? JSON.parse(raw) : null;
+          var theme = prefs && prefs.theme;
+          var follow = prefs && prefs.follow_system_theme;
+          if (follow === true) {
+            theme =
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          } else if (theme !== 'light' && theme !== 'dark') {
+            theme = 'dark';
+          }
+          var body = document.body;
+          if (body) {
+            body.classList.remove('theme--dark', 'theme--light');
+            body.classList.add('theme--' + theme);
+          }
+        } catch (e) {}
+      })();
+    </script>
     <app-root tabindex="-1"></app-root>
-  </body>
 
-  <!-- Selfhosted analytics -->
-  <noscript>
-    <img
-      src="https://analytics.casperverswijvelt.be/ingress/ba385d2a-5c80-4b31-931e-3da309fac8d0/pixel.gif"
-    />
-  </noscript>
-  <script
-    defer
-    src="https://analytics.casperverswijvelt.be/ingress/ba385d2a-5c80-4b31-931e-3da309fac8d0/script.js"
-  ></script>
+    <!-- Deferred third parties: load after first paint to avoid blocking
+         the critical render path. -->
+    <script>
+      (function () {
+        var loaded = false;
+        function loadThirdParties() {
+          if (loaded) return;
+          loaded = true;
+
+          // Google Analytics (GA4)
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            window.dataLayer.push(arguments);
+          }
+          window.gtag = gtag;
+          gtag('js', new Date());
+          gtag('config', 'G-RJT2W8D2R8');
+          var gaScript = document.createElement('script');
+          gaScript.async = true;
+          gaScript.src =
+            'https://www.googletagmanager.com/gtag/js?id=G-RJT2W8D2R8';
+          document.head.appendChild(gaScript);
+
+          // Google AdSense
+          var adsScript = document.createElement('script');
+          adsScript.async = true;
+          adsScript.crossOrigin = 'anonymous';
+          adsScript.src =
+            'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3922544046545700';
+          document.head.appendChild(adsScript);
+
+          // Self-hosted analytics
+          var shynet = document.createElement('script');
+          shynet.defer = true;
+          shynet.src =
+            'https://analytics.casperverswijvelt.be/ingress/ba385d2a-5c80-4b31-931e-3da309fac8d0/script.js';
+          document.head.appendChild(shynet);
+        }
+
+        if ('requestIdleCallback' in window) {
+          window.requestIdleCallback(loadThirdParties, { timeout: 3000 });
+        } else {
+          setTimeout(loadThirdParties, 1500);
+        }
+        // Safety net: also load on first interaction in case idle never fires.
+        ['pointerdown', 'keydown', 'scroll'].forEach(function (ev) {
+          window.addEventListener(ev, loadThirdParties, {
+            once: true,
+            passive: true,
+          });
+        });
+      })();
+    </script>
+
+    <noscript>
+      <img
+        src="https://analytics.casperverswijvelt.be/ingress/ba385d2a-5c80-4b31-931e-3da309fac8d0/pixel.gif"
+      />
+    </noscript>
+  </body>
 </html>

@@ -6,7 +6,13 @@ const prettier = require('eslint-config-prettier');
 const prettierPlugin = require('eslint-plugin-prettier');
 
 module.exports = tseslint.config(
-  { ignores: ['dist/**', 'node_modules/**'] },
+  {
+    ignores: [
+      'dist/**',
+      'node_modules/**',
+      'src/app/components/pages/changelog-page/changelog.generated.ts',
+    ],
+  },
   {
     files: ['**/*.ts'],
     extends: [

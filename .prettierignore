@@ -3,3 +3,4 @@ node_modules/
 package-lock.json
 src/assets/
 CHANGELOG.md
+src/app/components/pages/changelog-page/changelog.generated.ts

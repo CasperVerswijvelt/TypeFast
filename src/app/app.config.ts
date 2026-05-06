@@ -1,6 +1,6 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { provideHttpClient, withFetch, HttpClient } from '@angular/common/http';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import {
   provideClientHydration,
   withEventReplay,
@@ -12,16 +12,12 @@ import {
   withInMemoryScrolling,
   withPreloading,
 } from '@angular/router';
-import { MarkdownModule } from 'ngx-markdown';
 import { routes } from './app.routes';
 import { SeoTitleStrategy } from './seo/seo-title-strategy';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    importProvidersFrom(
-      FormsModule,
-      MarkdownModule.forRoot({ loader: HttpClient }),
-    ),
+    importProvidersFrom(FormsModule),
     provideHttpClient(withFetch()),
     provideClientHydration(withEventReplay()),
     provideRouter(

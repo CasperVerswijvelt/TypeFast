@@ -1,0 +1,48 @@
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/favicon.ico",
+          "/favicon-16x16.png",
+          "/favicon-32x32.png",
+          "/apple-touch-icon.png",
+          "/android-chrome-192x192.png",
+          "/android-chrome-512x512.png",
+          "/index.csr.html",
+          "/index.html",
+          "/site.webmanifest",
+          "/*.css",
+          "/*.js"
+        ]
+      }
+    },
+    {
+      "name": "fonts-and-images",
+      "installMode": "prefetch",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/fonts/*.woff2",
+          "/assets/img/*.(webp|png|jpg|jpeg)",
+          "/assets/icons/*.svg"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "languages",
+      "urls": ["/assets/languages/**"],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 50,
+        "maxAge": "30d"
+      }
+    }
+  ]
+}
