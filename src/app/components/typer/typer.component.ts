@@ -6,14 +6,13 @@ import {
   DestroyRef,
   ElementRef,
   OnDestroy,
-  Signal,
   afterNextRender,
   computed,
-  effect,
   inject,
   viewChild,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { skip } from 'rxjs/operators';
 import { NgClass, DecimalPipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -107,27 +106,40 @@ export class TyperComponent implements AfterViewInit, OnDestroy {
 
     // React to preference changes that need imperative DOM follow-up. The
     // current value is already applied via the seed assignments above, so
-    // each effect skips its own first run.
-    this.onChange(this.prefs.reverseScroll, () => {
-      this.syncReverseScroll();
-      this.syncOffset();
-    });
-    this.onChange(this.prefs.textSize, () => {
-      this.syncTextSizeClass();
-      this.setupTest();
-    });
-    this.onChange(this.prefs.smoothScrolling, (value) => {
-      this.smoothScroll = value;
-      this.syncOffset();
-    });
-    this.onChange(this.prefs.ignoreDiacritics, (value) => {
-      this.ignoreAccentedCharacters = value;
-      this.setupTest();
-    });
-    this.onChange(this.prefs.ignoreCasing, (value) => {
-      this.ignoreCasing = value;
-      this.setupTest();
-    });
+    // skip(1) avoids re-firing on the seeded value. Subscribe (rather than
+    // effect) keeps setupTest()'s cdRef.detectChanges() out of the
+    // effect-flush phase, which would otherwise recurse into change
+    // detection.
+    toObservable(this.prefs.reverseScroll)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe(() => {
+        this.syncReverseScroll();
+        this.syncOffset();
+      });
+    toObservable(this.prefs.textSize)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe(() => {
+        this.syncTextSizeClass();
+        this.setupTest();
+      });
+    toObservable(this.prefs.smoothScrolling)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe((value) => {
+        this.smoothScroll = value;
+        this.syncOffset();
+      });
+    toObservable(this.prefs.ignoreDiacritics)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe((value) => {
+        this.ignoreAccentedCharacters = value;
+        this.setupTest();
+      });
+    toObservable(this.prefs.ignoreCasing)
+      .pipe(skip(1), takeUntilDestroyed())
+      .subscribe((value) => {
+        this.ignoreCasing = value;
+        this.setupTest();
+      });
 
     // When the test ends (timer hits 0), score the partial in-progress word
     // and shift focus off the input so the results stay visible. Done here
@@ -169,20 +181,6 @@ export class TyperComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.boundFocus) this.state.unregister(this.boundFocus);
     this.state.running.set(false);
-  }
-
-  // Subscribe to a signal and run `onChange` on subsequent values only — the
-  // initial seed is assumed to be applied imperatively at construction time.
-  private onChange<T>(source: Signal<T>, onChange: (value: T) => void): void {
-    let firstRun = true;
-    effect(() => {
-      const value = source();
-      if (firstRun) {
-        firstRun = false;
-        return;
-      }
-      onChange(value);
-    });
   }
 
   // Resets test state and view-layer offsets, then measures the new layout.
