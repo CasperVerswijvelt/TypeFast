@@ -22,6 +22,77 @@
     Discord and GitHub.
   </p>
 
+  <p>
+    What data is collected and how it's handled lives on the
+    <a routerLink="/privacy">privacy page</a>; the rules for using the site live
+    on the <a routerLink="/terms">terms page</a>.
+  </p>
+
+  <h2>Why it exists</h2>
+
+  <p>
+    The original motivation was simple: every typing test site I tried was
+    either too sparse to be interesting after a week, or so cluttered with
+    accounts, leaderboards, and competitive features that the actual test got
+    buried. There was a clear gap for something that took the test seriously
+    without making it a social network. The first version went live in 2020,
+    written in a long evening, and slowly grew from there.
+  </p>
+
+  <p>
+    The site has stayed a side project on purpose. It's not optimised for
+    growth, monetisation, or any particular metric. Ads cover hosting; the rest
+    of the time it just runs. That has turned out to be a useful constraint — it
+    keeps every feature decision small enough that an evening is enough to ship
+    it, and it keeps the site honest about what it is and isn't.
+  </p>
+
+  <h2>Design principles</h2>
+
+  <p>
+    A handful of principles shape what gets built and what gets quietly
+    declined:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Get out of the way.</strong> The test is the product. Ads,
+      navigation, settings, and every other piece of UI defers to the typing
+      area. If a feature would make the test feel busier without making it
+      better, it doesn't ship.
+    </li>
+    <li>
+      <strong>Respect the user's attention.</strong> No popups, no "rate us"
+      prompts, no email collection, no streak guilt-tripping. Open the page,
+      type, leave. Come back when you want to.
+    </li>
+    <li>
+      <strong>Local first.</strong> Your preferences, your custom word lists,
+      your test results — everything lives in your browser and stays there. No
+      account system, no server-side profile, nothing to leak. The
+      <a routerLink="/privacy">privacy page</a> covers exactly what is and isn't
+      sent anywhere.
+    </li>
+    <li>
+      <strong>Multilingual is the default, not the bolt-on.</strong> The site
+      was multilingual from early on, with proper case folding and accent
+      handling per language rather than a translated wrapper around English code
+      paths.
+    </li>
+    <li>
+      <strong>Be honest about measurement.</strong> The
+      <a routerLink="/how-it-works">how it works page</a> documents exactly how
+      each number is calculated, including the edge cases. If the test can be
+      gamed in some way, that should be visible to anyone who reads the source,
+      not hidden as a feature.
+    </li>
+    <li>
+      <strong>Open by default.</strong> Source code, issues, and most decisions
+      live in public on GitHub. The site benefits enormously from word-list
+      contributions and bug reports from people the operator has never met.
+    </li>
+  </ul>
+
   <h2>What makes it different</h2>
 
   <ul>
@@ -57,6 +128,46 @@
     </li>
     <li><strong>Light and dark themes</strong> with system-theme follow.</li>
   </ul>
+
+  <h2>What's next</h2>
+
+  <p>
+    The site doesn't have a fixed roadmap, but a few directions tend to surface
+    in feedback and stay on the list:
+  </p>
+
+  <ul>
+    <li>
+      More built-in word lists. Each one needs careful sourcing and a
+      native-speaker review; PRs that include both are particularly welcome.
+    </li>
+    <li>
+      Better statistics across sessions, on the local device only — so you can
+      see your trend without anything leaving your browser.
+    </li>
+    <li>
+      Continued accessibility work: keyboard navigation, screen-reader support,
+      sensible focus order, proper colour contrast.
+    </li>
+    <li>
+      Continued performance work, with the test page remaining the lightest
+      possible thing it can be.
+    </li>
+  </ul>
+
+  <p>
+    What's already shipped is on the
+    <a routerLink="/changelog">changelog</a>.
+  </p>
+
+  <p>
+    If you have an idea that fits the principles above, the
+    <a routerLink="/feedback">feedback page</a> is the place to send it. If
+    you'd rather build it yourself, the
+    <a routerLink="/contribute">contribute page</a> covers how to get started.
+    For anything else — questions, corrections, or just a hello — drop an
+    <a [href]="mailtoHref" [attr.aria-label]="contactEmail">email</a>.
+  </p>
 
   <h2>Support</h2>
 

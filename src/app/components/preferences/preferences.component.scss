@@ -1,27 +1,30 @@
-@use '../../../styles/breakpoints' as bp;
 @use '../../../styles/mixins' as m;
 
 // Layout-only locals (not theme-related, kept as SCSS).
-$preferences-offset: 16px;
 $preferences-entry-padding-side: 16px;
 $preferences-entry-padding-vertical: 9px;
 $preferences-entry-height: 31px;
 $preferences-entry-main-height: 37px;
+// Dialog opens to the LEFT of the nav cog. The cog sits at right:16px
+// inside the nav and is ~30px wide; we offset the dialog right edge by
+// (cog width + cog right margin + gap) so it tucks alongside the cog.
+$preferences-dialog-top: 16px;
+$preferences-dialog-right: 16px + 40px + 10px;
 
 * {
   user-select: none;
 }
 
-// Native <dialog>, anchored top-right next to the always-visible icon column.
-// Browser default centers and adds margin: auto; we override to keep the
-// existing top-right placement. Renders in the top layer so it can never be
-// hidden behind the nav.
+// Native <dialog>, anchored top-right alongside (left of) the nav cog.
+// Browser default centers and adds margin: auto; we override to keep
+// the top-right placement. Renders in the top layer so it can never
+// be hidden behind the nav.
 .preferences-dialog {
   position: fixed;
-  inset: $preferences-offset (40px + $preferences-offset + 10px) auto auto;
+  inset: $preferences-dialog-top $preferences-dialog-right auto auto;
   margin: 0;
   width: 240px;
-  max-height: calc(100dvh - #{$preferences-offset * 2});
+  max-height: calc(100dvh - #{$preferences-dialog-top + 16px});
   padding: 0;
   border: none;
   border-radius: var(--radius-md);
@@ -61,62 +64,6 @@ $preferences-entry-main-height: 37px;
   label {
     text-transform: capitalize;
   }
-}
-
-.preferences-icons {
-  position: fixed;
-  top: $preferences-offset;
-  right: $preferences-offset;
-  z-index: 11;
-  display: flex;
-  flex-direction: column;
-  pointer-events: initial;
-  @include m.fade-transition;
-
-  &.dimmed {
-    opacity: 0.12;
-
-    &:hover {
-      opacity: 1;
-    }
-  }
-}
-
-.preferences-icon {
-  @include m.icon-button;
-  padding: 5px;
-  width: 20px;
-  height: 20px;
-  margin-bottom: 5px;
-  outline: none;
-
-  svg {
-    fill: var(--pref-icon-fill);
-    width: 80%;
-    height: 80%;
-  }
-
-  &:active {
-    border: none;
-  }
-}
-
-@include m.above(bp.$bp-lg) {
-  .preferences-icon {
-    width: 23px;
-    height: 23px;
-  }
-}
-
-.preferences-icon-github {
-  svg {
-    width: 75%;
-    height: 75%;
-  }
-}
-
-.preferences-icon-discord {
-  margin-bottom: 2px;
 }
 
 .preferences-padding {

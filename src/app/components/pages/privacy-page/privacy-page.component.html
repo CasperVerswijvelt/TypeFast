@@ -7,6 +7,13 @@
     page explains exactly what data is touched when you use the site.
   </p>
 
+  <p>
+    The site is operated from Belgium by Casper Verswijvelt, who is the
+    controller for any personal data processed here. Contact:
+    <a [href]="mailtoHref">{{ contactEmail }}</a
+    >.
+  </p>
+
   <h2>Local storage</h2>
 
   <p>
@@ -31,10 +38,11 @@
 
   <ul>
     <li>
-      <strong>Google Analytics</strong> for aggregate visit counts, browser and
-      device breakdown, and basic referral information. Configured via Google's
-      standard <code>gtag.js</code> snippet. No custom events are sent and no
-      personal identifiers are recorded.
+      <strong>Google Analytics 4</strong> for aggregate visit counts, browser
+      and device breakdown, and basic referral information. Configured via
+      Google's standard <code>gtag.js</code> snippet. No custom events are sent
+      and no personal identifiers are recorded. User-level and event-level data
+      is retained for 14 months and then deleted automatically.
     </li>
     <li>
       <strong>Self-hosted analytics</strong> at
@@ -69,13 +77,140 @@
     >.
   </p>
 
+  <h2>Consent</h2>
+
+  <p>
+    For visitors from the EEA, the UK and Switzerland, the site shows Google's
+    Funding Choices consent banner before any personalised advertising or Google
+    Analytics measurement is enabled. Until you make a choice, ad storage, ad
+    personalisation, ad user data, and analytics storage are all denied —
+    meaning AdSense will only serve non-personalised ads (if any) and Google
+    Analytics will not set its measurement cookies.
+  </p>
+
+  <p>
+    For visitors outside those regions, those same services run by default, in
+    line with how most ad-supported sites operate. You can still opt out of
+    personalised advertising via the AdSense link above, and you can block
+    analytics by clearing or blocking cookies for this site.
+  </p>
+
   <h2>Cookies</h2>
 
   <p>
-    Beyond the cookies set by the analytics and advertising scripts above,
-    TypeFast.io itself sets no cookies. The site does not implement any custom
-    session, login, or tracking cookies of its own.
+    TypeFast.io itself does not set any cookies for sessions, login, or
+    tracking. The cookies you may encounter come from the third parties listed
+    above:
   </p>
+
+  <ul>
+    <li>
+      <code>_ga</code>, <code>_ga_*</code> — Google Analytics measurement and
+      session identifiers (only set after consent for EEA/UK/CH visitors).
+    </li>
+    <li>
+      <code>FCCDCF</code> — set by Google Funding Choices to remember your
+      consent decision so the banner doesn't reappear on every visit.
+    </li>
+    <li>Various AdSense cookies set by Google's domains when an ad loads.</li>
+  </ul>
+
+  <h2>Your rights under the GDPR</h2>
+
+  <p>
+    If you visit from the EEA, the UK or Switzerland, the GDPR (or equivalent
+    domestic law) gives you the following rights over any personal data
+    processed about you:
+  </p>
+
+  <ul>
+    <li><strong>Access</strong> — request a copy of what's held about you.</li>
+    <li><strong>Rectification</strong> — correct anything inaccurate.</li>
+    <li><strong>Erasure</strong> — ask for it to be deleted.</li>
+    <li>
+      <strong>Restriction</strong> — limit how the data is used while a dispute
+      is resolved.
+    </li>
+    <li>
+      <strong>Portability</strong> — receive a structured copy you can take
+      elsewhere.
+    </li>
+    <li>
+      <strong>Objection</strong> — object to processing based on legitimate
+      interest.
+    </li>
+    <li>
+      <strong>Withdrawal of consent</strong> — at any time, with no effect on
+      processing already done.
+    </li>
+  </ul>
+
+  <p>
+    To exercise any of these, email
+    <a [href]="mailtoHref">{{ contactEmail }}</a
+    >. You also have the right to lodge a complaint with the Belgian Data
+    Protection Authority (<a
+      href="https://www.gegevensbeschermingsautoriteit.be"
+      target="_blank"
+      rel="noopener"
+      >Gegevensbeschermingsautoriteit</a
+    >), or with the supervisory authority in your own country.
+  </p>
+
+  <p>
+    Legal basis for processing: <strong>consent</strong> (GDPR Art. 6(1)(a)) for
+    personalised advertising and Google Analytics in the EEA / UK / CH;
+    <strong>legitimate interests</strong> (Art. 6(1)(f)) for the self-hosted
+    aggregate analytics, which does not identify individuals and is used only to
+    keep the site running and improve it.
+  </p>
+
+  <h2>California and other US privacy rights (CCPA / CPRA)</h2>
+
+  <p>
+    Under the California Consumer Privacy Act (CCPA / CPRA) and similar laws in
+    other US states, you have the right to know what personal information is
+    collected, request deletion, and opt out of any "sale" or "sharing" of
+    personal information. TypeFast.io does not sell your data in the everyday
+    sense, but ad personalisation through AdSense may qualify as a "share" under
+    those laws. To opt out, use the AdSense ad-settings link above, or send a
+    request to
+    <a [href]="mailtoHref">{{ contactEmail }}</a
+    >. Global Privacy Control (GPC) signals your browser may send are honoured
+    where AdSense supports them.
+  </p>
+
+  <h2>International transfers</h2>
+
+  <p>
+    Google Analytics and AdSense data is processed by Google LLC in the United
+    States. Where transfers from the EEA / UK / CH apply, they rely on Standard
+    Contractual Clauses approved by the European Commission, together with the
+    supplementary measures Google publishes in its data-processing terms. The
+    self-hosted analytics server is hosted in Europe.
+  </p>
+
+  <h2>Data retention</h2>
+
+  <ul>
+    <li>
+      Google Analytics 4: 14-month retention; user-level and event-level data is
+      deleted automatically after that window.
+    </li>
+    <li>
+      Self-hosted analytics: aggregate visit data is retained for at most 90
+      days, then rolled up. Raw IP addresses are not stored beyond that window.
+    </li>
+    <li>
+      Web-server access logs (Cloudflare and Netlify): retained according to
+      each provider's default and not used for any analytics purpose.
+    </li>
+    <li>
+      Email correspondence (feedback, rights requests): kept until the
+      conversation is concluded, plus a short period to demonstrate compliance,
+      and then deleted.
+    </li>
+  </ul>
 
   <h2>Open source</h2>
 

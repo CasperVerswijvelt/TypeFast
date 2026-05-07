@@ -18,9 +18,9 @@
   position: relative;
   z-index: 9;
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-4);
-  padding: var(--space-3) var(--space-16) var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4) var(--space-2) var(--space-4);
   font-size: 0.95rem;
   pointer-events: auto;
   user-select: none;
@@ -33,6 +33,7 @@
   font-size: 1.4rem;
   color: var(--text);
   margin-right: var(--space-2);
+  align-self: baseline;
 
   &:hover {
     color: var(--text-strong-hover);
@@ -45,9 +46,10 @@
 
 .desktop-links {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: var(--space-4);
+  white-space: nowrap;
 }
 
 .nav-link {
@@ -63,6 +65,184 @@
   &.active {
     color: var(--text);
     text-decoration-color: currentColor;
+  }
+}
+
+// Primary CTA in the nav. Same font size as siblings (per design),
+// distinguished by the CTA palette and a button-like background.
+.nav-link-cta {
+  text-decoration: none;
+  color: var(--text-on-cta);
+  background-color: var(--cta-bg);
+  padding: 4px var(--space-3);
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration-fast);
+
+  &:hover {
+    color: var(--text-on-cta);
+    background-color: var(--cta-bg-hover);
+    text-decoration: none;
+  }
+
+  &.active {
+    text-decoration: none;
+    color: var(--text-on-cta);
+  }
+}
+
+// Dropdown (guides). Hover/focus on .nav-group reveals .nav-dropdown.
+// routerLinkActive on .nav-group bubbles 'active' from any descendant
+// router link, keeping 'guides' underlined on /tips and on every guide
+// sub-page.
+.nav-group {
+  position: relative;
+}
+
+.nav-link-with-children {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  // Text-decoration is moved to the inner .nav-link-text so the caret
+  // doesn't pick up the underline.
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+  transition: color var(--duration-normal);
+
+  &:hover {
+    color: var(--text);
+  }
+}
+
+.nav-link-text {
+  @include m.link-underline(2px, 4px);
+}
+
+.nav-group:hover .nav-link-with-children,
+.nav-group:focus-within .nav-link-with-children,
+.nav-group.active .nav-link-with-children {
+  color: var(--text);
+}
+
+.nav-group.active .nav-link-text {
+  text-decoration-color: currentColor;
+}
+
+.nav-caret {
+  font-size: 0.7em;
+  line-height: 1;
+  position: relative;
+  top: 1px;
+  transition: transform var(--duration-fast);
+}
+
+.nav-group:hover .nav-caret,
+.nav-group:focus-within .nav-caret {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 220px;
+  margin-top: 6px;
+  padding: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background-color: var(--surface-elevated);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition:
+    opacity var(--duration-fast),
+    visibility var(--duration-fast),
+    transform var(--duration-fast);
+  z-index: 10;
+
+  // Invisible hover bridge that fills the 6px gap between the parent
+  // link and the dropdown panel. Without it, the cursor would lose
+  // .nav-group:hover when crossing the gap and the panel would close
+  // before the cursor reaches it.
+  &::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 0;
+    right: 0;
+    height: 8px;
+  }
+}
+
+.nav-group:hover .nav-dropdown,
+.nav-group:focus-within .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+// After a sub-link click, force-close until the cursor leaves the group.
+.nav-group.nav-group-suppressed:hover .nav-dropdown,
+.nav-group.nav-group-suppressed:focus-within .nav-dropdown {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  pointer-events: none;
+}
+
+.nav-group.nav-group-suppressed:hover .nav-caret,
+.nav-group.nav-group-suppressed:focus-within .nav-caret {
+  transform: rotate(0);
+}
+
+.nav-dropdown-link {
+  @include m.link-underline(1px, 3px);
+  display: block;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  white-space: nowrap;
+
+  &:hover {
+    color: var(--text);
+    background-color: var(--surface-overlay-soft);
+  }
+
+  &.active {
+    color: var(--text);
+  }
+}
+
+// Settings cog. Lives inside the nav (so it scrolls with content
+// instead of floating fixed at the viewport corner). margin-left:auto
+// pushes it to the far right, after the desktop links on wide screens
+// and after the brand on narrow screens (where .desktop-links hides).
+.nav-settings {
+  @include m.icon-button;
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  padding: 5px;
+  flex-shrink: 0;
+
+  svg {
+    fill: var(--pref-icon-fill);
+    width: 80%;
+    height: 80%;
+  }
+}
+
+@include m.above(bp.$bp-lg) {
+  .nav-settings {
+    width: 23px;
+    height: 23px;
   }
 }
 
@@ -161,13 +341,9 @@
   background-color: var(--surface-bg);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  // Pin to top + scroll when content exceeds viewport. Vertical padding
-  // grows with available space so a normal phone still has the menu
-  // visually centered, while a short landscape viewport keeps everything
-  // reachable via scroll.
+  align-items: stretch;
   justify-content: flex-start;
-  padding-block: clamp(var(--space-6), 12vh, var(--space-12));
+  padding-block: clamp(var(--space-6), 12vh, var(--space-12)) 0;
   padding-inline: var(--space-6);
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
@@ -183,6 +359,12 @@
   align-items: center;
   gap: var(--space-2);
 
+  > li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
   a {
     @include m.link-underline(2px, 6px);
     display: block;
@@ -191,6 +373,7 @@
     color: var(--text-muted);
     padding: var(--space-3) var(--space-4);
     min-height: 44px;
+    text-align: center;
 
     &:hover {
       color: var(--text);
@@ -200,7 +383,30 @@
       color: var(--text);
       text-decoration-color: currentColor;
     }
+
+    &.mobile-cta {
+      color: var(--text-on-cta);
+      background-color: var(--cta-bg);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      padding-inline: var(--space-6);
+
+      &:hover,
+      &.active {
+        color: var(--text-on-cta);
+        background-color: var(--cta-bg-hover);
+        text-decoration: none;
+      }
+    }
   }
+}
+
+// Footer rendered inside the mobile-nav overlay so meta links
+// (changelog/contribute/feedback/privacy/terms/email) are reachable
+// from the open menu without dismissing it first.
+.mobile-nav-footer {
+  flex-shrink: 0;
+  margin-top: var(--space-6);
 }
 
 @include m.below(bp.$bp-nav) {

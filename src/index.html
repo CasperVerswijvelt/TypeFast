@@ -127,6 +127,64 @@
     </script>
     <app-root tabindex="-1"></app-root>
 
+    <!-- Consent defaults. Must run before any gtag() call so AdSense /
+         GA4 know the consent state from the first event. EEA + UK + CH
+         start denied; Funding Choices flips them to granted on user
+         consent. Everywhere else stays permissive. -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = function () {
+        window.dataLayer.push(arguments);
+      };
+      gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 500,
+        region: [
+          'AT',
+          'BE',
+          'BG',
+          'HR',
+          'CY',
+          'CZ',
+          'DK',
+          'EE',
+          'FI',
+          'FR',
+          'DE',
+          'GR',
+          'HU',
+          'IE',
+          'IT',
+          'LV',
+          'LT',
+          'LU',
+          'MT',
+          'NL',
+          'PL',
+          'PT',
+          'RO',
+          'SK',
+          'SI',
+          'ES',
+          'SE',
+          'IS',
+          'LI',
+          'NO',
+          'GB',
+          'CH',
+        ],
+      });
+      gtag('consent', 'default', {
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        analytics_storage: 'granted',
+      });
+    </script>
+
     <!-- Deferred third parties: load after first paint to avoid blocking
          the critical render path. -->
     <script>
@@ -136,12 +194,7 @@
           if (loaded) return;
           loaded = true;
 
-          // Google Analytics (GA4)
-          window.dataLayer = window.dataLayer || [];
-          function gtag() {
-            window.dataLayer.push(arguments);
-          }
-          window.gtag = gtag;
+          // Google Analytics (GA4) — gtag/dataLayer initialised eagerly above
           gtag('js', new Date());
           gtag('config', 'G-RJT2W8D2R8');
           var gaScript = document.createElement('script');

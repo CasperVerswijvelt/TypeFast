@@ -18,9 +18,7 @@ import { WordService } from '../../services/word.service';
 import { LanguageService } from 'src/app/services/language.service';
 import { DOCUMENT, NgClass, KeyValuePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { DISCORD_URL, GITHUB_URL } from '../../constants';
 import { PopperDirective } from '../../directives/popper.directive';
-import { TyperStateService } from '../../services/typer-state.service';
 import { PreferenceGroupComponent } from '../shared/preference-group/preference-group.component';
 import { PreferenceToggleComponent } from '../shared/preference-toggle/preference-toggle.component';
 
@@ -43,7 +41,6 @@ export class PreferencesComponent {
   private readonly preferencesDialogRef =
     viewChild.required<ElementRef<HTMLDialogElement>>('preferencesDialog');
 
-  readonly state = inject(TyperStateService);
   readonly prefs = inject(PreferencesService);
   private readonly wordService = inject(WordService);
   private readonly document = inject(DOCUMENT);
@@ -53,8 +50,6 @@ export class PreferencesComponent {
   WordMode = WordMode;
   TextSize = TextSize;
   Preference = Preference;
-  readonly discordUrl = DISCORD_URL;
-  readonly githubUrl = GITHUB_URL;
 
   openedPreferencesGroup = '';
   currentlyLoadingLanguage: Language | undefined;

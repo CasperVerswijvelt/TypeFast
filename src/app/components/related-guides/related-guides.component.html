@@ -1,0 +1,23 @@
+@if (heading()) {
+  <h2>{{ heading() }}</h2>
+}
+<ul
+  class="related-guides"
+  [class.compact]="compact()"
+  [class.cols-3]="columns() === 3"
+>
+  @for (guide of guides(); track guide.slug) {
+    <li class="related-guide">
+      <a
+        [routerLink]="guide.slug"
+        class="related-guide-link"
+        [attr.aria-label]="guide.title + ' — ' + guide.summary"
+      >
+        <span class="related-guide-title">{{ guide.title }}</span>
+        @if (!compact()) {
+          <span class="related-guide-summary">{{ guide.summary }}</span>
+        }
+      </a>
+    </li>
+  }
+</ul>

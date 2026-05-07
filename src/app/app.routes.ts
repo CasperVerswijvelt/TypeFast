@@ -93,6 +93,45 @@ export const routes: Routes = [
     },
   ),
   pageRoute(
+    'touch-typing-fundamentals',
+    () =>
+      import('./components/pages/touch-typing-fundamentals-page/touch-typing-fundamentals-page.component').then(
+        (m) => m.TouchTypingFundamentalsPageComponent,
+      ),
+    'Touch typing fundamentals',
+    {
+      description:
+        'A start-to-finish primer on touch typing: home row, finger zones, posture, beginner drills, common mistakes, and how to avoid RSI as you build the habit.',
+      canonical: '/touch-typing-fundamentals',
+    },
+  ),
+  pageRoute(
+    'keyboard-layouts',
+    () =>
+      import('./components/pages/keyboard-layouts-page/keyboard-layouts-page.component').then(
+        (m) => m.KeyboardLayoutsPageComponent,
+      ),
+    'Keyboard layouts compared',
+    {
+      description:
+        'An honest look at QWERTY, Dvorak, Colemak, Workman, and AZERTY. Layout history, ergonomic claims vs. evidence, and whether switching is worth the cost.',
+      canonical: '/keyboard-layouts',
+    },
+  ),
+  pageRoute(
+    'practice-routines',
+    () =>
+      import('./components/pages/practice-routines-page/practice-routines-page.component').then(
+        (m) => m.PracticeRoutinesPageComponent,
+      ),
+    'Practice routines that work',
+    {
+      description:
+        'Deliberate-practice protocols for 10-, 30-, and 60-minute typing sessions. Weekly progression, plateau breakers, and how to track real improvement.',
+      canonical: '/practice-routines',
+    },
+  ),
+  pageRoute(
     'privacy',
     () =>
       import('./components/pages/privacy-page/privacy-page.component').then(
@@ -127,7 +166,7 @@ export const routes: Routes = [
     'Changelog',
     {
       description:
-        'Release history for TypeFast.io — features, fixes, and improvements over time.',
+        "Release history for TypeFast.io — every feature, fix, and improvement with dates. See what's changed across modes, languages, themes, and the typing test.",
       canonical: '/changelog',
     },
   ),
@@ -152,7 +191,8 @@ export const routes: Routes = [
       ),
     'Feedback',
     {
-      description: 'Share feedback, ideas, or bug reports for TypeFast.io.',
+      description:
+        'Share feedback, ideas, or bug reports for TypeFast.io. Reach out via Discord, file a GitHub issue, or send a note — every message helps the project improve.',
       canonical: '/feedback',
     },
   ),

@@ -1,0 +1,90 @@
+@use '../../../styles/breakpoints' as bp;
+
+:host {
+  display: block;
+  margin-top: var(--space-12);
+}
+
+// In compact mode the cards sit immediately after the intro paragraph,
+// which already carries its own bottom margin — so reduce ours.
+:host(.is-compact) {
+  margin-top: 0;
+  margin-bottom: var(--space-8);
+}
+
+.related-guides {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-4);
+  grid-template-columns: 1fr;
+
+  @media (min-width: bp.$bp-md) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &.cols-3 {
+    @media (min-width: bp.$bp-md) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+.related-guide {
+  margin: 0;
+  padding: 0;
+}
+
+.related-guide-link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  text-decoration: none !important;
+  color: inherit;
+  transition:
+    border-color var(--duration-normal),
+    background-color var(--duration-normal);
+  height: 100%;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--accent);
+    background-color: var(--surface-elevated);
+  }
+
+  &:focus-visible {
+    outline: var(--focus-ring-width) solid var(--accent);
+    outline-offset: var(--focus-ring-offset);
+  }
+}
+
+.related-guide-title {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-strong);
+  font-size: 1rem;
+}
+
+.related-guide-summary {
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--text);
+}
+
+// Compact variant — title-only cards used for the inline "skip ahead"
+// block. Smaller padding, vertically centred title.
+.related-guides.compact {
+  .related-guide-link {
+    padding: var(--space-3) var(--space-4);
+    justify-content: center;
+    text-align: center;
+  }
+
+  .related-guide-title {
+    font-size: 0.95rem;
+  }
+}

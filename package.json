@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "node scripts/generate-changelog.mjs && ng build && node scripts/generate-sitemap.mjs",
+    "build": "node scripts/generate-changelog.mjs && ng build && node scripts/generate-sitemap.mjs && node scripts/inject-staging-noindex.mjs",
     "test": "ng test",
     "lint": "ng lint",
     "typecheck": "tsc -b --noEmit",

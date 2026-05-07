@@ -4,8 +4,8 @@ import { ProsePageComponent } from '../prose-page/prose-page.component';
 import { RelatedGuidesComponent } from '../../related-guides/related-guides.component';
 
 @Component({
-  templateUrl: './tips-page.component.html',
+  templateUrl: './keyboard-layouts-page.component.html',
   imports: [ProsePageComponent, RouterLink, RelatedGuidesComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TipsPageComponent {}
+export class KeyboardLayoutsPageComponent {}

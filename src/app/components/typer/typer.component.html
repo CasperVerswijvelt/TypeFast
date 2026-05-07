@@ -25,6 +25,7 @@
       placeholder="type here"
       autocomplete="off"
       autocapitalize="off"
+      aria-label="Typing test input — type the words shown above"
       class="word-input"
       tabindex="0"
       #wordInputEl
@@ -36,7 +37,6 @@
       <button
         class="type-test-timer-decrease"
         (click)="onDecreaseClicked()"
-        tabindex="1"
         title="Decrease test duration"
       >
         <svg
@@ -63,7 +63,6 @@
       <button
         class="type-test-timer-increase"
         (click)="onIncreaseClicked()"
-        tabindex="1"
         title="Increase test duration"
       >
         <svg
@@ -128,6 +127,9 @@
       class="type-test-results"
       [class.is-hidden]="state.testIsRunning() && hideLiveStats()"
     >
+      <caption class="visually-hidden">
+        Typing test results
+      </caption>
       <tr class="type-test-results-wpm">
         <th colspan="2">
           <span class="type-test-results-wpm-value">{{

@@ -46,13 +46,59 @@
     not.
   </p>
 
+  <p>A few edge cases worth understanding:</p>
+
+  <ul>
+    <li>
+      <strong>Mid-word stop.</strong> If the timer ends partway through a word,
+      the characters you typed correctly so far are counted; the not-yet-typed
+      remainder is not. The trailing space credit only applies if the word was
+      fully completed before the buzzer.
+    </li>
+    <li>
+      <strong>Backspaces.</strong> Backspacing removes the character from the
+      input but doesn't undo the fact that you typed an incorrect one in the
+      first place — character accuracy is calculated against your full keystroke
+      history, not just the final state. Word accuracy, by contrast, looks at
+      the submitted word, so backspacing to fix a word before submitting it does
+      help your word-accuracy stat.
+    </li>
+    <li>
+      <strong>Excess characters.</strong> Typing more characters in a word than
+      the expected word contains is counted as incorrect characters against you,
+      not as bonus typing.
+    </li>
+  </ul>
+
+  <h2>Where "5 characters = 1 word" comes from</h2>
+
+  <p>
+    The five-characters convention dates from typewriter benchmarking in the
+    early twentieth century, when standardised speed contests needed a measure
+    that didn't reward writers of short words over writers of long ones. Five
+    was a deliberate compromise: long enough to capture something like a real
+    English average, short enough that punctuation, spaces, and short function
+    words pulled the average down to roughly that. The convention stuck because
+    it became the basis on which records were compared.
+  </p>
+
+  <p>
+    Modern critiques are valid — average English word length is closer to 4.7
+    characters, German averages closer to 6, Chinese romanised input is
+    something else entirely — but the convention has the same status as
+    measuring rope in fathoms: legacy, but everyone uses it. TypeFast keeps the
+    convention so a 70 WPM here is a 70 WPM somewhere else.
+  </p>
+
   <h2>Characters per minute (CPM)</h2>
 
   <p>
     CPM is the same idea without the divide-by-five step:
     <code>CPM = correct characters / (elapsed seconds / 60)</code>. WPM is just
     CPM divided by 5. CPM is more useful when comparing performance across
-    languages with different average word lengths.
+    languages with different average word lengths. A 60 WPM English reading is
+    structurally similar to a 60 WPM German reading, but the German one
+    represents more raw keystrokes per minute, which CPM exposes.
   </p>
 
   <h2>Character accuracy and word accuracy</h2>
@@ -72,6 +118,16 @@
     submitted word is what's checked.
   </p>
 
+  <p>
+    Both metrics exist because they measure different skills. Character accuracy
+    is a measure of keystroke precision — your nervous system's aim. Word
+    accuracy is a measure of self-correction — whether you noticed your mistakes
+    in time to fix them. Strong typists tend to be high on both; less
+    experienced typists are often high on character accuracy and low on word
+    accuracy (small mistakes that go unnoticed) or the reverse (sloppy typing
+    aggressively backspaced).
+  </p>
+
   <h2>Word mode vs sentence mode</h2>
 
   <p>
@@ -84,6 +140,84 @@
     capitalisation and punctuation intact. Use it to practice realistic typing
     rhythm: capital letters, commas, periods, apostrophes, the way you'd
     actually write an email or report.
+  </p>
+
+  <p>
+    A rough decision tree: pick word mode when you want to push raw speed and
+    isolate finger mechanics; pick sentence mode when you want to test how well
+    your typing holds up under the conditions of real prose. Most typists are
+    noticeably slower in sentence mode. The gap between your word-mode and
+    sentence-mode speeds is a useful diagnostic — if it's small, you're carrying
+    your speed into real typing. If it's large, your word-mode score is
+    flattering you.
+  </p>
+
+  <h2>How TypeFast's word lists are constructed</h2>
+
+  <p>
+    The built-in word lists are derived from publicly available frequency
+    corpora for each language, filtered to remove obvious junk (URLs, non-words,
+    partial tokens) and to keep words within a sensible length range so that the
+    test doesn't hand you "supercalifragilistic" every third word. The selection
+    is biased toward common-but-not-trivial words — the long-tail of rare words
+    is dropped, and the very most common function words are de-emphasised to
+    avoid making every test feel like "the of and it is".
+  </p>
+
+  <p>
+    Within those constraints, individual word selection is uniform-random rather
+    than frequency-weighted. Frequency-weighted random feels more like real text
+    but produces tests dominated by the same handful of short words;
+    uniform-random gives a broader exercise of the word list at some cost to
+    realism. Sentence mode is where real-text frequency distributions show up.
+  </p>
+
+  <p>
+    For programming mode, the corpus is built from the keywords, common
+    identifiers, and punctuation patterns of the major programming languages.
+    The licensing of the underlying corpora is detailed on the
+    <a routerLink="/terms">terms page</a>; in short, everything is either
+    public-domain or under a permissive open-source licence.
+  </p>
+
+  <h2>Comparing TypeFast results to other sites</h2>
+
+  <p>
+    Different typing tests measure different things and produce different
+    numbers, so a 90 WPM on TypeFast and a 90 WPM on another site aren't
+    automatically the same skill. Differences worth knowing about:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Word lists differ.</strong> A site that drills only the 200 most
+      common English words will produce inflated scores compared to a site with
+      a longer tail. Switching from a top-200 site to TypeFast's broader list
+      often drops a typist's headline number 5–10 WPM at the same actual skill.
+    </li>
+    <li>
+      <strong>Accuracy treatment differs.</strong> Some sites force you to
+      correct every error before moving on (which inflates accuracy at the cost
+      of speed). TypeFast lets you proceed with errors and counts them, giving
+      you a faster but more honest measurement.
+    </li>
+    <li>
+      <strong>Rolling speed displays differ.</strong> Some sites show your
+      best-N-second speed as the headline. TypeFast shows the full-test WPM. The
+      two can differ by 10+ points in the same test.
+    </li>
+    <li>
+      <strong>Word vs sentence default.</strong> Several popular sites default
+      to word mode, where you'll likely score higher than in sentence mode. If
+      you're comparing screenshots, compare like with like.
+    </li>
+  </ul>
+
+  <p>
+    None of this is to say one site is right and the others are wrong. They're
+    measuring different cuts of the same skill. The most useful benchmark is
+    consistency on the same site over time; cross-site comparisons should come
+    with an asterisk.
   </p>
 
   <h2>Languages and custom word lists</h2>
@@ -120,6 +254,41 @@
     to your results so you don't accidentally compare a relaxed score to a
     strict one later.
   </p>
+
+  <h2>Limitations and known biases</h2>
+
+  <p>
+    A few things the test doesn't measure well, in the interest of honest
+    framing:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Touch-screen typing.</strong> The test runs on a software keyboard
+      if you're on a phone, but touch-screen typing has different mechanics —
+      autocorrect, swipe input, no tactile feedback — that the test doesn't
+      account for. Numbers on a phone are not directly comparable to numbers on
+      a physical keyboard.
+    </li>
+    <li>
+      <strong>Autocorrect interactions.</strong> If your browser or OS is
+      autocorrecting your input, the input field receives the corrected version,
+      not your raw keystrokes. Autocorrect is disabled in the test input where
+      browsers respect the setting, but on some platforms it can still trigger.
+    </li>
+    <li>
+      <strong>Long-tail vocabulary.</strong> Because the word list is filtered
+      toward common-but-not-trivial words, very rare words and proper nouns
+      aren't represented. If your real-world typing is heavily technical
+      (medical terms, code, specific jargon), the test under-represents that
+      bottleneck.
+    </li>
+    <li>
+      <strong>Stamina.</strong> Most tests are 60 seconds or less, which doesn't
+      capture how fast you can sustain typing for ten minutes. Real-world typing
+      is closer to a marathon than a sprint.
+    </li>
+  </ul>
 
   <p>
     Want to put this into practice? See the

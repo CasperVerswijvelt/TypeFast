@@ -1,11 +1,10 @@
 <footer class="bottom-footer">
-  <span class="copy-full">© {{ year }} Casper Verswijvelt</span>
-  <span class="copy-short">© {{ year }}</span>
-  ·
+  © {{ year }} · <a class="footer-link" routerLink="/changelog">changelog</a> ·
+  <a class="footer-link" routerLink="/contribute">contribute</a> ·
+  <a class="footer-link" routerLink="/feedback">feedback</a> ·
   <a class="footer-link" routerLink="/privacy">privacy</a> ·
   <a class="footer-link" routerLink="/terms">terms</a> ·
-  <a class="footer-link" [href]="mailtoHref">
-    <span class="email-full">{{ contactEmail }}</span>
-    <span class="email-short">email</span>
-  </a>
+  <a class="footer-link" [href]="mailtoHref" [attr.aria-label]="contactEmail"
+    >email</a
+  >
 </footer>

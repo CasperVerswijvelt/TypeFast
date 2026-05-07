@@ -1,5 +1,29 @@
 # Release notes
 
+## Unreleased
+
+### New
+
+- Three new in-depth typing guides: touch typing fundamentals (a beginner-to-intermediate primer with home row, finger zones, posture, drills, and RSI prevention), keyboard layouts compared (an honest walk through QWERTY, Dvorak, Colemak, Workman, AZERTY and whether switching is worth it), and practice routines that work (10-, 30-, and 60-minute deliberate-practice protocols and a weekly shape that compounds)
+- A "guides" hover menu in the top nav, grouping the tips overview with the three new in-depth guides
+
+### Improvements
+
+- Restructured the top navigation: a primary "start typing" call-to-action takes the most prominent slot, and less-frequent entries (changelog, contribute, feedback) moved to the footer
+- The settings cog now lives in the navbar instead of floating in the corner, scrolling with the rest of the page
+- Tips page substantially rewritten — new sections on the bigram bottleneck, multilingual considerations, hardware that actually matters, and how to read the results screen, plus a quick "skip ahead" set of cards near the top
+- How-it-works page substantially rewritten — adds formula edge cases, the history of the "five characters per word" convention, how the word lists are constructed, an honest comparison against other typing sites, and the test's known limitations
+- About page expanded with the project's origin story, the design principles that shape it, and what's next
+- Privacy policy expanded to cover GDPR rights, CCPA / CPRA rights, data retention, international transfers, and how consent works regionally
+- Terms of use expanded to cover governing law, acceptable use, age, intellectual property, termination, and word-list licensing
+- Compact one-line footer on every viewport, with all secondary links (changelog, contribute, feedback, privacy, terms, email) in one place
+- Mobile menu now includes the footer too, so the secondary links are reachable while the menu is open
+- EEA, UK, and Switzerland visitors now have advertising personalisation and analytics turned off by default until they make a consent choice; everywhere else stays unchanged
+
+### Fixed
+
+- Accessibility on the typing test page: the page now exposes a heading for screen readers, the typing input has a proper accessible label, and the natural tab order through the controls is restored
+
 ## 1.3.0 - 2026-05-07
 
 ### Improvements

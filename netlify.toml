@@ -6,3 +6,27 @@
 # canonical tags we emit (https://typefast.io/about, no trailing slash).
 [build.processing.html]
   pretty_urls = false
+
+# Per-context env. STAGING is consumed by scripts/inject-staging-noindex.mjs
+# to add `noindex` meta tags and a Disallow-all robots.txt to non-production
+# builds (branch deploys like develop.typefast.io, plus deploy previews).
+[context.production.environment]
+  STAGING = "false"
+
+[context.deploy-preview.environment]
+  STAGING = "true"
+
+[context.branch-deploy.environment]
+  STAGING = "true"
+
+# Header-level belt-and-braces. Even if the meta tag were ever stripped,
+# X-Robots-Tag at the response level keeps Google out of staging.
+[[context.deploy-preview.headers]]
+  for = "/*"
+  [context.deploy-preview.headers.values]
+    X-Robots-Tag = "noindex, nofollow"
+
+[[context.branch-deploy.headers]]
+  for = "/*"
+  [context.branch-deploy.headers.values]
+    X-Robots-Tag = "noindex, nofollow"

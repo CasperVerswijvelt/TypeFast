@@ -7,6 +7,14 @@
     minute. Here's what actually moves the needle.
   </p>
 
+  <p>Looking for a specific topic? Skip ahead:</p>
+  <app-related-guides
+    currentSlug="/tips"
+    heading=""
+    [compact]="true"
+    [columns]="3"
+  />
+
   <h2>Touch typing is non-negotiable</h2>
 
   <p>
@@ -19,7 +27,10 @@
   <p>
     Cover the keys with a cloth for a few practice sessions. Your hands learn
     much faster when you remove the option to cheat. After a week your accuracy
-    will recover, and you'll never need to look again.
+    will recover, and you'll never need to look again. If you're starting from
+    scratch, the
+    <a routerLink="/touch-typing-fundamentals">touch typing fundamentals</a>
+    page covers the full beginner curriculum.
   </p>
 
   <h2>Find and trust the home row</h2>
@@ -55,6 +66,16 @@
     screen is the one to watch.
   </p>
 
+  <p>
+    The accuracy-first rule isn't a moral position — it's arithmetic. A 5% error
+    rate sounds small, but every error costs you roughly the time of typing the
+    character plus correcting it: two keystrokes for the price of one, plus the
+    cognitive interruption. A typist hitting 100 WPM gross with 5% errors lands
+    somewhere closer to 80 WPM net once corrections are included. The same
+    typist hitting 95 WPM gross with 1% errors nets a higher number than the
+    "faster" one. Speed is what's left after accuracy has had its share.
+  </p>
+
   <h2>Type to a steady rhythm</h2>
 
   <p>
@@ -79,51 +100,170 @@
     slower texts before pushing speed.
   </p>
 
-  <h2>Common mistakes that cap progress</h2>
+  <h2>The bigram bottleneck</h2>
+
+  <p>
+    Most people who plateau at 80 WPM are not slow on every letter — they're
+    slow on a handful of specific letter pairs. <code>th</code>,
+    <code>ou</code>, and <code>he</code> are the most common English bigrams,
+    but the ones that <em>cost</em> you are the ones with awkward finger
+    transitions: <code>br</code>, <code>sk</code>, <code>gh</code>,
+    <code>qu</code>, <code>nm</code>, <code>my</code>. Same-finger bigrams
+    (typing two consecutive letters with the same finger) are particularly
+    expensive on QWERTY — <code>de</code>, <code>ec</code>, <code>un</code>
+    — because the finger has to lift off one key and travel before pressing the
+    next.
+  </p>
+
+  <p>
+    The fix is to find your slow bigrams and drill them in isolation. After a
+    test, look at your incorrect-words list — most errors cluster around three
+    or four bigrams, not random scattering. Spend a few minutes typing those
+    pairs deliberately at low speed, then mix them into normal text. After a
+    week, those specific transitions get smoother and your overall WPM follows.
+  </p>
+
+  <h2>Multilingual considerations</h2>
+
+  <p>
+    Typing speed is language-specific in ways most typists don't realise.
+    Different languages have different bigram frequencies, different
+    capitalisation patterns, and different punctuation densities. Speaking
+    fluent French doesn't make you a fast French typist if you trained on
+    English — the muscle memory is for English bigrams, and reaches like
+    <code>é</code>, <code>ç</code>, or AltGr combinations are a separate skill.
+  </p>
+
+  <p>A few practical points if you type in more than one language:</p>
 
   <ul>
     <li>
-      <strong>Hammering keys.</strong> You don't need force, you need precision.
-      Lighter touches are faster and quieter, and your hands will fatigue less
-      in long sessions.
+      Long compound words (German, Dutch, Finnish) reward sustained accuracy far
+      more than punctuation-heavy languages do; one mistake near the end of a
+      14-letter word costs the entire word.
     </li>
     <li>
-      <strong>Using the wrong shift key.</strong> Use the shift key on the
-      opposite hand from the letter you're capitalising. Right-hand letter uses
-      left shift, left-hand letter uses right shift. Same-hand shifting wastes
-      time.
+      Romanised input (Japanese rōmaji, Pinyin) hides a layer of mental
+      conversion. Your raw typing speed in those modes will lag your English
+      speed even after the muscles catch up, because you're translating in
+      parallel.
     </li>
     <li>
-      <strong>Practising only "easy" words.</strong> Random word mode is great
-      for drilling raw speed, but real-world text is full of capitalisation and
-      punctuation. Spend at least some sessions in sentence mode.
+      Typing in your weak-side language for a few minutes during practice
+      surfaces awkward fingerings that English never tests. It's one of the best
+      plateau breakers.
     </li>
     <li>
-      <strong>Skipping rest days.</strong> Like any motor skill, progress
-      consolidates during sleep, not during practice. Daily 10-minute sessions
-      beat weekly hour-long marathons.
+      If you're switching between layouts (AZERTY at home, QWERTY at work), stay
+      deliberately fluent in both rather than half-fluent in either — the
+      <a routerLink="/keyboard-layouts">keyboard layouts page</a> goes into
+      this.
     </li>
   </ul>
 
-  <h2>A simple practice routine</h2>
-
-  <ol>
-    <li>
-      <strong>5 minutes of warm-up.</strong> Word mode at a duration where you
-      can maintain 98% or better accuracy.
-    </li>
-    <li>
-      <strong>10 minutes of focused work.</strong> Sentence mode in a language
-      you actually use. Don't watch the WPM, watch your accuracy.
-    </li>
-    <li>
-      <strong>One sprint test.</strong> Word mode, longer duration, push
-      slightly past comfortable. This is the only part where you chase speed.
-    </li>
-  </ol>
+  <h2>Hardware that actually matters</h2>
 
   <p>
-    Done daily for a few weeks, this routine will move most people into a
-    different speed bracket. Boring, predictable, effective.
+    Mechanical keyboards, ergonomic split designs, and exotic switches occupy a
+    lot of typing-community attention. Most of it is hobby, not speed advantage.
+    Here's what actually affects your top speed and what doesn't.
   </p>
+
+  <p>Things that <strong>do</strong> matter:</p>
+
+  <ul>
+    <li>
+      <strong>Key travel that suits you.</strong> Very short travel (laptop
+      chiclet keys) is fast for some, fatiguing for others. Very long travel
+      (full mechanical with deep switches) feels great but adds a millisecond
+      per keystroke. Most people land around 1.5–3mm of travel as the sweet
+      spot.
+    </li>
+    <li>
+      <strong>Keyboard at the right height.</strong> Wrists straight beats every
+      other ergonomic factor. If your wrists bend up to type, lower the
+      keyboard.
+    </li>
+    <li>
+      <strong>A monitor at eye level.</strong> Looking down at a laptop screen
+      tilts your head and tightens your shoulders, which surfaces in your typing
+      as tension and missed keys.
+    </li>
+    <li>
+      <strong>Quiet enough that you can hear yourself thinking.</strong>
+      Typing tense and loud is correlated; calmer hands type more accurately.
+    </li>
+  </ul>
+
+  <p>
+    Things that <strong>don't</strong> matter as much as the discourse claims:
+  </p>
+
+  <ul>
+    <li>
+      <strong>Switch type.</strong> Linear vs tactile is a feel preference, not
+      a speed unlock. Pick the one you enjoy and stop changing.
+    </li>
+    <li>
+      <strong>Mechanical vs membrane.</strong> Plenty of 100+ WPM typists are
+      faster on cheap rubber-dome boards than people with $400 customs.
+    </li>
+    <li>
+      <strong>Keycap profile.</strong> Cherry, OEM, SA, MT3 — comfort and
+      aesthetics, not speed.
+    </li>
+    <li>
+      <strong>Layout-changing keyboards alone.</strong> A split board doesn't
+      type faster on its own; it just makes Colemak-DH ergonomically more
+      compelling. Hardware is the enabler, not the cause.
+    </li>
+  </ul>
+
+  <h2>Reading the result screen</h2>
+
+  <p>
+    After a test, most people scan for the WPM number and move on. The other
+    numbers carry more useful information.
+  </p>
+
+  <ul>
+    <li>
+      <strong>Character accuracy</strong> is the lead indicator of sustainable
+      improvement. If it's climbing test over test, your speed will follow even
+      without forcing it.
+    </li>
+    <li>
+      <strong>Word accuracy minus character accuracy</strong> tells you how
+      "lumpy" your errors are. A small gap means errors are spread evenly; a
+      large gap means a few words have multiple errors each, which usually
+      points to a specific weak bigram or a moment of rhythm collapse.
+    </li>
+    <li>
+      <strong>Incorrect-words list</strong> is where the next session's drill
+      content lives. Don't dismiss it.
+    </li>
+    <li>
+      <strong>WPM</strong> is the celebration metric, not the planning metric.
+      It tells you how the run went; it doesn't tell you what to practise next.
+    </li>
+  </ul>
+
+  <p>
+    The
+    <a routerLink="/how-it-works">how it works page</a> covers exactly how each
+    of these is computed, including the edge cases.
+  </p>
+
+  <h2>Build a routine</h2>
+
+  <p>
+    Doing the right things for ten minutes a day beats doing them for two hours
+    on a Saturday. The
+    <a routerLink="/practice-routines">practice routines page</a> walks through
+    three sized routines (10-, 30-, and 60-minute) and a weekly shape that
+    compounds. If you only have time for one of these pages today, that's the
+    one to read.
+  </p>
+
+  <app-related-guides currentSlug="/tips" heading="Going deeper" />
 </app-prose-page>

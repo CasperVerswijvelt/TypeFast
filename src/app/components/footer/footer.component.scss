@@ -1,4 +1,3 @@
-@use '../../../styles/breakpoints' as bp;
 @use '../../../styles/mixins' as m;
 
 :host {
@@ -16,7 +15,7 @@
 }
 
 .bottom-footer {
-  padding: var(--space-2) var(--space-4);
+  padding: var(--space-1) var(--space-3);
   font-family: var(--font-mono);
   font-size: 0.7rem;
   color: var(--text-subtle);
@@ -32,21 +31,5 @@
   &:hover {
     color: var(--text-muted);
     text-decoration-color: currentColor;
-  }
-}
-
-.copy-short,
-.email-short {
-  display: none;
-}
-
-@include m.below(bp.$bp-md) {
-  .copy-full,
-  .email-full {
-    display: none;
-  }
-  .copy-short,
-  .email-short {
-    display: inline;
   }
 }

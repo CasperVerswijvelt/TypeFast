@@ -1,7 +1,8 @@
 <a class="skip-link" href="#main-content">Skip to content</a>
-<app-nav></app-nav>
+<app-nav (settingsClicked)="prefs.onPreferencesIconClicked()"></app-nav>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
 <app-preferences
+  #prefs
   (preferencesToggled)="onPreferencesToggled($event)"
 ></app-preferences>
