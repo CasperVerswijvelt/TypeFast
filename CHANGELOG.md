@@ -6,9 +6,9 @@
 
 - Faster initial load: Roboto and Roboto Mono are now self-hosted, and analytics and AdSense are deferred until after first paint instead of blocking the page
 - Repeat visits load instantly thanks to service-worker caching, and the site keeps working when you're offline
-- Search-engine metadata (the site's Organization and WebApplication schema) now ships with the page rather than being added after JavaScript runs, so crawlers always see it
 - Tooltips now render in the browser top layer so they're never clipped by parent overflow or hidden behind a modal backdrop
 - The settings, Discord, and GitHub icons now dim during a test, matching the header and footer
+- Search-engine metadata (the site's Organization and WebApplication schema) now ships with the page rather than being added after JavaScript runs, so crawlers always see it
 
 ### Fixed
 
