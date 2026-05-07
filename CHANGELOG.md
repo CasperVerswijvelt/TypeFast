@@ -1,6 +1,6 @@
 # Release notes
 
-## Unreleased
+## 1.4.0 - 2026-05-07
 
 ### New
 
