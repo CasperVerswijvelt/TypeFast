@@ -23,6 +23,7 @@
 ### Fixed
 
 - Accessibility on the typing test page: the page now exposes a heading for screen readers, the typing input has a proper accessible label, and the natural tab order through the controls is restored
+- Preferences spinner stuck after switching word mode or language: the new word list loaded correctly, but the in-row spinner kept spinning until the next click. It now clears as soon as the new list is ready.
 
 ## 1.3.0 - 2026-05-07
 

@@ -52,7 +52,7 @@
         >
           <span
             class="checkmark"
-            [class.checkmark-loading]="currentlyLoadingWordMode === mode.value"
+            [class.checkmark-loading]="currentlyLoadingWordMode() === mode.value"
           >
             <div class="spinner">
               <div></div>
@@ -97,7 +97,7 @@
           ></div>
           <span
             class="checkmark"
-            [class.checkmark-loading]="currentlyLoadingLanguage === lang.value"
+            [class.checkmark-loading]="currentlyLoadingLanguage() === lang.value"
           >
             <div class="spinner">
               <div></div>

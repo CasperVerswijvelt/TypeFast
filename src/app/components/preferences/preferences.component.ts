@@ -1,8 +1,10 @@
 import {
   Component,
   ElementRef,
+  NgZone,
   inject,
   output,
+  signal,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -44,6 +46,7 @@ export class PreferencesComponent {
   readonly prefs = inject(PreferencesService);
   private readonly wordService = inject(WordService);
   private readonly document = inject(DOCUMENT);
+  private readonly ngZone = inject(NgZone);
 
   Language = Language;
   Theme = Theme;
@@ -52,8 +55,12 @@ export class PreferencesComponent {
   Preference = Preference;
 
   openedPreferencesGroup = '';
-  currentlyLoadingLanguage: Language | undefined;
-  currentlyLoadingWordMode: WordMode | undefined;
+  // Signals so writes mark the view dirty (the AppComponent is OnPush, so a
+  // plain field write wouldn't trigger CD). The fetch that resolves these
+  // is started inside a signal effect — so its .then() runs outside NgZone,
+  // and we re-enter the zone explicitly so the dirty mark gets ticked.
+  readonly currentlyLoadingLanguage = signal<Language | undefined>(undefined);
+  readonly currentlyLoadingWordMode = signal<WordMode | undefined>(undefined);
 
   originalOrder = (): number => 0;
 
@@ -61,13 +68,17 @@ export class PreferencesComponent {
     this.wordService.languageFetchStarted
       .pipe(takeUntilDestroyed())
       .subscribe(({ language, wordMode, promise }) => {
-        this.currentlyLoadingLanguage = language;
-        this.currentlyLoadingWordMode = wordMode;
+        this.ngZone.run(() => {
+          this.currentlyLoadingLanguage.set(language);
+          this.currentlyLoadingWordMode.set(wordMode);
+        });
         promise.then(() => {
-          if (this.prefs.language() === language) {
-            this.currentlyLoadingLanguage = undefined;
-            this.currentlyLoadingWordMode = undefined;
-          }
+          this.ngZone.run(() => {
+            if (this.prefs.language() === language) {
+              this.currentlyLoadingLanguage.set(undefined);
+              this.currentlyLoadingWordMode.set(undefined);
+            }
+          });
         });
       });
   }
@@ -117,7 +128,7 @@ export class PreferencesComponent {
     const setPreference = () =>
       this.prefs.setPreference(Preference.LANGUAGE, language);
     const setCustomLanguageLoading = (file: File) => {
-      this.currentlyLoadingLanguage = Language.CUSTOM;
+      this.currentlyLoadingLanguage.set(Language.CUSTOM);
       return file;
     };
     const loadFile = (file: File) => this.wordService.loadFile(file);
@@ -125,7 +136,7 @@ export class PreferencesComponent {
     const languageChanged = this.prefs.language() !== language;
 
     const handleCancel = () => {
-      this.currentlyLoadingLanguage = undefined;
+      this.currentlyLoadingLanguage.set(undefined);
     };
 
     if (languageChanged) {
