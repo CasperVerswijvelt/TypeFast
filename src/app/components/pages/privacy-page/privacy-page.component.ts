@@ -1,10 +1,13 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { PROSE_PAGE_IMPORTS } from '../prose-page/prose-page.imports';
-import { ProsePageBase } from '../prose-page/prose-page-base';
+import { RouterLink } from '@angular/router';
+import { GITHUB_URL } from '../../../constants';
+import { ProsePageComponent } from '../prose-page/prose-page.component';
 
 @Component({
   templateUrl: './privacy-page.component.html',
-  imports: PROSE_PAGE_IMPORTS,
+  imports: [ProsePageComponent, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PrivacyPageComponent extends ProsePageBase {}
+export class PrivacyPageComponent {
+  readonly githubUrl = GITHUB_URL;
+}

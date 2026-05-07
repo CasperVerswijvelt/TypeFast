@@ -6,6 +6,7 @@ import {
   Signal,
   WritableSignal,
   inject,
+  signal,
 } from '@angular/core';
 import {
   Preference,
@@ -16,10 +17,17 @@ import {
   WordMode,
   TextSize,
 } from '../models/Preference';
-import { readJSON, signalsFromDefaults, writeJSON } from './storage-signal';
 
 type SignalMap = { [K in Preference]: WritableSignal<PreferenceValueMap[K]> };
 const STORAGE_KEY = 'preferences';
+
+function parseJSON<T>(raw: string | null): T | null {
+  try {
+    return JSON.parse(raw ?? 'null') as T | null;
+  } catch {
+    return null;
+  }
+}
 
 @Injectable({
   providedIn: 'root',
@@ -57,7 +65,9 @@ export class PreferencesService {
     [Preference.HIDE_LIVE_STATS]: 'boolean',
   };
 
-  private readonly signals: SignalMap = signalsFromDefaults(this.defaults);
+  private readonly signals: SignalMap = Object.fromEntries(
+    Object.entries(this.defaults).map(([k, v]) => [k, signal(v)]),
+  ) as SignalMap;
 
   // Typed read-only signal accessors. Templates and effects bind to these
   // directly: prefs.theme(), prefs.ignoreCasing(), etc.
@@ -103,7 +113,7 @@ export class PreferencesService {
   }
 
   private retrievePreferences() {
-    const stored = readJSON<Preferences>(STORAGE_KEY);
+    const stored = parseJSON<Preferences>(localStorage.getItem(STORAGE_KEY));
     if (!stored) return;
 
     for (const key of Object.keys(stored) as Preference[]) {
@@ -147,9 +157,14 @@ export class PreferencesService {
     if (!this.validatePreferenceType(key, value)) return;
 
     if (this.isBrowser && !this.isTemporaryPreference(key, value)) {
-      const pref = readJSON<Preferences>(STORAGE_KEY) ?? {};
+      const pref =
+        parseJSON<Preferences>(localStorage.getItem(STORAGE_KEY)) ?? {};
       (pref as Record<string, unknown>)[key] = value;
-      writeJSON(STORAGE_KEY, pref);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(pref));
+      } catch {
+        // ignore quota / disabled-storage failures
+      }
     }
 
     (this.signals[key] as WritableSignal<unknown>).set(value);
@@ -167,15 +182,8 @@ export class PreferencesService {
   private onStorage(event: StorageEvent) {
     if (event.key !== STORAGE_KEY) return;
 
-    const parse = (raw: string | null): Preferences | null => {
-      try {
-        return JSON.parse(raw ?? 'null') as Preferences | null;
-      } catch {
-        return null;
-      }
-    };
-    const oldObj = parse(event.oldValue);
-    const newObj = parse(event.newValue);
+    const oldObj = parseJSON<Preferences>(event.oldValue);
+    const newObj = parseJSON<Preferences>(event.newValue);
     if (!newObj) return;
 
     for (const key of Object.keys(this.defaults) as Preference[]) {

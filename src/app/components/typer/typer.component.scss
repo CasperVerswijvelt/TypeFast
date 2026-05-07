@@ -295,7 +295,8 @@ $word-spacing: 20px;
     cursor: pointer;
 
     &:focus-visible {
-      @include m.focus-ring;
+      outline: var(--focus-ring-width) solid var(--focus-ring-color);
+      outline-offset: var(--focus-ring-offset);
     }
   }
 }

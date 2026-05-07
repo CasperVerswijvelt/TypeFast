@@ -1,43 +1,11 @@
 import { DOCUMENT } from '@angular/common';
 import { Injectable, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { GITHUB_URL, ORIGIN, SITE_NAME } from '../constants';
+import { ORIGIN, SITE_NAME } from '../constants';
 
 const DEFAULT_OG_IMAGE = `${ORIGIN}/og-image.png`;
 const DEFAULT_DESCRIPTION =
   'At TypeFast.io you can test your typing speed in a minimalistic way, without skimping out on features such as multilanguage, sentence/word mode, and themes.';
-const LOGO_URL = `${ORIGIN}/android-chrome-512x512.png`;
-
-const ORGANIZATION_LD = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: SITE_NAME,
-  url: `${ORIGIN}/`,
-  logo: LOGO_URL,
-  sameAs: [GITHUB_URL],
-} as const;
-
-const WEB_APPLICATION_LD = {
-  '@context': 'https://schema.org',
-  '@type': 'WebApplication',
-  name: SITE_NAME,
-  url: `${ORIGIN}/test`,
-  description:
-    'Free, minimalistic typing speed test that measures WPM and accuracy across 18+ languages, with sentence and word modes and customisable themes.',
-  applicationCategory: 'EducationalApplication',
-  operatingSystem: 'Any (web)',
-  browserRequirements: 'Requires JavaScript',
-  inLanguage: 'en',
-  offers: {
-    '@type': 'Offer',
-    price: '0',
-    priceCurrency: 'USD',
-  },
-  author: {
-    '@type': 'Person',
-    name: 'Casper Verswijvelt',
-  },
-} as const;
 
 export interface SeoData {
   title: string;
@@ -89,11 +57,8 @@ export class SeoService {
     path: string,
     faq?: { question: string; answer: string }[],
   ): Record<string, unknown>[] {
-    const items: Record<string, unknown>[] = [
-      { ...ORGANIZATION_LD },
-      this.buildBreadcrumb(title, path),
-    ];
-    if (path === '/test') items.push({ ...WEB_APPLICATION_LD });
+    const items: Record<string, unknown>[] = [];
+    if (path !== '/') items.push(this.buildBreadcrumb(title, path));
     if (faq?.length) items.push(this.buildFaqPage(faq));
     return items;
   }
@@ -119,26 +84,23 @@ export class SeoService {
     title: string,
     path: string,
   ): Record<string, unknown> {
-    const elements: Record<string, unknown>[] = [
-      {
-        '@type': 'ListItem',
-        position: 1,
-        name: SITE_NAME,
-        item: `${ORIGIN}/`,
-      },
-    ];
-    if (path !== '/') {
-      elements.push({
-        '@type': 'ListItem',
-        position: 2,
-        name: title,
-        item: `${ORIGIN}${path}`,
-      });
-    }
     return {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',
-      itemListElement: elements,
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: SITE_NAME,
+          item: `${ORIGIN}/`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: title,
+          item: `${ORIGIN}${path}`,
+        },
+      ],
     };
   }
 

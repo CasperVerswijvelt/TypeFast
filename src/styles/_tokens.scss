@@ -9,10 +9,8 @@
   // Surfaces
   --surface-bg: #080808;
   --surface-elevated: rgb(7, 7, 7);
-  --surface-elevated-soft: #00000066;
   --surface-overlay-soft: #00000033;
   --surface-overlay: #00000099;
-  --surface-overlay-strong: rgba(0, 0, 0, 0.9);
 
   // Foregrounds
   --text: #cacaca;
@@ -138,10 +136,8 @@
 #body.theme--light {
   --surface-bg: rgb(219, 219, 219);
   --surface-elevated: rgb(245, 245, 245);
-  --surface-elevated-soft: #b7b7b766;
   --surface-overlay-soft: rgba(0, 0, 0, 0.18);
   --surface-overlay: rgba(0, 0, 0, 0.5);
-  --surface-overlay-strong: rgba(0, 0, 0, 0.7);
 
   --text: rgb(31, 31, 31);
   --text-strong: #0a0a0a;

@@ -43,12 +43,6 @@
   }
 }
 
-// Visible focus outline for keyboard users.
-@mixin focus-ring {
-  outline: var(--focus-ring-width) solid var(--focus-ring-color);
-  outline-offset: var(--focus-ring-offset);
-}
-
 // Smooth opacity transition. Default duration follows --duration-slow / --ease
 // — the values used for layout fades (header/footer/preferences icon column).
 @mixin fade-transition($duration: var(--duration-slow)) {
