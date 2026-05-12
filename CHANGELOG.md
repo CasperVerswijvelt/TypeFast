@@ -1,5 +1,19 @@
 # Release notes
 
+## 1.4.1 - 2026-05-12
+
+### Improvements
+
+- Every content page now shows a "Last updated" date and author below its title, so you can tell at a glance how current each guide and policy is
+- Privacy page consent paragraph now describes what actually happens before you consent: Google Analytics runs in cookieless, consent-denied mode (no measurement cookies, no advertising identifiers, no cross-site signals), and AdSense serves only non-personalised ads
+- Home FAQ now answers the mobile question accurately: the test works fine on phones and tablets, touch input is fully supported, and the only caveat is that on-screen-keyboard scores aren't directly comparable to physical-keyboard scores
+
+### Fixed
+
+- Bottom-footer link text now meets WCAG AA contrast on the dark theme (was 2.25:1, now ~8.7:1) — the footer links are properly readable instead of fading into the background
+- Footer "email" link no longer fails accessibility checkers due to a label/name mismatch; its accessible name now contains the visible word
+- A new site deploy now takes effect on the first visit again — previously the service worker would serve the prior deploy's HTML on the first navigation after an update, and only switch on the second
+
 ## 1.4.0 - 2026-05-07
 
 ### New
