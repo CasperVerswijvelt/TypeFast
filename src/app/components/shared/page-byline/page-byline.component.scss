@@ -1,0 +1,11 @@
+.page-byline {
+  margin-top: -0.5rem;
+  margin-bottom: 1.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.page-byline time {
+  font-variant-numeric: tabular-nums;
+}

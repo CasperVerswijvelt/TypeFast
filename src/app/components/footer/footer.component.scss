@@ -18,7 +18,7 @@
   padding: var(--space-1) var(--space-3);
   font-family: var(--font-mono);
   font-size: 0.7rem;
-  color: var(--text-subtle);
+  color: var(--text-muted);
   background-color: var(--surface-bg);
   text-align: center;
   user-select: none;
@@ -29,7 +29,7 @@
   color: inherit;
 
   &:hover {
-    color: var(--text-muted);
+    color: var(--text);
     text-decoration-color: currentColor;
   }
 }

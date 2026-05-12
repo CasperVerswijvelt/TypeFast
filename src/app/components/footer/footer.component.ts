@@ -19,4 +19,5 @@ export class FooterComponent {
   readonly year = new Date().getFullYear();
   readonly contactEmail = CONTACT_EMAIL;
   readonly mailtoHref = MAILTO_HREF;
+  readonly emailAriaLabel = `Email ${CONTACT_EMAIL}`;
 }

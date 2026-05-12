@@ -4,6 +4,7 @@
 
 export const SITE_NAME = 'TypeFast.io';
 export const TITLE_SUFFIX = ` - ${SITE_NAME}`;
+export const AUTHOR_NAME = 'Casper Verswijvelt';
 export const CONTACT_EMAIL = 'typefast@casperverswijvelt.be';
 export const ORIGIN = 'https://typefast.io';
 export const GITHUB_URL = 'https://github.com/CasperVerswijvelt/TypeFast';

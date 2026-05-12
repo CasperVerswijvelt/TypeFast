@@ -32,6 +32,6 @@ export const FAQS: FaqEntry[] = [
   {
     question: 'Does TypeFast work on mobile?',
     answer:
-      'The layout works on phones and tablets, but typing tests are best taken on a physical keyboard. Touch input is supported but does not reflect realistic typing speeds.',
+      'Yes — the test works fine on phones and tablets, and touch input is fully supported. Just keep in mind that scores on an on-screen keyboard aren\'t directly comparable to physical-keyboard scores, since the feel and key size are different.',
   },
 ];
