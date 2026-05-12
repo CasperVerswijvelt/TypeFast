@@ -1,5 +1,11 @@
 # Release notes
 
+## Unreleased
+
+### Improvements
+
+- Refreshed build-tool dependencies to clear seven Dependabot security advisories (in @babel/plugin-transform-modules-systemjs, hono, fast-uri, and ip-address). All were in dev-only build infrastructure — the live site itself was never affected.
+
 ## 1.4.1 - 2026-05-12
 
 ### Improvements
